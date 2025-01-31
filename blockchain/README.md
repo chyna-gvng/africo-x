@@ -21,33 +21,22 @@ cd africo-x
 npm install
 ```
 
-4. Configure environment variables:
-```bash
-cp example.env .env
-```
-Edit `.env` with your:
-- Mnemonic phrase
-- Alchemy API key
-- Initial owner address
-
-## Local Testing
-
-1. Start Ganache:
+4. Start Ganache:
 ```bash
 ganache
 ```
 
-2. In a new terminal, compile contracts:
+5. In a new terminal, compile contracts:
 ```bash
 truffle compile
 ```
 
-3. Run tests:
+6. Run tests:
 ```bash
 truffle test
 ```
 
-4. Deploy contracts:
+7. Deploy contracts:
 ```bash
 truffle migrate --network development
 ```
