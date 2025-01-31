@@ -1,21 +1,23 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "./ProjectRegistration.sol";
 
 contract Governance is Ownable {
-    IERC20 public cctToken;
+    ERC20Burnable public cctToken;
     ProjectRegistration public projectRegistration;
 
-    constructor(address _cctToken, address _projectRegistration) {
-        cctToken = IERC20(_cctToken);
+    constructor(address _cctToken, address _projectRegistration) Ownable(msg.sender) {
+        cctToken = ERC20Burnable(_cctToken);
         projectRegistration = ProjectRegistration(_projectRegistration);
     }
 
     function vote(uint256 projectId) external {
         uint256 voteWeight = cctToken.balanceOf(msg.sender);
-        projectRegistration.voteForProject(projectId, voteWeight);
+        uint256 totalSupply = cctToken.totalSupply();
+        projectRegistration.voteForProject(projectId, voteWeight, totalSupply);
     }
 
     function retireCarbon(uint256 amount, uint256 depletionRate) external {
