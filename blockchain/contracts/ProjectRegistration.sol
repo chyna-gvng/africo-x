@@ -18,17 +18,19 @@ contract ProjectRegistration is Ownable {
     event ProjectSubmitted(uint256 projectId, string name, string description, address owner);
     event ProjectRegistered(uint256 projectId);
 
+    constructor() Ownable(msg.sender) {}
+
     function submitProject(string memory name, string memory description) external {
         projects[projectCount] = Project(name, description, msg.sender, 0, false);
         emit ProjectSubmitted(projectCount, name, description, msg.sender);
         projectCount++;
     }
 
-    function voteForProject(uint256 projectId, uint256 voteWeight) external {
+    function voteForProject(uint256 projectId, uint256 voteWeight, uint256 totalSupply) external {
         require(projectId < projectCount, "Invalid project ID");
         projects[projectId].voteWeight += voteWeight;
 
-        if (projects[projectId].voteWeight > (totalSupply() / 2)) {
+        if (projects[projectId].voteWeight > (totalSupply / 2)) {
             projects[projectId].registered = true;
             emit ProjectRegistered(projectId);
         }
