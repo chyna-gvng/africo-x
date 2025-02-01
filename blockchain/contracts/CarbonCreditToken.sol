@@ -3,6 +3,7 @@ pragma solidity 0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "./ProjectRegistration.sol";
 
 /**
  * @title CarbonCreditToken (CCT)
@@ -15,11 +16,17 @@ contract CarbonCreditToken is ERC20, Ownable {
     mapping(address => Role) public roles;
     mapping(address => uint256) public depletionRate;
 
+    ProjectRegistration public projectReg;
+
     /**
      * @notice Initializes the ERC-20 Carbon Credit Token.
      */
     constructor() ERC20("CarbonCreditToken", "CCT") Ownable(msg.sender) {
         roles[msg.sender] = Role.Admin; // Set deployer as Admin
+    }
+
+    function setProjectRegistration(address _projectReg) external onlyOwner {
+    	projectReg = ProjectRegistration(_projectReg);
     }
 
     /**
@@ -29,6 +36,9 @@ contract CarbonCreditToken is ERC20, Ownable {
      */
     function setRole(address user, Role role) external onlyOwner {
         roles[user] = role;
+        if (role == Role.Buyer && address(projectReg) != address(0)) {
+        	projectReg.addEligibleVoter(user);
+        }
     }
 
     /**
