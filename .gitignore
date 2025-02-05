@@ -1,2 +1,5 @@
-web3test
-.aider*
+# node_modules
+/node_modules
+
+# lock file
+package-lock.json
