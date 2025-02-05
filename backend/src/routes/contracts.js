@@ -164,4 +164,26 @@ router.get('/hasAddressVoted', authenticateJWT, async (req, res) => {
   }
 });
 
+// Get Ethereum Balance
+router.get('/getEthBalance', authenticateJWT, async (req, res) => {
+  const { userAddress } = req.query;
+  try {
+    const balance = await contracts.getEthBalance(userAddress);
+    res.status(200).json({ balance });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get CCT Balance
+router.get('/getCctBalance', authenticateJWT, async (req, res) => {
+  const { userAddress } = req.query;
+  try {
+    const balance = await contracts.getCctBalance(userAddress);
+    res.status(200).json({ balance });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

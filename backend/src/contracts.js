@@ -90,6 +90,16 @@ async function hasAddressVoted(projectId, voter) {
   return await prContract.hasAddressVoted(projectId, voter);
 }
 
+async function getEthBalance(userAddress) {
+  const balance = await provider.getBalance(userAddress);
+  return ethers.utils.formatEther(balance);
+}
+
+async function getCctBalance(userAddress) {
+  const balance = await cctContract.balanceOf(userAddress);
+  return ethers.utils.formatEther(balance);
+}
+
 module.exports = {
   setRole,
   mint,
@@ -104,4 +114,6 @@ module.exports = {
   getEligibleVoterCount,
   isEligibleVoter,
   hasAddressVoted,
+  getEthBalance,
+  getCctBalance,
 };
