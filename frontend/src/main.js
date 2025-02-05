@@ -12,7 +12,7 @@ document.querySelector('#app').innerHTML = `
       <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
     </a>
     <h1>Hello Vite!</h1>
-    <div class="card">
+    <div class="border-t border-b border-gray-200 py-2">
       <button id="counter" type="button"></button>
     </div>
     <p class="read-the-docs">
