@@ -1,0 +1,21 @@
+{
+  "name": "africo-x-backend",
+  "version": "1.0.0",
+  "description": "API to interact with smart contracts",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "ethers": "^5.7.2",
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "author": "",
+  "license": "MIT"
+}
