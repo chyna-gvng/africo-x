@@ -1,4 +1,6 @@
 const { ethers } = require('ethers');
+const fs = require('fs');
+const path = require('path');
 require('dotenv').config();
 
 // Load private key and provider URL from environment variables
@@ -7,13 +9,18 @@ const providerUrl = process.env.PROVIDER_URL;
 const provider = new ethers.providers.JsonRpcProvider(providerUrl);
 const wallet = new ethers.Wallet(privateKey, provider);
 
-// CarbonCreditToken ABI and Address
-const cctAbi = [/* CarbonCreditToken ABI */];
+// Load ABIs dynamically
+const cctAbiPath = path.join(__dirname, '../../blockchain/build/contracts/CarbonCreditToken.json');
+const prAbiPath = path.join(__dirname, '../../blockchain/build/contracts/ProjectRegistration.json');
+
+const cctAbi = JSON.parse(fs.readFileSync(cctAbiPath, 'utf8')).abi;
+const prAbi = JSON.parse(fs.readFileSync(prAbiPath, 'utf8')).abi;
+
+// CarbonCreditToken Address
 const cctAddress = process.env.CCT_ADDRESS;
 const cctContract = new ethers.Contract(cctAddress, cctAbi, wallet);
 
-// ProjectRegistration ABI and Address
-const prAbi = [/* ProjectRegistration ABI */];
+// ProjectRegistration Address
 const prAddress = process.env.PR_ADDRESS;
 const prContract = new ethers.Contract(prAddress, prAbi, wallet);
 
