@@ -59,7 +59,7 @@ export default function Login() {
         </form>
         {message && <p className="mt-4 text-center text-green-500">{message}</p>}
         <div className="mt-4 text-center">
-          <Link href="/register">
+          <Link href="/register" legacyBehavior>
             <a className="text-blue-500 hover:underline">Don't have an account? Register</a>
           </Link>
         </div>

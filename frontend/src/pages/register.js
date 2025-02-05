@@ -59,7 +59,7 @@ export default function Register() {
         </form>
         {message && <p className="mt-4 text-center text-green-500">{message}</p>}
         <div className="mt-4 text-center">
-          <Link href="/login">
+          <Link href="/login" legacyBehavior>
             <a className="text-blue-500 hover:underline">Already have an account? Login</a>
           </Link>
         </div>
