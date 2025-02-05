@@ -31,7 +31,7 @@ blockchain/
 ## Development Setup
 
 ### Prerequisites
-- Node.js (v16+)
+- Node.js v16.0.0
 - Truffle Suite
 - Ganache CLI
 
