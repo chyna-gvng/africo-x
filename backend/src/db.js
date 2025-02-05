@@ -24,13 +24,21 @@ function registerUser(username, password) {
       if (err) {
         reject(err);
       } else {
-        // Get the address from Ganache
+        // Get the address from Ganache based on userId
         const accounts = await provider.listAccounts();
         db.run('INSERT INTO users (username, password, address) VALUES (?, ?, ?)', [username, hash, accounts[0]], function (err) {
           if (err) {
             reject(err);
           } else {
-            resolve(this.lastID);
+            const userId = this.lastID;
+            const userAddress = accounts[userId - 1];
+            db.run('UPDATE users SET address = ? WHERE id = ?', [userAddress, userId], function (err) {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(userId);
+              }
+            });
           }
         });
       }
