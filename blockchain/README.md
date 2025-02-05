@@ -1,72 +1,93 @@
-# AFRICO-X
+# AFRICO-X Blockchain Contracts
 
 ## Overview
-AFRICO-X is a decentralized application (DApp) built on the Ethereum blockchain that facilitates the trading of carbon credits. It allows project owners to register carbon offset projects and buyers to purchase and retire carbon credits. The platform ensures transparency and security through smart contracts.
+This directory contains the core smart contracts and development environment for the AFRICO-X carbon credit trading platform. It implements a decentralized system for managing carbon credits as ERC-20 tokens and a project registration system with weighted voting.
 
-## Tools
+## Key Features
+- **Carbon Credit Token (CCT)**: ERC-20 token representing carbon credits (1 CCT = 1 metric ton of CO2)
+- **Project Registration**: System for submitting and verifying carbon offset projects
+- **Weighted Voting**: Token holders can vote on projects with voting power proportional to their token balance
+- **Role-Based Access Control**: Three distinct roles (Admin, ProjectOwner, Buyer) with specific permissions
+
+## Directory Structure
+```
+blockchain/
+├── contracts/          # Solidity smart contracts
+│   ├── CarbonCreditToken.sol    # ERC-20 token implementation
+│   ├── ProjectRegistration.sol  # Project submission and voting system
+│   └── .gitkeep
+├── migrations/         # Deployment scripts
+│   ├── 1_deploy_contracts.js    # Contract deployment
+│   └── .gitkeep
+├── test/               # Comprehensive test suite
+│   ├── cct.test.js     # CarbonCreditToken tests
+│   ├── pr.test.js      # ProjectRegistration tests
+│   └── .gitkeep
+├── truffle-config.js   # Truffle configuration
+├── package.json        # Node.js dependencies
+└── README.md           # Project documentation
+```
+
+## Development Setup
+
+### Prerequisites
+- Node.js (v16+)
 - Truffle Suite
-- Ganache-CLI
-- Solidity
+- Ganache CLI
 
-## Users
-- **Admin**: The deployer of the smart contracts with the highest privileges.
-- **ProjectOwner (Seller)**: Users who can submit carbon offset projects.
-- **Buyers**: Users who can purchase and retire carbon credits.
+### Installation
+```bash
+npm install -g truffle ganache-cli
+npm install
+```
 
-## Smart Contracts
+### Compile Contracts
+```bash
+truffle compile
+```
 
-### CarbonCreditToken.sol
-This contract represents the ERC-20 token for carbon credits.
+### Running Tests
+1. Start Ganache in one terminal:
+```bash
+ganache-cli
+```
 
-#### Functions
-- **constructor()**: Initializes the ERC-20 Carbon Credit Token and sets the deployer as the Admin.
-- **setRole(address user, Role role)**: Assigns a role to a user.
-- **getRole(address user)**: Returns the role of a user.
-- **mint(address account, uint256 amount)**: Mints new CCT tokens.
-- **burn(uint256 amount)**: Burns (retires) CCT tokens.
-- **setDepletionRate(address buyer, uint256 rate)**: Sets the depletion rate for a buyer.
+2. In another terminal, run tests:
+```bash
+truffle test
+```
 
-### ProjectRegistration.sol
-This contract allows project owners to submit projects and receive verification through voting.
+### Deployment
+To deploy to local development network:
+```bash
+truffle migrate --network development
+```
 
-#### Functions
-- **constructor(address _cct)**: Initializes the contract with the CarbonCreditToken address.
-- **submitProject(string calldata _name)**: Allows a project owner to submit a new project.
-- **voteForProject(uint256 projectId)**: Allows CCT holders to vote for a project.
-- **finalizeProject(uint256 projectId)**: Finalizes project registration if it has >50% of total vote weight.
+## Smart Contract Documentation
 
-## Prerequisites
-- NodeJS (v16.0.0)
-- Truffle
-- Ganache-CLI
+### CarbonCreditToken (CCT)
+- **Roles**: Admin (1), ProjectOwner (2), Buyer (3)
+- **Functions**:
+  - `setRole(address user, Role role)`: Assign roles
+  - `mint(address account, uint256 amount)`: Create new tokens
+  - `burn(uint256 amount)`: Retire tokens
+  - `setDepletionRate(address buyer, uint256 rate)`: Configure buyer depletion
 
-## Setup
-1. **Install dependencies**:
-    ```bash
-    npm install -g truffle ganache-cli
-    ```
+### ProjectRegistration
+- **Project Lifecycle**:
+  1. ProjectOwner submits project
+  2. Buyers vote with their token weight
+  3. Admin finalizes projects with >50% votes
+- **Key Functions**:
+  - `submitProject(string name)`: Register new project
+  - `voteForProject(uint256 projectId)`: Vote for project
+  - `finalizeProject(uint256 projectId)`: Finalize successful projects
 
-2. **Compile contracts using Truffle**:
-    ```bash
-    truffle compile
-    ```
+## Contributing
+1. Create a new branch for your changes
+2. Write tests for new functionality
+3. Run all tests before submitting PR
+4. Update documentation as needed
 
-3. **Start Ganache-CLI instance**:
-    ```bash
-    ganache-cli
-    ```
-
-4. **In a separate terminal session, deploy contracts to the RPC**:
-    ```bash
-    truffle migrate --network development
-    ```
-
-5. **Testing**:
-    ```bash
-    truffle test
-    ```
-
-## Additional Notes
-- Ensure that your Ganache-CLI instance is running before deploying the contracts.
-- Make sure to configure your Truffle configuration file (`truffle-config.js`) to point to the correct network settings.
-- For production deployment, consider using a more robust Ethereum node provider like Infura or Alchemy.
+## License
+MIT License - See SPDX headers in source files
