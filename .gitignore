@@ -1,11 +1,11 @@
 # node_modules
-/node_modules
+node_modules
 
 # lock file
 package-lock.json
 
 # aider files
-aider*
+.aider*
 
 # web3test
 web3test
