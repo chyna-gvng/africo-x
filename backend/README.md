@@ -1,8 +1,8 @@
 # AfriCO-X: Decentralized Carbon Credit Trading Platform
 ## Prerequisites
 - Node.js
-- ethers.js
-- express.js
+- Express.js
+- Ethers.js
 
 ## Info
 API to interact with smart contracts
