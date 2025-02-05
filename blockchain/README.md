@@ -63,6 +63,14 @@ To deploy to local development network:
 truffle migrate --network development
 ```
 
+### Push to Git
+To push changes to the remote repository:
+```bash
+git add .
+git commit -m "Your commit message"
+git push
+```
+
 ## Smart Contract Documentation
 
 ### CarbonCreditToken (CCT)

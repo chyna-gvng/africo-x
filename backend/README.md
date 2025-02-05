@@ -6,3 +6,10 @@
 
 ## Info
 API to interact with smart contracts
+
+## Push to Git
+To push changes to the remote repository:
+```bash
+git add .
+git commit -m "Your commit message"
+git push
