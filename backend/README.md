@@ -14,6 +14,7 @@ backend/
 ├── src/
 │   ├── index.js          # Express.js server setup
 │   ├── db.js            # SQLite database setup and authentication
+│   ├── contracts.js     # Smart contract interaction logic
 │   ├── routes/
 │   │   ├── auth.js      # Authentication routes
 │   │   └── contracts.js # Smart contract interaction routes
@@ -52,7 +53,19 @@ node src/index.js
 - `POST /auth/login`: Authenticate a user
 
 ### Smart Contract Interaction
-- `POST /contracts/interact`: Interact with a smart contract
+- `POST /contracts/setRole`: Set role for a user
+- `POST /contracts/mint`: Mint tokens
+- `POST /contracts/burn`: Burn tokens
+- `POST /contracts/setDepletionRate`: Set depletion rate for a buyer
+- `POST /contracts/submitProject`: Submit a new project
+- `POST /contracts/voteForProject`: Vote for a project
+- `POST /contracts/finalizeProject`: Finalize a project
+- `GET /contracts/getRole`: Get role of a user
+- `GET /contracts/getProject`: Get project details
+- `GET /contracts/getTotalEligibleVotes`: Get total eligible votes
+- `GET /contracts/getEligibleVoterCount`: Get eligible voter count
+- `GET /contracts/isEligibleVoter`: Check voter eligibility
+- `GET /contracts/hasAddressVoted`: Check if address has voted
 
 ## License
 MIT License - See SPDX headers in source files
