@@ -1,5 +1,58 @@
-# Vue 3 + Vite
+# AfriCO-X Frontend
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+This is the frontend for the AfriCO-X decentralized carbon credit trading platform. It is built using Vue 3 and Vite.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## Project Setup
+
+### Prerequisites
+- Node.js
+- npm or yarn
+
+### Installation
+```bash
+npm install
+```
+
+### Running the Development Server
+```bash
+npm run dev
+```
+
+### Building for Production
+```bash
+npm run build
+```
+
+### Previewing the Production Build
+```bash
+npm run preview
+```
+
+## Directory Structure
+```
+frontend/
+├── public/
+│   └── vite.svg
+├── src/
+│   ├── assets/
+│   │   └── vue.svg
+│   ├── components/
+│   │   └── HelloWorld.vue
+│   ├── router/
+│   │   └── index.js
+│   ├── views/
+│   │   ├── Auth.vue
+│   │   ├── Dashboard.vue
+│   │   └── Home.vue
+│   ├── App.vue
+│   ├── main.js
+│   └── style.css
+├── .gitignore
+├── index.html
+├── package.json
+├── README.md
+└── vite.config.js
+```
+
+## License
+MIT License - See SPDX headers in source files
