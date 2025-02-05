@@ -39,6 +39,7 @@ blockchain/
 ```bash
 npm install -g truffle ganache-cli
 npm install
+npm install @openzeppelin/contracts
 ```
 
 ### Compile Contracts
