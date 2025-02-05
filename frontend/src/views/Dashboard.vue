@@ -27,17 +27,23 @@ export default {
     }
   },
   async created() {
-    const projectsResponse = await fetch('/contracts/getProject')
-    const projectsData = await projectsResponse.json()
-    this.projects = projectsData.projects
+    const token = localStorage.getItem('token');
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
 
-    const totalVotesResponse = await fetch('/contracts/getTotalEligibleVotes')
-    const totalVotesData = await totalVotesResponse.json()
-    this.totalVotes = totalVotesData.totalVotes
+    const projectsResponse = await fetch('/contracts/getProject', { headers });
+    const projectsData = await projectsResponse.json();
+    this.projects = projectsData.projects;
 
-    const voterCountResponse = await fetch('/contracts/getEligibleVoterCount')
-    const voterCountData = await voterCountResponse.json()
-    this.voterCount = voterCountData.voterCount
+    const totalVotesResponse = await fetch('/contracts/getTotalEligibleVotes', { headers });
+    const totalVotesData = await totalVotesResponse.json();
+    this.totalVotes = totalVotesData.totalVotes;
+
+    const voterCountResponse = await fetch('/contracts/getEligibleVoterCount', { headers });
+    const voterCountData = await voterCountResponse.json();
+    this.voterCount = voterCountData.voterCount;
   }
 }
 </script>

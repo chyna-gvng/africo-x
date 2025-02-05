@@ -46,10 +46,14 @@ export default {
 
       const data = await response.json()
       if (response.ok) {
-        alert(data.message)
-        // Redirect to dashboard or handle successful login/registration
+        if (this.isLogin) {
+          localStorage.setItem('token', data.token);
+          this.$router.push('/dashboard');
+        } else {
+          alert(data.message);
+        }
       } else {
-        alert(data.error)
+        alert(data.error);
       }
     }
   }

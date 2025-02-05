@@ -1,10 +1,30 @@
 const express = require('express');
 const contracts = require('../contracts');
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
+// Secret key for JWT
+const JWT_SECRET = process.env.JWT_SECRET || 'your_secret_key';
+
+// Middleware to verify JWT
+const authenticateJWT = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (token) {
+    jwt.verify(token, JWT_SECRET, (err, user) => {
+      if (err) {
+        return res.sendStatus(403);
+      }
+      req.user = user;
+      next();
+    });
+  } else {
+    res.sendStatus(401);
+  }
+};
+
 // Set Role
-router.post('/setRole', async (req, res) => {
+router.post('/setRole', authenticateJWT, async (req, res) => {
   const { user, role } = req.body;
   try {
     await contracts.setRole(user, role);
@@ -15,7 +35,7 @@ router.post('/setRole', async (req, res) => {
 });
 
 // Mint Tokens
-router.post('/mint', async (req, res) => {
+router.post('/mint', authenticateJWT, async (req, res) => {
   const { account, amount } = req.body;
   try {
     await contracts.mint(account, amount);
@@ -26,7 +46,7 @@ router.post('/mint', async (req, res) => {
 });
 
 // Burn Tokens
-router.post('/burn', async (req, res) => {
+router.post('/burn', authenticateJWT, async (req, res) => {
   const { amount } = req.body;
   try {
     await contracts.burn(amount);
@@ -37,7 +57,7 @@ router.post('/burn', async (req, res) => {
 });
 
 // Set Depletion Rate
-router.post('/setDepletionRate', async (req, res) => {
+router.post('/setDepletionRate', authenticateJWT, async (req, res) => {
   const { buyer, rate } = req.body;
   try {
     await contracts.setDepletionRate(buyer, rate);
@@ -48,7 +68,7 @@ router.post('/setDepletionRate', async (req, res) => {
 });
 
 // Submit Project
-router.post('/submitProject', async (req, res) => {
+router.post('/submitProject', authenticateJWT, async (req, res) => {
   const { name } = req.body;
   try {
     await contracts.submitProject(name);
@@ -59,7 +79,7 @@ router.post('/submitProject', async (req, res) => {
 });
 
 // Vote for Project
-router.post('/voteForProject', async (req, res) => {
+router.post('/voteForProject', authenticateJWT, async (req, res) => {
   const { projectId } = req.body;
   try {
     await contracts.voteForProject(projectId);
@@ -70,7 +90,7 @@ router.post('/voteForProject', async (req, res) => {
 });
 
 // Finalize Project
-router.post('/finalizeProject', async (req, res) => {
+router.post('/finalizeProject', authenticateJWT, async (req, res) => {
   const { projectId } = req.body;
   try {
     await contracts.finalizeProject(projectId);
@@ -81,7 +101,7 @@ router.post('/finalizeProject', async (req, res) => {
 });
 
 // Get User Role
-router.get('/getRole', async (req, res) => {
+router.get('/getRole', authenticateJWT, async (req, res) => {
   const { user } = req.query;
   try {
     const role = await contracts.getRole(user);
@@ -92,7 +112,7 @@ router.get('/getRole', async (req, res) => {
 });
 
 // Get Project Details
-router.get('/getProject', async (req, res) => {
+router.get('/getProject', authenticateJWT, async (req, res) => {
   const { projectId } = req.query;
   try {
     const project = await contracts.getProject(projectId);
@@ -103,7 +123,7 @@ router.get('/getProject', async (req, res) => {
 });
 
 // Get Total Eligible Votes
-router.get('/getTotalEligibleVotes', async (req, res) => {
+router.get('/getTotalEligibleVotes', authenticateJWT, async (req, res) => {
   try {
     const totalVotes = await contracts.getTotalEligibleVotes();
     res.status(200).json({ totalVotes });
@@ -113,7 +133,7 @@ router.get('/getTotalEligibleVotes', async (req, res) => {
 });
 
 // Get Eligible Voter Count
-router.get('/getEligibleVoterCount', async (req, res) => {
+router.get('/getEligibleVoterCount', authenticateJWT, async (req, res) => {
   try {
     const voterCount = await contracts.getEligibleVoterCount();
     res.status(200).json({ voterCount });
@@ -123,7 +143,7 @@ router.get('/getEligibleVoterCount', async (req, res) => {
 });
 
 // Check Voter Eligibility
-router.get('/isEligibleVoter', async (req, res) => {
+router.get('/isEligibleVoter', authenticateJWT, async (req, res) => {
   const { voter } = req.query;
   try {
     const isEligible = await contracts.isEligibleVoter(voter);
@@ -134,7 +154,7 @@ router.get('/isEligibleVoter', async (req, res) => {
 });
 
 // Check if Address Has Voted
-router.get('/hasAddressVoted', async (req, res) => {
+router.get('/hasAddressVoted', authenticateJWT, async (req, res) => {
   const { projectId, voter } = req.query;
   try {
     const hasVoted = await contracts.hasAddressVoted(projectId, voter);
