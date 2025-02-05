@@ -3,3 +3,9 @@
 
 # lock file
 package-lock.json
+
+# aider files
+aider*
+
+# web3test
+web3test
