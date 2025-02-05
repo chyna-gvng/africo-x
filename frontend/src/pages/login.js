@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import Link from 'next/link';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -57,6 +58,11 @@ export default function Login() {
           </div>
         </form>
         {message && <p className="mt-4 text-center text-green-500">{message}</p>}
+        <div className="mt-4 text-center">
+          <Link href="/register">
+            <a className="text-blue-500 hover:underline">Don't have an account? Register</a>
+          </Link>
+        </div>
       </div>
     </div>
   );
