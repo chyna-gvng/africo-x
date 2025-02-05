@@ -1,19 +1,20 @@
 const { ethers } = require('ethers');
+require('dotenv').config();
 
-// Replace with your private key and provider URL
-const privateKey = 'YOUR_PRIVATE_KEY';
-const providerUrl = 'http://127.0.0.1:8545';
+// Load private key and provider URL from environment variables
+const privateKey = process.env.PRIVATE_KEY;
+const providerUrl = process.env.PROVIDER_URL;
 const provider = new ethers.providers.JsonRpcProvider(providerUrl);
 const wallet = new ethers.Wallet(privateKey, provider);
 
 // CarbonCreditToken ABI and Address
 const cctAbi = [/* CarbonCreditToken ABI */];
-const cctAddress = '0xYourCarbonCreditTokenAddress';
+const cctAddress = process.env.CCT_ADDRESS;
 const cctContract = new ethers.Contract(cctAddress, cctAbi, wallet);
 
 // ProjectRegistration ABI and Address
 const prAbi = [/* ProjectRegistration ABI */];
-const prAddress = '0xYourProjectRegistrationAddress';
+const prAddress = process.env.PR_ADDRESS;
 const prContract = new ethers.Contract(prAddress, prAbi, wallet);
 
 async function setRole(user, role) {

@@ -12,3 +12,6 @@ package-lock.json
 
 # web3test
 web3test
+
+# environment variables
+.env
