@@ -1,25 +1,32 @@
 const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcrypt');
+const { ethers } = require('ethers');
 
 const db = new sqlite3.Database('./database.sqlite');
+
+// Connect to Ganache instance
+const provider = new ethers.providers.JsonRpcProvider('http://127.0.0.1:8545');
 
 // Create users table
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE,
-    password TEXT
+    password TEXT,
+    address TEXT
   )`);
 });
 
 // Register a new user
 function registerUser(username, password) {
   return new Promise((resolve, reject) => {
-    bcrypt.hash(password, 10, (err, hash) => {
+    bcrypt.hash(password, 10, async (err, hash) => {
       if (err) {
         reject(err);
       } else {
-        db.run('INSERT INTO users (username, password) VALUES (?, ?)', [username, hash], function (err) {
+        // Get the address from Ganache
+        const accounts = await provider.listAccounts();
+        db.run('INSERT INTO users (username, password, address) VALUES (?, ?, ?)', [username, hash, accounts[0]], function (err) {
           if (err) {
             reject(err);
           } else {
