@@ -4,6 +4,9 @@ node_modules
 # lock file
 package-lock.json
 
+# data
+*.sqlite
+
 # aider files
 .aider*
 
