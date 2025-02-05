@@ -48,15 +48,11 @@ export default {
       'Content-Type': 'application/json'
     };
 
-    // Fetch Ethereum balance
-    const ethBalanceResponse = await fetch('/contracts/getEthBalance', { headers });
-    const ethBalanceData = await ethBalanceResponse.json();
-    this.ethBalance = ethBalanceData.balance;
-
-    // Fetch CCT balance
-    const cctBalanceResponse = await fetch('/contracts/getCctBalance', { headers });
-    const cctBalanceData = await cctBalanceResponse.json();
-    this.cctBalance = cctBalanceData.balance;
+    // Fetch user balances
+    const balancesResponse = await fetch('/contracts/getUserBalances', { headers });
+    const balancesData = await balancesResponse.json();
+    this.ethBalance = balancesData.ethBalance;
+    this.cctBalance = balancesData.cctBalance;
 
     // Fetch projects
     const projectsResponse = await fetch('/contracts/getProject', { headers });
