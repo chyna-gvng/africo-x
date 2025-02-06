@@ -11,6 +11,7 @@ const Projects = () => {
   const [location, setLocation] = useState('');
   const [cctAmount, setCctAmount] = useState('');
   const [message, setMessage] = useState('');
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,10 +36,10 @@ const Projects = () => {
             setProjects(projectsResponse.projects);
           }
         } catch (error) {
-          setMessage(error);
+          setError(error.message);
         }
       } else {
-        setMessage('Please log in to view projects.');
+        setError('Please log in to view projects.');
       }
     };
 
@@ -54,10 +55,10 @@ const Projects = () => {
         setMessage('Project submitted successfully');
         navigate('/projects');
       } catch (error) {
-        setMessage(error);
+        setError(error.message);
       }
     } else {
-      setMessage('Please log in to submit a project.');
+      setError('Please log in to submit a project.');
     }
   };
 
@@ -69,10 +70,10 @@ const Projects = () => {
         setMessage('Project verified successfully');
         navigate('/projects');
       } catch (error) {
-        setMessage(error);
+        setError(error.message);
       }
     } else {
-      setMessage('Please log in to verify a project.');
+      setError('Please log in to verify a project.');
     }
   };
 
@@ -86,12 +87,16 @@ const Projects = () => {
         setMessage('CCT purchased successfully');
         navigate('/projects');
       } catch (error) {
-        setMessage(error);
+        setError(error.message);
       }
     } else {
-      setMessage('Please log in to purchase CCT.');
+      setError('Please log in to purchase CCT.');
     }
   };
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div>
