@@ -140,6 +140,15 @@ async function updateProjectCctAmount(projectId, cctAmount) {
   return await db.updateProjectCctAmount(projectId, cctAmount);
 }
 
+async function purchaseCCT(buyerAddress, ownerAddress, ethAmount) {
+  const tx = await wallet.sendTransaction({
+    to: ownerAddress,
+    value: ethers.utils.parseEther(ethAmount.toString()),
+  });
+  await tx.wait();
+  await mint(buyerAddress, ethAmount);
+}
+
 module.exports = {
   setRole,
   mint,
@@ -165,4 +174,5 @@ module.exports = {
   getVerifiedProjects,
   verifyProject,
   updateProjectCctAmount,
+  purchaseCCT,
 };

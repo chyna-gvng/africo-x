@@ -286,4 +286,15 @@ router.get('/getUserAddress', authenticateJWT, async (req, res) => {
   }
 });
 
+// Purchase CCT
+router.post('/purchaseCCT', authenticateJWT, async (req, res) => {
+  const { buyerAddress, ownerAddress, ethAmount } = req.body;
+  try {
+    await contracts.purchaseCCT(buyerAddress, ownerAddress, ethAmount);
+    res.status(200).json({ message: 'CCT purchased successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
