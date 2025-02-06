@@ -8,7 +8,7 @@ import "./ProjectRegistration.sol";
 /**
  * @title CarbonCreditToken (CCT)
  * @dev ERC-20 token representing carbon credits (1 CCT = 1 metric ton of CO2).
- * Implements role-based access control, minting, burning, and depletion rate management.
+ * Implements role-based access control, minting, burning, depletion rate management, and CCT transfers.
  */
 contract CarbonCreditToken is ERC20, Ownable {
     enum Role {None, Admin, ProjectOwner, Buyer}
@@ -74,5 +74,16 @@ contract CarbonCreditToken is ERC20, Ownable {
      */
     function setDepletionRate(address buyer, uint256 rate) external onlyOwner {
         depletionRate[buyer] = rate;
+    }
+
+    /**
+     * @notice Transfers CCT tokens from one address to another.
+     * @param from The address to transfer from.
+     * @param to The address to transfer to.
+     * @param amount The amount of tokens to transfer.
+     */
+    function transferFrom(address from, address to, uint256 amount) external override {
+        require(roles[from] == Role.Buyer, "Only buyers can transfer CCT");
+        super.transferFrom(from, to, amount);
     }
 }

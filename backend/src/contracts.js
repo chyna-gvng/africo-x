@@ -130,6 +130,9 @@ async function getVerifiedProjects() {
 }
 
 async function verifyProject(projectId) {
+  const project = await db.getProjectById(projectId);
+  const ownerAddress = await db.getUserAddressById(project.owner_id);
+  await mint(ownerAddress, project.cctAmount);
   return await db.verifyProject(projectId);
 }
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAllProjects, getProjectsByOwner, getVerifiedProjects, submitProject, verifyProject } from './api/contracts';
+import { getAllProjects, getProjectsByOwner, getVerifiedProjects, submitProject, verifyProject, getCctBalance, mintTokens } from './api/contracts';
 import { getUserRole } from './api/user';
 
 const Projects = () => {
@@ -76,6 +76,23 @@ const Projects = () => {
     }
   };
 
+  const handlePurchaseCCT = async (projectId, cctAmount) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const userAddress = await getUserAddress(token);
+        const ethAmount = cctAmount; // 1 CCT = 1 ETH
+        await mintTokens(token, userAddress, ethAmount);
+        setMessage('CCT purchased successfully');
+        navigate('/projects');
+      } catch (error) {
+        setMessage(error);
+      }
+    } else {
+      setMessage('Please log in to purchase CCT.');
+    }
+  };
+
   return (
     <div>
       <h2>Projects</h2>
@@ -111,6 +128,9 @@ const Projects = () => {
               <p>{project.verification_status ? 'Verified' : 'Unverified'}</p>
               {role === 1 && !project.verification_status && (
                 <button onClick={() => handleVerifyProject(project.project_id)}>Verify Project</button>
+              )}
+              {role === 3 && project.verification_status && (
+                <button onClick={() => handlePurchaseCCT(project.project_id, project.cctAmount)}>Purchase CCT</button>
               )}
             </li>
           ))}

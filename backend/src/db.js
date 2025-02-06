@@ -202,6 +202,36 @@ function updateProjectCctAmount(projectId, cctAmount) {
   });
 }
 
+// Get project by ID
+function getProjectById(projectId) {
+  return new Promise((resolve, reject) => {
+    db.get('SELECT * FROM projects WHERE project_id = ?', [projectId], (err, row) => {
+      if (err) {
+        reject(err);
+      } else if (row) {
+        resolve(row);
+      } else {
+        reject(new Error('Project not found'));
+      }
+    });
+  });
+}
+
+// Get user address by ID
+function getUserAddressById(userId) {
+  return new Promise((resolve, reject) => {
+    db.get('SELECT address FROM users WHERE id = ?', [userId], (err, row) => {
+      if (err) {
+        reject(err);
+      } else if (row) {
+        resolve(row.address);
+      } else {
+        reject(new Error('User not found'));
+      }
+    });
+  });
+}
+
 module.exports = {
   registerUser,
   authenticateUser,
@@ -214,4 +244,6 @@ module.exports = {
   getVerifiedProjects,
   verifyProject,
   updateProjectCctAmount,
+  getProjectById,
+  getUserAddressById,
 };
