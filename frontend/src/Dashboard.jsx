@@ -16,6 +16,9 @@ const Dashboard = () => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
+            params: {
+              userAddress: '0xYourUserAddressHere', // Replace with actual user address
+            },
           });
           setUserData(response.data);
         } catch (error) {
