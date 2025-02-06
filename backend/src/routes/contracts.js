@@ -275,4 +275,15 @@ router.post('/updateProjectCctAmount', authenticateJWT, async (req, res) => {
   }
 });
 
+// Get User Address
+router.get('/getUserAddress', authenticateJWT, async (req, res) => {
+  const { username } = req.user;
+  try {
+    const userAddress = await contracts.getUserAddress(username);
+    res.status(200).json({ userAddress });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

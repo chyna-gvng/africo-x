@@ -203,3 +203,14 @@ export const getCctBalance = async (token, userAddress) => {
     throw error.response.data;
   }
 };
+
+export const getUserAddress = async (token) => {
+  try {
+    const response = await axios.get(`${API_URL}/getUserAddress`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
