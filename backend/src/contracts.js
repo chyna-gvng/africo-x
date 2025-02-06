@@ -32,7 +32,7 @@ async function setRole(user, role) {
 }
 
 async function mint(account, amount) {
-  const tx = await cctContract.mint(account, amount);
+  const tx = await cctContract.mint(account, ethers.utils.parseEther(amount.toString()));
   await tx.wait();
   return tx;
 }
