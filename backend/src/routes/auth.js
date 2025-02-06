@@ -9,9 +9,9 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your_secret_key';
 
 // Register a new user
 router.post('/register', async (req, res) => {
-  const { username, password } = req.body;
+  const { username, password, role } = req.body;
   try {
-    const userId = await db.registerUser(username, password);
+    const userId = await db.registerUser(username, password, role);
     res.status(201).json({ message: 'User registered successfully', userId });
   } catch (err) {
     res.status(400).json({ error: err.message });

@@ -13,12 +13,13 @@ db.serialize(() => {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE,
     password TEXT,
-    address TEXT
+    address TEXT,
+    role TEXT
   )`);
 });
 
 // Register a new user
-function registerUser(username, password) {
+function registerUser(username, password, role) {
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, 10, async (err, hash) => {
       if (err) {
@@ -26,7 +27,7 @@ function registerUser(username, password) {
       } else {
         // Get the address from Ganache based on userId
         const accounts = await provider.listAccounts();
-        db.run('INSERT INTO users (username, password, address) VALUES (?, ?, ?)', [username, hash, accounts[0]], function (err) {
+        db.run('INSERT INTO users (username, password, address, role) VALUES (?, ?, ?, ?)', [username, hash, accounts[0], role], function (err) {
           if (err) {
             reject(err);
           } else {
