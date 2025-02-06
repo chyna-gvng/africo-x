@@ -69,7 +69,23 @@ function authenticateUser(username, password) {
   });
 }
 
+// Get user address
+function getUserAddress(username) {
+  return new Promise((resolve, reject) => {
+    db.get('SELECT address FROM users WHERE username = ?', [username], (err, row) => {
+      if (err) {
+        reject(err);
+      } else if (row) {
+        resolve(row.address);
+      } else {
+        reject(new Error('User not found'));
+      }
+    });
+  });
+}
+
 module.exports = {
   registerUser,
   authenticateUser,
+  getUserAddress,
 };

@@ -1,6 +1,7 @@
 const { ethers } = require('ethers');
 const fs = require('fs');
 const path = require('path');
+const db = require('./db');
 require('dotenv').config();
 
 // Load private key and provider URL from environment variables
@@ -100,6 +101,10 @@ async function getCctBalance(userAddress) {
   return ethers.utils.formatEther(balance);
 }
 
+async function getUserAddress(username) {
+  return await db.getUserAddress(username);
+}
+
 module.exports = {
   setRole,
   mint,
@@ -116,4 +121,5 @@ module.exports = {
   hasAddressVoted,
   getEthBalance,
   getCctBalance,
+  getUserAddress,
 };

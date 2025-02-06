@@ -188,8 +188,9 @@ router.get('/getCctBalance', authenticateJWT, async (req, res) => {
 
 // Get User Balances
 router.get('/getUserBalances', authenticateJWT, async (req, res) => {
-  const { userAddress } = req.query;
+  const { username } = req.user;
   try {
+    const userAddress = await contracts.getUserAddress(username);
     const ethBalance = await contracts.getEthBalance(userAddress);
     const cctBalance = await contracts.getCctBalance(userAddress);
     res.status(200).json({ ethBalance, cctBalance });
