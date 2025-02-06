@@ -43,7 +43,7 @@ const Dashboard = () => {
       <h2>Dashboard</h2>
       <p>Ethereum Balance: {userData.ethBalance} ETH</p>
       <p>Carbon Credit Balance: {userData.cctBalance} CCT</p>
-      <button onClick={handleLogout}>Logout</button>
+      {localStorage.getItem('token') && <button onClick={handleLogout}>Logout</button>}
     </div>
   );
 };
