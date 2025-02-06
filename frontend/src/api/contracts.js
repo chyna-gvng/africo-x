@@ -191,3 +191,15 @@ export const updateProjectCctAmount = async (token, projectId, cctAmount) => {
     throw error.response.data;
   }
 };
+
+export const getCctBalance = async (token, userAddress) => {
+  try {
+    const response = await axios.get(`${API_URL}/getCctBalance`, {
+      headers: { Authorization: `Bearer ${token}` },
+      params: { userAddress },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
