@@ -113,6 +113,30 @@ async function setUserRole(username, role) {
   return await db.setUserRole(username, role);
 }
 
+async function addProject(name, description, location, cctAmount, ownerId) {
+  return await db.addProject(name, description, location, cctAmount, ownerId);
+}
+
+async function getAllProjects() {
+  return await db.getAllProjects();
+}
+
+async function getProjectsByOwner(ownerId) {
+  return await db.getProjectsByOwner(ownerId);
+}
+
+async function getVerifiedProjects() {
+  return await db.getVerifiedProjects();
+}
+
+async function verifyProject(projectId) {
+  return await db.verifyProject(projectId);
+}
+
+async function updateProjectCctAmount(projectId, cctAmount) {
+  return await db.updateProjectCctAmount(projectId, cctAmount);
+}
+
 module.exports = {
   setRole,
   mint,
@@ -132,4 +156,10 @@ module.exports = {
   getUserAddress,
   getUserRole,
   setUserRole,
+  addProject,
+  getAllProjects,
+  getProjectsByOwner,
+  getVerifiedProjects,
+  verifyProject,
+  updateProjectCctAmount,
 };

@@ -46,9 +46,9 @@ export const setDepletionRate = async (token, buyer, rate) => {
   }
 };
 
-export const submitProject = async (token, name) => {
+export const submitProject = async (token, name, description, location, cctAmount) => {
   try {
-    const response = await axios.post(`${API_URL}/submitProject`, { name }, {
+    const response = await axios.post(`${API_URL}/submitProject`, { name, description, location, cctAmount }, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
@@ -130,6 +130,61 @@ export const hasAddressVoted = async (token, projectId, voter) => {
     const response = await axios.get(`${API_URL}/hasAddressVoted`, {
       headers: { Authorization: `Bearer ${token}` },
       params: { projectId, voter },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+export const getAllProjects = async (token) => {
+  try {
+    const response = await axios.get(`${API_URL}/getAllProjects`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+export const getProjectsByOwner = async (token) => {
+  try {
+    const response = await axios.get(`${API_URL}/getProjectsByOwner`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+export const getVerifiedProjects = async (token) => {
+  try {
+    const response = await axios.get(`${API_URL}/getVerifiedProjects`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+export const verifyProject = async (token, projectId) => {
+  try {
+    const response = await axios.post(`${API_URL}/verifyProject`, { projectId }, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+export const updateProjectCctAmount = async (token, projectId, cctAmount) => {
+  try {
+    const response = await axios.post(`${API_URL}/updateProjectCctAmount`, { projectId, cctAmount }, {
+      headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
   } catch (error) {

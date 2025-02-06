@@ -16,6 +16,17 @@ db.serialize(() => {
     address TEXT,
     role INTEGER
   )`);
+
+  db.run(`CREATE TABLE IF NOT EXISTS projects (
+    project_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    description TEXT,
+    location TEXT,
+    cctAmount INTEGER,
+    verification_status BOOLEAN,
+    owner_id INTEGER,
+    FOREIGN KEY (owner_id) REFERENCES users (id)
+  )`);
 });
 
 // Register a new user
@@ -113,10 +124,94 @@ function setUserRole(username, role) {
   });
 }
 
+// Add a new project
+function addProject(name, description, location, cctAmount, ownerId) {
+  return new Promise((resolve, reject) => {
+    db.run('INSERT INTO projects (name, description, location, cctAmount, verification_status, owner_id) VALUES (?, ?, ?, ?, ?, ?)', [name, description, location, cctAmount, false, ownerId], function (err) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(this.lastID);
+      }
+    });
+  });
+}
+
+// Get all projects
+function getAllProjects() {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT * FROM projects', (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+}
+
+// Get projects by owner
+function getProjectsByOwner(ownerId) {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT * FROM projects WHERE owner_id = ?', [ownerId], (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+}
+
+// Get verified projects
+function getVerifiedProjects() {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT * FROM projects WHERE verification_status = ?', [true], (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+}
+
+// Verify a project
+function verifyProject(projectId) {
+  return new Promise((resolve, reject) => {
+    db.run('UPDATE projects SET verification_status = ? WHERE project_id = ?', [true, projectId], function (err) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
+// Update project CCT amount
+function updateProjectCctAmount(projectId, cctAmount) {
+  return new Promise((resolve, reject) => {
+    db.run('UPDATE projects SET cctAmount = ? WHERE project_id = ?', [cctAmount, projectId], function (err) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
 module.exports = {
   registerUser,
   authenticateUser,
   getUserAddress,
   getUserRole,
   setUserRole,
+  addProject,
+  getAllProjects,
+  getProjectsByOwner,
+  getVerifiedProjects,
+  verifyProject,
+  updateProjectCctAmount,
 };

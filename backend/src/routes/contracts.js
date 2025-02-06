@@ -69,9 +69,10 @@ router.post('/setDepletionRate', authenticateJWT, async (req, res) => {
 
 // Submit Project
 router.post('/submitProject', authenticateJWT, async (req, res) => {
-  const { name } = req.body;
+  const { name, description, location, cctAmount } = req.body;
+  const { userId } = req.user;
   try {
-    await contracts.submitProject(name);
+    await contracts.addProject(name, description, location, cctAmount, userId);
     res.status(200).json({ message: 'Project submitted successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -216,6 +217,59 @@ router.post('/setUserRole', authenticateJWT, async (req, res) => {
   try {
     await contracts.setUserRole(username, role);
     res.status(200).json({ message: 'Role set successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get All Projects
+router.get('/getAllProjects', authenticateJWT, async (req, res) => {
+  try {
+    const projects = await contracts.getAllProjects();
+    res.status(200).json({ projects });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get Projects By Owner
+router.get('/getProjectsByOwner', authenticateJWT, async (req, res) => {
+  const { userId } = req.user;
+  try {
+    const projects = await contracts.getProjectsByOwner(userId);
+    res.status(200).json({ projects });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get Verified Projects
+router.get('/getVerifiedProjects', authenticateJWT, async (req, res) => {
+  try {
+    const projects = await contracts.getVerifiedProjects();
+    res.status(200).json({ projects });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Verify Project
+router.post('/verifyProject', authenticateJWT, async (req, res) => {
+  const { projectId } = req.body;
+  try {
+    await contracts.verifyProject(projectId);
+    res.status(200).json({ message: 'Project verified successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Update Project CCT Amount
+router.post('/updateProjectCctAmount', authenticateJWT, async (req, res) => {
+  const { projectId, cctAmount } = req.body;
+  try {
+    await contracts.updateProjectCctAmount(projectId, cctAmount);
+    res.status(200).json({ message: 'Project CCT amount updated successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
