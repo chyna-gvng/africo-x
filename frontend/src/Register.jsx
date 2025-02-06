@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:3000/auth/register', { username, password, role });
       setMessage(response.data.message);
+      navigate('/login'); // Redirect to login
     } catch (error) {
       setMessage(error.response.data.error);
     }
