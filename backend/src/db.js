@@ -14,7 +14,7 @@ db.serialize(() => {
     username TEXT UNIQUE,
     password TEXT,
     address TEXT,
-    role TEXT
+    role INTEGER
   )`);
 });
 
@@ -85,8 +85,38 @@ function getUserAddress(username) {
   });
 }
 
+// Get user role
+function getUserRole(username) {
+  return new Promise((resolve, reject) => {
+    db.get('SELECT role FROM users WHERE username = ?', [username], (err, row) => {
+      if (err) {
+        reject(err);
+      } else if (row) {
+        resolve(row.role);
+      } else {
+        reject(new Error('User not found'));
+      }
+    });
+  });
+}
+
+// Set user role
+function setUserRole(username, role) {
+  return new Promise((resolve, reject) => {
+    db.run('UPDATE users SET role = ? WHERE username = ?', [role, username], function (err) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
 module.exports = {
   registerUser,
   authenticateUser,
   getUserAddress,
+  getUserRole,
+  setUserRole,
 };

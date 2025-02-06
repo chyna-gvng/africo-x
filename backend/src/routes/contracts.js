@@ -199,4 +199,26 @@ router.get('/getUserBalances', authenticateJWT, async (req, res) => {
   }
 });
 
+// Get User Role
+router.get('/getUserRole', authenticateJWT, async (req, res) => {
+  const { username } = req.user;
+  try {
+    const role = await contracts.getUserRole(username);
+    res.status(200).json({ role });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Set User Role
+router.post('/setUserRole', authenticateJWT, async (req, res) => {
+  const { username, role } = req.body;
+  try {
+    await contracts.setUserRole(username, role);
+    res.status(200).json({ message: 'Role set successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

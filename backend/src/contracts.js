@@ -105,6 +105,14 @@ async function getUserAddress(username) {
   return await db.getUserAddress(username);
 }
 
+async function getUserRole(username) {
+  return await db.getUserRole(username);
+}
+
+async function setUserRole(username, role) {
+  return await db.setUserRole(username, role);
+}
+
 module.exports = {
   setRole,
   mint,
@@ -122,4 +130,6 @@ module.exports = {
   getEthBalance,
   getCctBalance,
   getUserAddress,
+  getUserRole,
+  setUserRole,
 };
