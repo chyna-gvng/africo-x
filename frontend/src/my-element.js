@@ -41,6 +41,8 @@ export class MyElement extends LitElement {
       </div>
       <slot></slot>
       <div class="card">
+        <h1>Welcome to AfriCO-X</h1>
+        <p>Decentralized Carbon Credit Trading Platform</p>
         <button @click=${this._onClick} part="button">
           count is ${this.count}
         </button>
