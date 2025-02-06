@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -27,6 +29,11 @@ const Dashboard = () => {
     fetchUserData();
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
   if (!userData) {
     return <div>{message}</div>;
   }
@@ -36,6 +43,7 @@ const Dashboard = () => {
       <h2>Dashboard</h2>
       <p>Ethereum Balance: {userData.ethBalance} ETH</p>
       <p>Carbon Credit Balance: {userData.cctBalance} CCT</p>
+      <button onClick={handleLogout}>Logout</button>
     </div>
   );
 };
