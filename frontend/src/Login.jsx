@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -12,6 +14,7 @@ const Login = () => {
       const response = await axios.post('http://localhost:3000/auth/login', { username, password });
       localStorage.setItem('token', response.data.token);
       setMessage(response.data.message);
+      navigate('/dashboard'); // Redirect to dashboard
     } catch (error) {
       setMessage(error.response.data.error);
     }
