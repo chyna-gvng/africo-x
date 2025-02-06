@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAllProjects, getProjectsByOwner, getVerifiedProjects, submitProject, verifyProject, getCctBalance, mintTokens } from './api/contracts';
+import { getAllProjects, getProjectsByOwner, getVerifiedProjects, submitProject, verifyProject, getCctBalance, mintTokens, getUserAddress } from './api/contracts';
 import { getUserRole } from './api/user';
 
 const Projects = () => {
