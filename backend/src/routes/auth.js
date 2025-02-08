@@ -11,7 +11,16 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your_secret_key';
 router.post('/register', async (req, res) => {
   const { username, password, role } = req.body;
   try {
+    // Register user in database first to get their address
     const userId = await db.registerUser(username, password, role);
+    
+    // Get user's blockchain address
+    const userAddress = await db.getUserAddress(username);
+    
+    // Set role in blockchain
+    const contracts = require('../contracts');
+    await contracts.setRole(userAddress, role);
+    
     res.status(201).json({ message: 'User registered successfully', userId });
   } catch (err) {
     res.status(400).json({ error: err.message });
