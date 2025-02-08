@@ -97,7 +97,9 @@ async function getEthBalance(userAddress) {
 }
 
 async function getCctBalance(userAddress) {
+  // Query the CCT ERC-20 contract's balanceOf function
   const balance = await cctContract.balanceOf(userAddress);
+  // Convert from wei (1e18) to whole tokens using formatEther
   return ethers.utils.formatEther(balance);
 }
 

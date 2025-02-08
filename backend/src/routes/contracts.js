@@ -191,9 +191,15 @@ router.get('/getCctBalance', authenticateJWT, async (req, res) => {
 router.get('/getUserBalances', authenticateJWT, async (req, res) => {
   const { username } = req.user;
   try {
+    // Get user's blockchain address from database
     const userAddress = await contracts.getUserAddress(username);
+    
+    // Get ETH balance directly from blockchain
     const ethBalance = await contracts.getEthBalance(userAddress);
+    
+    // Get CCT balance from ERC-20 contract
     const cctBalance = await contracts.getCctBalance(userAddress);
+    
     res.status(200).json({ ethBalance, cctBalance });
   } catch (err) {
     res.status(500).json({ error: err.message });
