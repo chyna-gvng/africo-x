@@ -112,7 +112,17 @@ async function getUserRole(username) {
 }
 
 async function setUserRole(username, role) {
-  return await db.setUserRole(username, role);
+  // Get user's blockchain address from database
+  const userAddress = await db.getUserAddress(username);
+  
+  // Update role in blockchain
+  const tx = await cctContract.setRole(userAddress, role);
+  await tx.wait();
+  
+  // Update role in database
+  await db.setUserRole(username, role);
+  
+  return tx;
 }
 
 async function addProject(name, description, location, cctAmount, ownerId) {
