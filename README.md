@@ -16,7 +16,6 @@ AfriCO-X is a comprehensive platform designed to facilitate the trading of carbo
 - [Frontend](#frontend)
   - [Pages](#pages)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Project Structure
 
@@ -220,10 +219,6 @@ Before you begin, ensure you have the following installed:
 2. Write tests for new functionality.
 3. Run all tests before submitting a pull request.
 4. Update documentation as needed.
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
 
 ---
 
