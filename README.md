@@ -1,6 +1,6 @@
 # AfriCO-X: Decentralized Carbon Credit Trading Platform
 
-AfriCO-X is a comprehensive platform designed to facilitate the trading of carbon credits using blockchain technology. The platform enables project owners to submit carbon offset projects, buyers to purchase carbon credits, and a decentralized voting system for project verification. This README provides an overview of the project structure, setup instructions, and usage guidelines.
+AfriCO-X is a comprehensive platform designed to facilitate the trading of carbon credits using blockchain technology. The platform enables project owners to submit carbon offset projects, buyers to purchase carbon credits, and a decentralized voting system for project verification.
 
 ## Table of Contents
 
@@ -221,5 +221,3 @@ Before you begin, ensure you have the following installed:
 4. Update documentation as needed.
 
 ---
-
-This README provides a comprehensive overview of the AfriCO-X platform, including setup instructions, usage guidelines, and contributing information.
