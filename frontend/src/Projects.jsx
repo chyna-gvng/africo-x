@@ -21,17 +21,17 @@ const Projects = () => {
       if (token) {
         try {
           const roleResponse = await getUserRole(token);
-          console.log('User Role:', roleResponse.role); // Debug statement
-          setRole(roleResponse.role);
-          if (roleResponse.role === 1) {
+          console.log('User Role:', roleResponse); // Debug statement
+          setRole(roleResponse.dbRole);
+          if (roleResponse.dbRole === 1) {
             const projectsResponse = await getAllProjects(token);
             console.log('All Projects:', projectsResponse.projects); // Debug statement
             setProjects(projectsResponse.projects);
-          } else if (roleResponse.role === 2) {
+          } else if (roleResponse.dbRole === 2) {
             const projectsResponse = await getProjectsByOwner(token);
             console.log('Projects By Owner:', projectsResponse.projects); // Debug statement
             setProjects(projectsResponse.projects);
-          } else if (roleResponse.role === 3) {
+          } else if (roleResponse.dbRole === 3) {
             const projectsResponse = await getVerifiedProjects(token);
             console.log('Verified Projects:', projectsResponse.projects); // Debug statement
             setProjects(projectsResponse.projects);
