@@ -69,18 +69,19 @@ contract ProjectRegistration {
     /**
      * @notice Allows CCT holders to vote for a project.
      * @param projectId ID of the project to vote for.
+     * @param voterAddress Address of the voter.
      */
-    function voteForProject(uint256 projectId) external {
-        require(eligibleVoters[msg.sender], "Not an eligible voter");
+    function voteForProject(uint256 projectId, address voterAddress) external {
+        require(eligibleVoters[voterAddress], "Not an eligible voter");
         require(projectId < projectCount, "Invalid project ID");
-        require(!hasVoted[projectId][msg.sender], "Already voted");
+        require(!hasVoted[projectId][voterAddress], "Already voted");
 
-        uint256 voterBalance = cct.balanceOf(msg.sender);
+        uint256 voterBalance = cct.balanceOf(voterAddress);
         require(voterBalance > 0, "Must hold CCT to vote");
 
         projects[projectId].voteWeight += voterBalance;
-        hasVoted[projectId][msg.sender] = true;
-        emit VoteCast(projectId, msg.sender, voterBalance);
+        hasVoted[projectId][voterAddress] = true;
+        emit VoteCast(projectId, voterAddress, voterBalance);
     }
 
     /**

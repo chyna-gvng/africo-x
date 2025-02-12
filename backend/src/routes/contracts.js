@@ -89,9 +89,9 @@ router.post('/submitProject', authenticateJWT, async (req, res) => {
 
 // Vote for Project
 router.post('/voteForProject', authenticateJWT, async (req, res) => {
-  const { projectId } = req.body;
+  const { projectId, voterAddress } = req.body;
   try {
-    await contracts.voteForProject(projectId);
+    await contracts.voteForProject(projectId, voterAddress);
     res.status(200).json({ message: 'Vote cast successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });

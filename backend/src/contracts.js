@@ -49,8 +49,8 @@ async function submitProject(name, ownerAddress) {
   return tx;
 }
 
-async function voteForProject(projectId) {
-  const tx = await prContract.voteForProject(projectId);
+async function voteForProject(projectId, voterAddress) {
+  const tx = await prContract.voteForProject(projectId, voterAddress);
   await tx.wait();
   return tx;
 }

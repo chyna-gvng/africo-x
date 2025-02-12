@@ -88,7 +88,8 @@ const Projects = () => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        await voteForProject(token, projectId);
+        const userAddress = await getUserAddress(token);
+        await voteForProject(token, projectId, userAddress);
         setMessage('Vote cast successfully');
         // After voting, attempt to finalize the project
         await handleFinalizeProject(projectId);

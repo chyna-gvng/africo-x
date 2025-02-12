@@ -68,9 +68,9 @@ export const submitProjectToBlockchain = async (token, projectId) => {
   }
 };
 
-export const voteForProject = async (token, projectId) => {
+export const voteForProject = async (token, projectId, voterAddress) => {
   try {
-    const response = await axios.post(`${API_URL}/voteForProject`, { projectId }, {
+    const response = await axios.post(`${API_URL}/voteForProject`, { projectId, voterAddress }, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
