@@ -44,7 +44,8 @@ contract ProjectRegistration {
      * @param _name The name of the project.
      */
     function submitProject(string calldata _name) external {
-        require(uint256(cct.getRole(msg.sender)) == 2, "Only project owners can submit projects");
+        CarbonCreditToken.Role role = cct.getRole(msg.sender);
+        require(uint256(role) == 2, "Only project owners can submit projects");
         projects[projectCount] = Project(_name, msg.sender, 0, false);
         emit ProjectSubmitted(projectCount, _name, msg.sender);
         projectCount++;
