@@ -78,6 +78,10 @@ router.post('/submitProject', authenticateJWT, async (req, res) => {
     const projectId = await contracts.addProject(name, description, location, cctAmount, userId);
     const userAddress = await db.getUserAddressById(userId);
 
+    const role = await contracts.getRole(userAddress);
+    console.log("User ID:", userId);
+    console.log("User Address:", userAddress);
+    console.log("User Role:", role);
     console.log("Project Name:", name);
     console.log("Owner Address:", userAddress);
     await contracts.submitProject(name, userAddress);
