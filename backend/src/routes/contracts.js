@@ -23,13 +23,14 @@ const authenticateJWT = (req, res, next) => {
   }
 };
 
-// Set Role
+// Set Role by Username
 router.post('/setRole', authenticateJWT, async (req, res) => {
-  const { user, role } = req.body;
+  const { username, role } = req.body;
   try {
-    await contracts.setRole(user, role);
+    await contracts.setRole(username, role);
     res.status(200).json({ message: 'Role set successfully' });
   } catch (err) {
+    console.log(err)
     res.status(500).json({ error: err.message });
   }
 });
@@ -74,10 +75,10 @@ router.post('/submitProject', authenticateJWT, async (req, res) => {
   try {
     // First submit to blockchain
     await contracts.submitProject(name);
-    
+
     // Then store in database
     await contracts.addProject(name, description, location, cctAmount, userId);
-    
+
     res.status(200).json({ message: 'Project submitted successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -101,17 +102,6 @@ router.post('/finalizeProject', authenticateJWT, async (req, res) => {
   try {
     await contracts.finalizeProject(projectId);
     res.status(200).json({ message: 'Project finalized successfully' });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Get User Role
-router.get('/getRole', authenticateJWT, async (req, res) => {
-  const { user } = req.query;
-  try {
-    const role = await contracts.getRole(user);
-    res.status(200).json({ role });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -198,13 +188,13 @@ router.get('/getUserBalances', authenticateJWT, async (req, res) => {
   try {
     // Get user's blockchain address from database
     const userAddress = await contracts.getUserAddress(username);
-    
+
     // Get ETH balance directly from blockchain
     const ethBalance = await contracts.getEthBalance(userAddress);
-    
+
     // Get CCT balance from ERC-20 contract
     const cctBalance = await contracts.getCctBalance(userAddress);
-    
+
     res.status(200).json({ ethBalance, cctBalance });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -217,17 +207,6 @@ router.get('/getUserRole', authenticateJWT, async (req, res) => {
   try {
     const role = await contracts.getUserRole(username);
     res.status(200).json({ role });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Set User Role
-router.post('/setUserRole', authenticateJWT, async (req, res) => {
-  const { username, role } = req.body;
-  try {
-    await contracts.setUserRole(username, role);
-    res.status(200).json({ message: 'Role set successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

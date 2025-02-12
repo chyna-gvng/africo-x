@@ -25,12 +25,6 @@ const cctContract = new ethers.Contract(cctAddress, cctAbi, wallet);
 const prAddress = process.env.PR_ADDRESS;
 const prContract = new ethers.Contract(prAddress, prAbi, wallet);
 
-async function setRole(user, role) {
-  const tx = await cctContract.setRole(user, role);
-  await tx.wait();
-  return tx;
-}
-
 async function mint(account, amount) {
   const tx = await cctContract.mint(account, ethers.utils.parseEther(amount.toString()));
   await tx.wait();
@@ -65,10 +59,6 @@ async function finalizeProject(projectId) {
   const tx = await prContract.finalizeProject(projectId);
   await tx.wait();
   return tx;
-}
-
-async function getRole(user) {
-  return await cctContract.getRole(user);
 }
 
 async function getProject(projectId) {
@@ -111,17 +101,17 @@ async function getUserRole(username) {
   return await db.getUserRole(username);
 }
 
-async function setUserRole(username, role) {
+async function setRole(username, role) {
   // Get user's blockchain address from database
   const userAddress = await db.getUserAddress(username);
-  
+
   // Update role in blockchain
   const tx = await cctContract.setRole(userAddress, role);
   await tx.wait();
-  
+
   // Update role in database
   await db.setUserRole(username, role);
-  
+
   return tx;
 }
 
@@ -162,14 +152,12 @@ async function purchaseCCT(buyerAddress, ownerAddress, ethAmount) {
 }
 
 module.exports = {
-  setRole,
   mint,
   burn,
   setDepletionRate,
   submitProject,
   voteForProject,
   finalizeProject,
-  getRole,
   getProject,
   getTotalEligibleVotes,
   getEligibleVoterCount,
@@ -179,7 +167,7 @@ module.exports = {
   getCctBalance,
   getUserAddress,
   getUserRole,
-  setUserRole,
+  setRole,
   addProject,
   getAllProjects,
   getProjectsByOwner,

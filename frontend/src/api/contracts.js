@@ -2,9 +2,9 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:3000/contracts';
 
-export const setRole = async (token, user, role) => {
+export const setRole = async (token, username, role) => {
   try {
-    const response = await axios.post(`${API_URL}/setRole`, { user, role }, {
+    const response = await axios.post(`${API_URL}/setRole`, { username, role }, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
