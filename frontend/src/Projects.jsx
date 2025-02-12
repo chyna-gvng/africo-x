@@ -113,7 +113,7 @@ const Projects = () => {
   return (
     <div>
       <h2>Projects</h2>
-      {role === 2 && (
+      {(role === 2 || role === 3) && (
         <form onSubmit={handleSubmitProject}>
           <div>
             <label>Name:</label>
