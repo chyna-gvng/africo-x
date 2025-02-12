@@ -42,12 +42,13 @@ contract ProjectRegistration {
     /**
      * @notice Allows a project owner to submit a new project.
      * @param _name The name of the project.
+     * @param _userAddress The address of the user submitting the project.
      */
-    function submitProject(string calldata _name) external {
-        CarbonCreditToken.Role role = cct.getRole(msg.sender);
+    function submitProject(string calldata _name, address _userAddress) external {
+        CarbonCreditToken.Role role = cct.getRole(_userAddress);
         require(role == CarbonCreditToken.Role.ProjectOwner, "Only project owners can submit projects");
-        projects[projectCount] = Project(_name, msg.sender, 0, false);
-        emit ProjectSubmitted(projectCount, _name, msg.sender);
+        projects[projectCount] = Project(_name, _userAddress, 0, false);
+        emit ProjectSubmitted(projectCount, _name, _userAddress);
         projectCount++;
     }
 
