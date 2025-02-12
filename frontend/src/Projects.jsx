@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAllProjects, getProjectsByOwner, getVerifiedProjects, submitProject, verifyProject, getCctBalance, mintTokens, getUserAddress } from './api/contracts';
+import { getAllProjects, getProjectsByOwner, getVerifiedProjects, submitProject, verifyProject, getCctBalance, mintTokens, getUserAddress, submitProjectToBlockchain } from './api/contracts';
 import { getUserRole } from './api/user';
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [role, setRole] = useState('');
   const [name, setName] = useState('');
+  const [blockchainSubmitted, setBlockchainSubmitted] = useState(false);
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
   const [cctAmount, setCctAmount] = useState('');
@@ -52,30 +53,41 @@ const Projects = () => {
     if (token) {
       try {
         await submitProject(token, name, description, location, cctAmount);
+        setBlockchainSubmitted(true);
         setMessage('Project submitted successfully');
-        navigate('/projects');
+        setName('');
+        setDescription('');
+        setLocation('');
+        setCctAmount('');
       } catch (error) {
-        setError(error.message);
+        setError('Please log in to submit a project.');
       }
-    } else {
-      setError('Please log in to submit a project.');
-    }
-  };
+    };
+  }
 
   const handleVerifyProject = async (projectId) => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        await verifyProject(token, projectId);
-        setMessage('Project verified successfully');
-        navigate('/projects');
+        await submitProjectToBlockchain(token, projectId);
+        setMessage('Project submitted to blockchain');
       } catch (error) {
-        setError(error.message);
+        setError('Please log in to submit a project.');
       }
-    } else {
-      setError('Please log in to verify a project.');
-    }
-  };
+    };
+  }
+
+  const handleBlockchainSubmit = async (projectId) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        await submitProjectToBlockchain(token, projectId);
+        setMessage('Project submitted to blockchain');
+      } catch (error) {
+        setError('Please log in to submit a project.');
+      }
+    };
+  }
 
   const handlePurchaseCCT = async (projectId, cctAmount) => {
     const token = localStorage.getItem('token');
@@ -131,6 +143,9 @@ const Projects = () => {
               <p>{project.location}</p>
               <p>{project.cctAmount} CCT</p>
               <p>{project.verification_status ? 'Verified' : 'Unverified'}</p>
+              {role === 1 && !project.verification_status && (
+                <button onClick={() => handleBlockchainSubmit(project.project_id)}>Submit to Blockchain</button>
+              )}
               {role === 1 && !project.verification_status && (
                 <button onClick={() => handleVerifyProject(project.project_id)}>Verify Project</button>
               )}
