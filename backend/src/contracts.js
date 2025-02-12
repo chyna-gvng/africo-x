@@ -44,6 +44,7 @@ async function setDepletionRate(buyer, rate) {
 }
 
 async function submitProject(name, ownerAddress) {
+  console.log("Submitting project to blockchain:", name, ownerAddress);
   const tx = await prContract.submitProject(name, { from: ownerAddress });
   await tx.wait();
   return tx;
