@@ -176,6 +176,19 @@ function getVerifiedProjects() {
   });
 }
 
+// Get unverified projects
+function getUnverifiedProjects() {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT * FROM projects WHERE verification_status = ?', [false], (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+}
+
 // Verify a project
 function verifyProject(projectId) {
   return new Promise((resolve, reject) => {
@@ -242,6 +255,7 @@ module.exports = {
   getAllProjects,
   getProjectsByOwner,
   getVerifiedProjects,
+  getUnverifiedProjects,
   verifyProject,
   updateProjectCctAmount,
   getProjectById,

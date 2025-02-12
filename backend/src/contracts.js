@@ -135,6 +135,10 @@ async function getVerifiedProjects() {
   return await db.getVerifiedProjects();
 }
 
+async function getUnverifiedProjects() {
+  return await db.getUnverifiedProjects();
+}
+
 async function verifyProject(projectId) {
   const project = await db.getProjectById(projectId);
   const ownerAddress = await db.getUserAddressById(project.owner_id);
@@ -177,6 +181,7 @@ module.exports = {
   getAllProjects,
   getProjectsByOwner,
   getVerifiedProjects,
+  getUnverifiedProjects,
   verifyProject,
   updateProjectCctAmount,
   purchaseCCT,

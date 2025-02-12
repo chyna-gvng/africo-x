@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAllProjects, getProjectsByOwner, getVerifiedProjects, submitProject, verifyProject, getCctBalance, mintTokens, getUserAddress, submitProjectToBlockchain } from './api/contracts';
+import { getAllProjects, getProjectsByOwner, getVerifiedProjects, submitProject, verifyProject, getCctBalance, mintTokens, getUserAddress, submitProjectToBlockchain, voteForProject, finalizeProject, getUnverifiedProjects } from './api/contracts';
 import { getUserRole } from './api/user';
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [role, setRole] = useState('');
+  const [mintAccount, setMintAccount] = useState('');
+  const [mintAmount, setMintAmount] = useState('');
   const [name, setName] = useState('');
   const [blockchainSubmitted, setBlockchainSubmitted] = useState(false);
   const [description, setDescription] = useState('');
@@ -32,8 +34,8 @@ const Projects = () => {
             console.log('Projects By Owner:', projectsResponse.projects); // Debug statement
             setProjects(projectsResponse.projects);
           } else if (roleResponse.dbRole === 3) {
-            const projectsResponse = await getVerifiedProjects(token);
-            console.log('Verified Projects:', projectsResponse.projects); // Debug statement
+            const projectsResponse = await getUnverifiedProjects(token); // Assuming this endpoint exists
+            console.log('Unverified Projects:', projectsResponse.projects);
             setProjects(projectsResponse.projects);
           }
         } catch (error) {
@@ -46,6 +48,23 @@ const Projects = () => {
 
     fetchProjects();
   }, []);
+
+  const handleMintTokens = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        await mintTokens(token, mintAccount, mintAmount);
+        setMessage('Tokens minted successfully');
+        setMintAccount('');
+        setMintAmount('');
+      } catch (error) {
+        setError(error.message);
+      }
+    } else {
+      setError('Please log in to mint tokens.');
+    }
+  };
 
   const handleSubmitProject = async (e) => {
     e.preventDefault();
@@ -65,29 +84,43 @@ const Projects = () => {
     };
   }
 
-  const handleVerifyProject = async (projectId) => {
+  const handleVoteForProject = async (projectId) => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        await submitProjectToBlockchain(token, projectId);
-        setMessage('Project submitted to blockchain');
+        await voteForProject(token, projectId);
+        setMessage('Vote cast successfully');
+        // After voting, attempt to finalize the project
+        await handleFinalizeProject(projectId);
       } catch (error) {
-        setError('Please log in to submit a project.');
+        setError(error.message);
       }
-    };
-  }
+    } else {
+      setError('Please log in to vote.');
+    }
+  };
 
-  const handleBlockchainSubmit = async (projectId) => {
+  const handleFinalizeProject = async (projectId) => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        await submitProjectToBlockchain(token, projectId);
-        setMessage('Project submitted to blockchain');
+        await finalizeProject(token, projectId);
+        setMessage('Project finalized successfully (if enough votes)');
+        // Refresh projects after finalization attempt
+        const roleResponse = await getUserRole(token);
+        setRole(roleResponse.dbRole);
+          if (roleResponse.dbRole === 3) {
+            const projectsResponse = await getUnverifiedProjects(token); // Assuming this endpoint exists
+            console.log('Unverified Projects:', projectsResponse.projects);
+            setProjects(projectsResponse.projects);
+          }
       } catch (error) {
-        setError('Please log in to submit a project.');
+        setError(error.message);
       }
-    };
-  }
+    } else {
+      setError('Please log in to finalize.');
+    }
+  };
 
   const handlePurchaseCCT = async (projectId, cctAmount) => {
     const token = localStorage.getItem('token');
@@ -134,6 +167,19 @@ const Projects = () => {
           <button type="submit">Submit Project</button>
         </form>
       )}
+      {role === 1 && (
+        <form onSubmit={handleMintTokens}>
+          <div>
+            <label>Receiver Address:</label>
+            <input type="text" value={mintAccount} onChange={(e) => setMintAccount(e.target.value)} required />
+          </div>
+          <div>
+            <label>Amount:</label>
+            <input type="number" value={mintAmount} onChange={(e) => setMintAmount(e.target.value)} required />
+          </div>
+          <button type="submit">Mint Tokens</button>
+        </form>
+      )}
       {projects.length > 0 ? (
         <ul>
           {projects.map((project) => (
@@ -143,11 +189,8 @@ const Projects = () => {
               <p>{project.location}</p>
               <p>{project.cctAmount} CCT</p>
               <p>{project.verification_status ? 'Verified' : 'Unverified'}</p>
-              {role === 1 && !project.verification_status && (
-                <button onClick={() => handleBlockchainSubmit(project.project_id)}>Submit to Blockchain</button>
-              )}
-              {role === 1 && !project.verification_status && (
-                <button onClick={() => handleVerifyProject(project.project_id)}>Verify Project</button>
+              {role === 3 && !project.verification_status && (
+                <button onClick={() => handleVoteForProject(project.project_id)}>Vote</button>
               )}
               {role === 3 && project.verification_status && (
                 <button onClick={() => handlePurchaseCCT(project.project_id, project.cctAmount)}>Purchase CCT</button>

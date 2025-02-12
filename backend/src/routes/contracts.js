@@ -78,37 +78,10 @@ router.post('/submitProject', authenticateJWT, async (req, res) => {
     const projectId = await contracts.addProject(name, description, location, cctAmount, userId);
     const userAddress = await db.getUserAddressById(userId);
 
+    // Automatically submit to blockchain
     await contracts.submitProject(name, userAddress);
+
     res.status(200).json({ message: 'Project submitted successfully' });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Submit Project to Blockchain
-router.post('/submitProjectToBlockchain', authenticateJWT, async (req, res) => {
-  const { projectId } = req.body;
-  const { userId } = req.user; // Get the user ID from the JWT
-
-  try {
-    const project = await db.getProjectById(projectId);
-    const userAddress = await db.getUserAddressById(userId);
-    const contractRole = await contracts.getRole(userAddress);
-
-    console.log("Project Name:", project.name);
-    console.log("Owner Address:", userAddress);
-    console.log("User ID:", userId);
-    console.log("Contract Role:", contractRole);
-    console.log("Project Details:", project);
-
-    if (contractRole != 2) {
-      return res.status(403).json({ error: 'Only project owners can submit projects.' });
-    }
-
-    // Submit to blockchain, passing the project owner's address
-    await contracts.submitProject(project.name, userAddress);
-
-    res.status(200).json({ message: 'Project submitted to blockchain successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -271,6 +244,16 @@ router.get('/getProjectsByOwner', authenticateJWT, async (req, res) => {
 router.get('/getVerifiedProjects', authenticateJWT, async (req, res) => {
   try {
     const projects = await contracts.getVerifiedProjects();
+    res.status(200).json({ projects });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get Unverified Projects
+router.get('/getUnverifiedProjects', authenticateJWT, async (req, res) => {
+  try {
+    const projects = await contracts.getUnverifiedProjects();
     res.status(200).json({ projects });
   } catch (err) {
     res.status(500).json({ error: err.message });
