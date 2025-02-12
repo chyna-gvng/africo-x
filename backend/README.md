@@ -53,19 +53,29 @@ node src/index.js
 - `POST /auth/login`: Authenticate a user
 
 ### Smart Contract Interaction
-- `POST /contracts/setRole`: Set role for a user
+- `POST /contracts/setRole`: Set role for a user by username
 - `POST /contracts/mint`: Mint tokens
 - `POST /contracts/burn`: Burn tokens
 - `POST /contracts/setDepletionRate`: Set depletion rate for a buyer
 - `POST /contracts/submitProject`: Submit a new project
 - `POST /contracts/voteForProject`: Vote for a project
 - `POST /contracts/finalizeProject`: Finalize a project
-- `GET /contracts/getRole`: Get role of a user
 - `GET /contracts/getProject`: Get project details
 - `GET /contracts/getTotalEligibleVotes`: Get total eligible votes
 - `GET /contracts/getEligibleVoterCount`: Get eligible voter count
 - `GET /contracts/isEligibleVoter`: Check voter eligibility
 - `GET /contracts/hasAddressVoted`: Check if address has voted
+- `GET /contracts/getEthBalance`: Get Ethereum balance of a user
+- `GET /contracts/getCctBalance`: Get CCT balance of a user
+- `GET /contracts/getUserBalances`: Get both ETH and CCT balances of the authenticated user
+- `GET /contracts/getUserRole`: Get role of the authenticated user from both the database and the smart contract
+- `GET /contracts/getAllProjects`: Get all projects
+- `GET /contracts/getProjectsByOwner`: Get projects owned by the authenticated user
+- `GET /contracts/getVerifiedProjects`: Get all verified projects
+- `POST /contracts/verifyProject`: Verify a project
+- `POST /contracts/updateProjectCctAmount`: Update the CCT amount for a project
+- `GET /contracts/getUserAddress`: Get user address of the authenticated user
+- `POST /contracts/purchaseCCT`: Purchase CCT tokens
 
 ## License
 MIT License - See SPDX headers in source files
