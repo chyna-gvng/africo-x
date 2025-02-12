@@ -13,14 +13,14 @@ router.post('/register', async (req, res) => {
   try {
     // Register user in database first to get their address
     const userId = await db.registerUser(username, password, role);
-    
+
     // Get user's blockchain address
     const userAddress = await db.getUserAddress(username);
-    
+
     // Set role in blockchain
     const contracts = require('../contracts');
-    await contracts.setRole(userAddress, role);
-    
+    await contracts.setRole(username, role);
+
     res.status(201).json({ message: 'User registered successfully', userId });
   } catch (err) {
     res.status(400).json({ error: err.message });
