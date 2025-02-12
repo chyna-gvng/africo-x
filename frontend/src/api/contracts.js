@@ -181,6 +181,17 @@ export const getVerifiedProjects = async (token) => {
   }
 };
 
+export const getUnverifiedProjects = async (token) => {
+  try {
+    const response = await axios.get(`${API_URL}/getUnverifiedProjects`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
 export const verifyProject = async (token, projectId) => {
   try {
     const response = await axios.post(`${API_URL}/verifyProject`, { projectId }, {
