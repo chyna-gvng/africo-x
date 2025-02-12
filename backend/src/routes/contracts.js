@@ -1,6 +1,7 @@
 const express = require('express');
 const contracts = require('../contracts');
 const jwt = require('jsonwebtoken');
+const db = require('../db');
 
 const router = express.Router();
 
@@ -72,10 +73,14 @@ router.post('/setDepletionRate', authenticateJWT, async (req, res) => {
 router.post('/submitProject', authenticateJWT, async (req, res) => {
   const { name, description, location, cctAmount } = req.body;
   const { userId } = req.user;
-  try {
-    //  store in database
-    await contracts.addProject(name, description, location, cctAmount, userId);
 
+  try {
+    const projectId = await contracts.addProject(name, description, location, cctAmount, userId);
+    const userAddress = await db.getUserAddressById(userId);
+
+    console.log("Project Name:", name);
+    console.log("Owner Address:", userAddress);
+    await contracts.submitProject(name, userAddress);
     res.status(200).json({ message: 'Project submitted successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
