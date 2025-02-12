@@ -85,11 +85,15 @@ router.post('/submitProject', authenticateJWT, async (req, res) => {
 // Submit Project to Blockchain
 router.post('/submitProjectToBlockchain', authenticateJWT, async (req, res) => {
   const { projectId } = req.body;
+  const { userId } = req.user; // Get the user ID from the JWT
+
   try {
     const project = await db.getProjectById(projectId);
+    const userAddress = await db.getUserAddressById(userId);
 
-    // Submit to blockchain
-    await contracts.submitProject(project.name);
+    // Submit to blockchain, passing the project owner's address
+    const tx = await contracts.submitProject(project.name, { from: userAddress });
+    await tx.wait();
 
     res.status(200).json({ message: 'Project submitted to blockchain successfully' });
   } catch (err) {

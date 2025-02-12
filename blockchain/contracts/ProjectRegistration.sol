@@ -20,11 +20,11 @@ contract ProjectRegistration {
     mapping(uint256 => Project) public projects;
     mapping(uint256 => mapping(address => bool)) public hasVoted;
     uint256 public projectCount;
-    
+
     // Track eligible voters
     mapping(address => bool) public eligibleVoters;
     address[] public voterList;
-    
+
     event ProjectSubmitted(uint256 indexed projectId, string name, address owner);
     event VoteCast(uint256 indexed projectId, address voter, uint256 weight);
     event VoterAdded(address voter);
@@ -44,7 +44,7 @@ contract ProjectRegistration {
      * @param _name The name of the project.
      */
     function submitProject(string calldata _name) external {
-        require(uint256(cct.roles(msg.sender)) == 2, "Only project owners can submit projects");
+        require(uint256(cct.getRole(msg.sender)) == 2, "Only project owners can submit projects");
         projects[projectCount] = Project(_name, msg.sender, 0, false);
         emit ProjectSubmitted(projectCount, _name, msg.sender);
         projectCount++;
@@ -58,7 +58,7 @@ contract ProjectRegistration {
         require(msg.sender == address(cct), "Only CCT contract can add voters");
         require(!eligibleVoters[voter], "Already eligible");
         require(uint256(cct.roles(voter)) == 3, "Must be a buyer");
-        
+
         eligibleVoters[voter] = true;
         voterList.push(voter);
         emit VoterAdded(voter);
@@ -88,16 +88,16 @@ contract ProjectRegistration {
     function finalizeProject(uint256 projectId) external {
         require(projectId < projectCount, "Invalid project ID");
         Project storage project = projects[projectId];
-        
+
         require(!project.registered, "Already registered");
-        
+
         uint256 requiredVotes = getTotalEligibleVotes() / 2;
         require(project.voteWeight > requiredVotes, "Not enough votes");
 
         project.registered = true;
         emit ProjectRegistered(projectId);
     }
-    
+
     /**
      * @notice Calculates the total voting power of all eligible voters.
      * @return Total number of tokens held by eligible voters.
