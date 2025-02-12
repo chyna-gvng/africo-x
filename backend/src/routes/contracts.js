@@ -204,10 +204,15 @@ router.get('/getUserBalances', authenticateJWT, async (req, res) => {
 // Get User Role
 router.get('/getUserRole', authenticateJWT, async (req, res) => {
   const { username } = req.user;
+
   try {
-    const role = await contracts.getUserRole(username);
-    res.status(200).json({ role });
+    const dbRole = await contracts.getUserRole(username);
+    const userAddress = await contracts.getUserAddress(username);
+    const contractRole = await contracts.getRole(userAddress);
+
+    res.status(200).json({ dbRole: dbRole, contractRole: contractRole });
   } catch (err) {
+    console.log(err)
     res.status(500).json({ error: err.message });
   }
 });

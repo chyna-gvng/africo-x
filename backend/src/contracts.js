@@ -101,6 +101,10 @@ async function getUserRole(username) {
   return await db.getUserRole(username);
 }
 
+async function getRole(userAddress) {
+  return await cctContract.getRole(userAddress);
+}
+
 async function setRole(username, role) {
   // Get user's blockchain address from database
   const userAddress = await db.getUserAddress(username);
@@ -167,6 +171,7 @@ module.exports = {
   getCctBalance,
   getUserAddress,
   getUserRole,
+  getRole,
   setRole,
   addProject,
   getAllProjects,
