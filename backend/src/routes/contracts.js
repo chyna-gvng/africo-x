@@ -93,8 +93,17 @@ router.post('/submitProjectToBlockchain', authenticateJWT, async (req, res) => {
   try {
     const project = await db.getProjectById(projectId);
     const userAddress = await db.getUserAddressById(userId);
+    const contractRole = await contracts.getRole(userAddress);
+
     console.log("Project Name:", project.name);
     console.log("Owner Address:", userAddress);
+    console.log("User ID:", userId);
+    console.log("Contract Role:", contractRole);
+    console.log("Project Details:", project);
+
+    if (contractRole != 2) {
+      return res.status(403).json({ error: 'Only project owners can submit projects.' });
+    }
 
     // Submit to blockchain, passing the project owner's address
     await contracts.submitProject(project.name, userAddress);
