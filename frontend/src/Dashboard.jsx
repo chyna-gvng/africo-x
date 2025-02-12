@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { getUserBalances } from './api/balances';
 
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
@@ -12,12 +13,8 @@ const Dashboard = () => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await axios.get('http://localhost:3000/contracts/getUserBalances', {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          setUserData(response.data);
+          const response = await getUserBalances(token);
+          setUserData(response);
         } catch (error) {
           setMessage(error.response.data.error);
         }
