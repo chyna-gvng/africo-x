@@ -6,4 +6,7 @@ module.exports = async function (deployer) {
   const cct = await CarbonCreditToken.deployed();
 
   await deployer.deploy(ProjectRegistration, cct.address);
+  const pr = await ProjectRegistration.deployed();
+
+  await cct.setProjectRegistration(pr.address);
 };
