@@ -2,6 +2,7 @@
 pragma solidity 0.8.20;
 
 import "./CarbonCreditToken.sol";
+import "truffle/console.sol";
 
 /**
  * @title ProjectRegistration
@@ -58,6 +59,9 @@ contract ProjectRegistration {
      */
     function addEligibleVoter(address voter) external {
         require(msg.sender == address(cct), "Only CCT contract can add voters");
+        console.log("Attempting to add voter:", voter);
+        console.log("eligibleVoters[voter] before:", eligibleVoters[voter]);
+        console.log("cct.roles(voter):", uint256(cct.roles(voter)));
         require(!eligibleVoters[voter], "Already eligible");
         require(uint256(cct.roles(voter)) == 3, "Must be a buyer");
 
