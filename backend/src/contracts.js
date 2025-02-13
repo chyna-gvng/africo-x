@@ -44,9 +44,10 @@ async function setDepletionRate(buyer, rate) {
 }
 
 async function submitProject(name, ownerAddress) {
+  const projectCount = await prContract.projectCount();
   const tx = await prContract.submitProject(name, ownerAddress);
   await tx.wait();
-  return tx;
+  return projectCount;
 }
 
 async function voteForProject(projectId, voterAddress) {

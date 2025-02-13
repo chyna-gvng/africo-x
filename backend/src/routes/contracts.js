@@ -75,13 +75,13 @@ router.post('/submitProject', authenticateJWT, async (req, res) => {
   const { userId } = req.user;
 
   try {
-    const projectId = await contracts.addProject(name, description, location, cctAmount, userId);
+    const project_id = await contracts.addProject(name, description, location, cctAmount, userId);
     const userAddress = await db.getUserAddressById(userId);
 
     // Automatically submit to blockchain
-    await contracts.submitProject(name, userAddress);
+    const blockchainProjectId = await contracts.submitProject(name, userAddress);
 
-    res.status(200).json({ message: 'Project submitted successfully' });
+    res.status(200).json({ message: 'Project submitted successfully', project_id, blockchainProjectId });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
