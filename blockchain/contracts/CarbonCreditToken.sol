@@ -56,6 +56,8 @@ contract CarbonCreditToken is ERC20, Ownable {
      * @param role The role to assign (1 = Admin, 2 = ProjectOwner, 3 = Buyer).
      */
     function setRole(address user, Role role) external onlyOwner {
+        console.log("setRole called for user:", user);
+        console.log("Role being set:", uint256(role));
         roles[user] = role;
 
         // If the user is assigned as a Buyer, register them as an eligible voter
