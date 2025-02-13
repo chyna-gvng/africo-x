@@ -11,4 +11,8 @@ module.exports = {
       version: "0.8.20",
     },
   },
+  solidityLog: {
+    displayPrefix: ' :',
+    preventConsoleLogMigration: true,
+  },
 };
