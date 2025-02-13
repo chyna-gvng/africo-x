@@ -12,6 +12,7 @@ contract ProjectRegistration {
     struct Project {
         string name;
         address owner;
+        uint256 project_id;
         uint256 voteWeight;
         bool registered;
     }
@@ -20,7 +21,6 @@ contract ProjectRegistration {
     address public admin;
     mapping(uint256 => Project) public projects;
     mapping(uint256 => mapping(address => bool)) public hasVoted;
-    uint256 public projectCount;
 
     // Track eligible voters
     mapping(address => bool) public eligibleVoters;
@@ -42,18 +42,18 @@ contract ProjectRegistration {
 
     /**
      * @notice Allows a project owner to submit a new project.
+     * @param _project_id The database-generated project ID.
      * @param _name The name of the project.
      * @param _userAddress The address of the user submitting the project.
      */
-    function submitProject(string calldata _name, address _userAddress) external {
+    function submitProject(uint256 _project_id, string calldata _name, address _userAddress) external {
         CarbonCreditToken.Role role = cct.getRole(_userAddress);
         require(role == CarbonCreditToken.Role.ProjectOwner, "Only project owners can submit projects");
-        projects[projectCount] = Project(_name, _userAddress, 0, false);
-        emit ProjectSubmitted(projectCount, _name, _userAddress);
+        projects[_project_id] = Project(_name, _userAddress, _project_id, 0, false);
+        emit ProjectSubmitted(_project_id, _name, _userAddress);
         console.log("Project submitted:", _name);
         console.log("Project owner:", _userAddress);
-        console.log("Project ID:", projectCount);
-        projectCount++;
+        console.log("Project ID:", _project_id);
     }
 
     /**
@@ -75,37 +75,37 @@ contract ProjectRegistration {
 
     /**
      * @notice Allows CCT holders to vote for a project.
-     * @param projectId ID of the project to vote for.
+     * @param _project_id ID of the project to vote for.
      * @param voterAddress Address of the voter.
      */
-    function voteForProject(uint256 projectId, address voterAddress) external {
+    function voteForProject(uint256 _project_id, address voterAddress) external {
         require(eligibleVoters[voterAddress], "Not an eligible voter");
-        require(projectId < projectCount, "Invalid project ID");
-        require(!hasVoted[projectId][voterAddress], "Already voted");
+        require(projects[_project_id].project_id == _project_id, "Invalid project ID");
+        require(!hasVoted[_project_id][voterAddress], "Already voted");
 
         uint256 voterBalance = cct.balanceOf(voterAddress);
         require(voterBalance > 0, "Must hold CCT to vote");
 
-        projects[projectId].voteWeight += voterBalance;
-        hasVoted[projectId][voterAddress] = true;
-        emit VoteCast(projectId, voterAddress, voterBalance);
+        projects[_project_id].voteWeight += voterBalance;
+        hasVoted[_project_id][voterAddress] = true;
+        emit VoteCast(_project_id, voterAddress, voterBalance);
     }
 
     /**
      * @notice Finalizes project registration if it has >50% of total vote weight.
-     * @param projectId ID of the project to finalize.
+     * @param _project_id ID of the project to finalize.
      */
-    function finalizeProject(uint256 projectId) external {
-        require(projectId < projectCount, "Invalid project ID");
-        Project storage project = projects[projectId];
+    function finalizeProject(uint256 _project_id) external {
+        require(projects[_project_id].project_id == _project_id, "Invalid project ID");
 
+        Project storage project = projects[_project_id];
         require(!project.registered, "Already registered");
 
         uint256 requiredVotes = getTotalEligibleVotes() / 2;
         require(project.voteWeight > requiredVotes, "Not enough votes");
 
         project.registered = true;
-        emit ProjectRegistered(projectId);
+        emit ProjectRegistered(_project_id);
     }
 
     /**
@@ -139,11 +139,11 @@ contract ProjectRegistration {
 
     /**
      * @notice Gets whether an address has voted for a project.
-     * @param projectId Project ID to check.
+     * @param _project_id Project ID to check.
      * @param voter Address to check.
      * @return Whether the address has voted for the project.
      */
-    function hasAddressVoted(uint256 projectId, address voter) external view returns (bool) {
-        return hasVoted[projectId][voter];
+    function hasAddressVoted(uint256 _project_id, address voter) external view returns (bool) {
+        return hasVoted[_project_id][voter];
     }
 }
