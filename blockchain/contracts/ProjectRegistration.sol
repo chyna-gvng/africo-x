@@ -50,6 +50,9 @@ contract ProjectRegistration {
         require(role == CarbonCreditToken.Role.ProjectOwner, "Only project owners can submit projects");
         projects[projectCount] = Project(_name, _userAddress, 0, false);
         emit ProjectSubmitted(projectCount, _name, _userAddress);
+        console.log("Project submitted:", _name);
+        console.log("Project owner:", _userAddress);
+        console.log("Project ID:", projectCount);
         projectCount++;
     }
 
