@@ -62,6 +62,8 @@ contract CarbonCreditToken is ERC20, Ownable {
 
         // If the user is assigned as a Buyer, register them as an eligible voter
         if (role == Role.Buyer && address(projectReg) != address(0)) {
+            console.log("projectReg address:", address(projectReg));
+            console.log("Adding eligible voter:", user);
             projectReg.addEligibleVoter(user);
         }
     }
