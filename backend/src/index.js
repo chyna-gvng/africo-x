@@ -49,7 +49,7 @@ prContract.on("VoteCast", async (projectId, voter, weight) => {
     const voteWeight = project.voteWeight;
 
     // Update the voteWeight in the database
-    await db.updateProjectVoteWeight(projectId.toNumber(), voteWeight.toNumber());
+    await db.updateProjectVoteWeight(projectId.toNumber(), voteWeight.toString());
 
     // Check if voteWeight is over 50% and finalize the project
     const totalEligibleVotes = await prContract.getTotalEligibleVotes();
@@ -81,8 +81,8 @@ async function syncVoteWeights() {
     for (const project of projects) {
       const blockchainProject = await prContract.projects(project.project_id);
       const voteWeight = blockchainProject.voteWeight;
-      await db.updateProjectVoteWeight(project.project_id, voteWeight.toNumber());
-      console.log(`Synced voteWeight for project ${project.project_id} to ${voteWeight.toNumber()}`);
+      await db.updateProjectVoteWeight(project.project_id, voteWeight.toString());
+      console.log(`Synced voteWeight for project ${project.project_id} to ${voteWeight.toString()}`);
     }
     console.log("Vote weights synchronized successfully.");
   } catch (error) {

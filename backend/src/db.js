@@ -25,7 +25,7 @@ db.serialize(() => {
     cctAmount INTEGER,
     verification_status BOOLEAN,
     owner_id INTEGER,
-    voteWeight INTEGER DEFAULT 0,
+    voteWeight TEXT DEFAULT '0',  -- Changed to TEXT
     FOREIGN KEY (owner_id) REFERENCES users (id)
   )`);
 });
@@ -128,7 +128,7 @@ function setUserRole(username, role) {
 // Add a new project
 function addProject(name, description, location, cctAmount, ownerId) {
   return new Promise((resolve, reject) => {
-    db.run('INSERT INTO projects (name, description, location, cctAmount, verification_status, owner_id, voteWeight) VALUES (?, ?, ?, ?, ?, ?, ?)', [name, description, location, cctAmount, false, ownerId, 0], function (err) {
+    db.run('INSERT INTO projects (name, description, location, cctAmount, verification_status, owner_id, voteWeight) VALUES (?, ?, ?, ?, ?, ?, ?)', [name, description, location, cctAmount, false, ownerId, '0'], function (err) {
       if (err) {
         reject(err);
       } else {
@@ -249,7 +249,7 @@ function getUserAddressById(userId) {
 // Update project vote weight
 function updateProjectVoteWeight(projectId, voteWeight) {
   return new Promise((resolve, reject) => {
-    db.run('UPDATE projects SET voteWeight = ? WHERE project_id = ?', [voteWeight, projectId], function (err) {
+    db.run('UPDATE projects SET voteWeight = ? WHERE project_id = ?', [voteWeight.toString(), projectId], function (err) {
       if (err) {
         reject(err);
       } else {
