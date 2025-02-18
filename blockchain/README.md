@@ -33,11 +33,11 @@ blockchain/
 ### Prerequisites
 - Node.js v18.20.5
 - Truffle Suite
-- Ganache CLI
+- Ganache
 
 ### Installation
 ```bash
-npm install -g truffle ganache-cli
+npm install -g truffle ganache
 npm install
 ```
 
