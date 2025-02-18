@@ -2,11 +2,19 @@ const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcrypt');
 const { ethers } = require('ethers');
 const crypto = require('crypto');
+require('dotenv').config(); // Load environment variables
 
 const db = new sqlite3.Database('./database.sqlite');
 
 // Connect to Ganache instance
 const provider = new ethers.providers.JsonRpcProvider('http://127.0.0.1:8545');
+
+// Encryption key (keep this secret and manage securely)
+const AES_ENCRYPTION_KEY = process.env.AES_ENCRYPTION_KEY;
+if (!AES_ENCRYPTION_KEY) {
+  console.error("AES_ENCRYPTION_KEY environment variable not set.");
+  process.exit(1); // Exit if the key is not set
+}
 
 // Create users table
 db.serialize(() => {
@@ -41,6 +49,24 @@ function encrypt(text) {
   let encrypted = cipher.update(text);
   encrypted = Buffer.concat([encrypted, cipher.final()]);
   return `${iv.toString('hex')}:${encrypted.toString('hex')}:${key.toString('hex')}`;
+}
+
+// Function to decrypt private key
+function decrypt(encryptedText) {
+  try {
+    const parts = encryptedText.split(':');
+    const iv = Buffer.from(parts.shift(), 'hex');
+    const key = Buffer.from(parts.pop(), 'hex');
+    const encryptedData = Buffer.from(parts.join(':'), 'hex');
+
+    const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
+    let decrypted = decipher.update(encryptedData);
+    decrypted = Buffer.concat([decrypted, decipher.final()]);
+    return decrypted.toString();
+  } catch (error) {
+    console.error("Decryption error:", error);
+    return null;
+  }
 }
 
 // Register a new user
@@ -132,11 +158,15 @@ function authenticateUser(username, password) {
 // Get user address
 function getUserAddress(username) {
   return new Promise((resolve, reject) => {
-    db.get('SELECT address FROM users WHERE username = ?', [username], (err, row) => {
+    db.get('SELECT address, private_key FROM users WHERE username = ?', [username], (err, row) => {
       if (err) {
         reject(err);
       } else if (row) {
-        resolve(row.address);
+        // Decrypt the private key (FOR DEMONSTRATION ONLY - AVOID THIS IN PRODUCTION)
+        // const decryptedPrivateKey = decrypt(row.private_key);
+        // console.log("Decrypted Private Key:", decryptedPrivateKey);
+
+        resolve(row.address); // Return the address
       } else {
         reject(new Error('User not found'));
       }
