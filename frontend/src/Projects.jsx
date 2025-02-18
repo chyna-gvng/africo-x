@@ -30,19 +30,29 @@ const Projects = () => {
           if (roleResponse.dbRole === 1) {
             const projectsResponse = await getAllProjects(token);
             console.log('All Projects:', projectsResponse.projects);
-            setVerifiedProjects(projectsResponse.projects);
-            setUnverifiedProjects(projectsResponse.projects); // Show all projects for admin
+
+            // Filter projects for admin
+            setVerifiedProjects(projectsResponse.projects.filter(project => project.verification_status));
+            setUnverifiedProjects(projectsResponse.projects.filter(project => !project.verification_status));
+
           } else if (roleResponse.dbRole === 2) {
             const projectsResponse = await getProjectsByOwner(token);
             console.log('Projects By Owner:', projectsResponse.projects);
-            setVerifiedProjects(projectsResponse.projects);
-            setUnverifiedProjects(projectsResponse.projects); // Show all projects for project owner
+
+            // Filter projects for project owner
+            setVerifiedProjects(projectsResponse.projects.filter(project => project.verification_status));
+            setUnverifiedProjects(projectsResponse.projects.filter(project => !project.verification_status));
+
           } else if (roleResponse.dbRole === 3) {
             const verifiedResponse = await getVerifiedProjects(token);
-            console.log('Verified Projects:', verifiedResponse.projects);
+
+            // Filter projects for buyer
             setVerifiedProjects(verifiedResponse.projects);
 
             const unverifiedResponse = await getUnverifiedProjects(token);
+            console.log('Verified Projects:', verifiedResponse.projects);
+            setVerifiedProjects(verifiedResponse.projects);
+
             console.log('Unverified Projects:', unverifiedResponse.projects);
             setUnverifiedProjects(unverifiedResponse.projects);
           }
