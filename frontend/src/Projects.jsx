@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAllProjects, getProjectsByOwner, getVerifiedProjects, getUnverifiedProjects, submitProject, verifyProject, getCctBalance, mintTokens, getUserAddress, submitProjectToBlockchain, voteForProject, finalizeProject } from './api/contracts';
-import { getUserRole } from './api/user';
+import { getAllProjects, getProjectsByOwner, getVerifiedProjects, getUnverifiedProjects, submitProject, verifyProject, getUserAddress, voteForProject, finalizeProject, getProjectDetails } from './api/contracts';
+import { getUserRole } from './api/user';import axios from 'axios';
 
 const Projects = () => {
   const [verifiedProjects, setVerifiedProjects] = useState([]);
@@ -148,16 +148,36 @@ const Projects = () => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        const userAddress = await getUserAddress(token);
-        const ethAmount = cctAmount; // 1 CCT = 1 ETH
-        await mintTokens(token, userAddress, ethAmount);
+        const userAddressResponse = await getUserAddress(token);
+        const buyerAddress = userAddressResponse.userAddress;
+
+        // Fetch project details to get the owner's address
+        const projectDetails = await getProjectDetails(token, projectId);
+
+        // Call the backend to handle the ETH transfer and CCT transfer
+        await purchaseCCT(token, buyerAddress, projectDetails.owner, cctAmount);
+
         setMessage('CCT purchased successfully');
         navigate('/projects');
       } catch (error) {
         setError(error.message);
       }
-    } else {
-      setError('Please log in to purchase CCT.');
+    }
+  };
+
+  // New function to call the backend purchase endpoint
+  const purchaseCCT = async (token, buyerAddress, ownerAddress, ethAmount) => {
+    try {
+      const response = await axios.post(
+        'http://localhost:3000/contracts/purchaseCCT',
+        { buyerAddress, ownerAddress, ethAmount },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error.response.data;
     }
   };
 

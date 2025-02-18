@@ -297,9 +297,21 @@ router.get('/getUserAddress', authenticateJWT, async (req, res) => {
 router.post('/purchaseCCT', authenticateJWT, async (req, res) => {
   const { buyerAddress, ownerAddress, ethAmount } = req.body;
   try {
-    await contracts.purchaseCCT(buyerAddress, ownerAddress, ethAmount);
+    // Transfer ETH from buyer to owner
+    const ethTx = await wallet.sendTransaction({
+      to: ownerAddress,
+      value: ethers.utils.parseEther(ethAmount.toString()),
+    });
+    await ethTx.wait();
+
+    // Transfer CCT from owner to buyer
+    const cctAmountWei = ethers.utils.parseEther(ethAmount.toString());
+    const cctTx = await cctContract.transfer(buyerAddress, cctAmountWei);
+    await cctTx.wait();
+
     res.status(200).json({ message: 'CCT purchased successfully' });
   } catch (err) {
+    console.error("Purchase CCT error:", err);
     res.status(500).json({ error: err.message });
   }
 });

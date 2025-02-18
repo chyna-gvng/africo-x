@@ -108,13 +108,15 @@ contract CarbonCreditToken is ERC20, Ownable {
     }
 
     /**
-     * @notice Transfers CCT tokens from one address to another.
-     * @dev Only buyers are allowed to transfer CCT tokens.
-     * @param from The address to transfer from.
+     * @notice Transfers CCT tokens from the sender to another address.
      * @param to The address to transfer to.
      * @param amount The amount of tokens to transfer.
      * @return success True if the transfer succeeds.
      */
+    function transfer(address to, uint256 amount) public override returns (bool) {
+        _transfer(msg.sender, to, amount);
+        return true;
+    }
     function transferFrom(address from, address to, uint256 amount) public override returns (bool success) {
         require(roles[from] == Role.Buyer, "Only buyers can transfer CCT");
         return super.transferFrom(from, to, amount);
