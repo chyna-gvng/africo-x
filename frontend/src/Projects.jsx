@@ -195,7 +195,7 @@ const Projects = () => {
                 <button onClick={() => handleVoteForProject(project.project_id)}>Vote</button>
               )}
               {role === 3 && project.verification_status && (
-                <button onClick={() => handlePurchaseCCT(project.project_id, project.cctAmount)}>Purchase CCT</button>
+                <button onClick={() => handlePurchaseCCT(project.project_id, project.cctAmount)}>Purchase</button>
               )}
             </li>
           ))}
