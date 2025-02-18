@@ -2,6 +2,7 @@ const express = require('express');
 const contracts = require('../contracts');
 const jwt = require('jsonwebtoken');
 const db = require('../db');
+const { wallet } = require('../contracts'); // Import the wallet object
 
 const router = express.Router();
 
