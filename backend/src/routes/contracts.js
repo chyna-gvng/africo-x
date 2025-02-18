@@ -102,8 +102,8 @@ router.post('/voteForProject', authenticateJWT, async (req, res) => {
 router.post('/finalizeProject', authenticateJWT, async (req, res) => {
   const { projectId } = req.body;
   try {
-    await contracts.finalizeProject(projectId);
-    res.status(200).json({ message: 'Project finalized successfully' });
+    // No longer calling contracts.finalizeProject here
+    res.status(200).json({ message: 'Project finalization initiated (handled by event listener)' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
