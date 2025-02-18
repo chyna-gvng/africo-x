@@ -23,7 +23,18 @@ echo "Blockchain dependencies installed."
 # Generate AES encryption key
 echo "Generating AES encryption key..."
 AES_KEY=$(openssl rand -hex 32)
-echo "AES_ENCRYPTION_KEY=$AES_KEY" > .env
+
+# Check if AES_ENCRYPTION_KEY already exists in .env
+if grep -q "^AES_ENCRYPTION_KEY=" .env; then
+  # Replace the existing key
+  echo "Replacing existing AES_ENCRYPTION_KEY in .env..."
+  sed -i "s/^AES_ENCRYPTION_KEY=.*/AES_ENCRYPTION_KEY=$AES_KEY/" .env
+else
+  # Append the key to the file
+  echo "Adding AES_ENCRYPTION_KEY to .env..."
+  echo "AES_ENCRYPTION_KEY=$AES_KEY" >> .env
+fi
+
 echo "AES encryption key generated and stored in .env file."
 
 echo "Setup complete!"
