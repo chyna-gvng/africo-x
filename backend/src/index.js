@@ -65,6 +65,11 @@ prContract.on("VoteCast", async (projectId, voter, weight) => {
         const tx = await prContract.finalizeProject(projectId);
         await tx.wait(); // Wait for the transaction to be mined
         console.log(`Project ${projectId} finalized successfully.`);
+
+        // Update verification_status in the database
+        await db.verifyProject(projectId.toNumber());
+        console.log(`Project ${projectId} verification_status updated in database.`);
+
       } catch (finalizeError) {
         console.error(`Error finalizing project ${projectId}:`, finalizeError);
       }
