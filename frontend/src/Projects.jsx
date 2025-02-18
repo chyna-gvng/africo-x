@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAllProjects, getProjectsByOwner, getVerifiedProjects, getUnverifiedProjects, submitProject, verifyProject, getUserAddress, voteForProject, finalizeProject, getProjectDetails } from './api/contracts';
-import { getUserRole } from './api/user';import axios from 'axios';
+import { getAllProjects, getProjectsByOwner, getVerifiedProjects, getUnverifiedProjects, submitProject, verifyProject, getUserAddress, voteForProject, finalizeProject, getProjectDetails, mintTokens } from './api/contracts';
+import { getUserRole } from './api/user';
+import axios from 'axios';
 
 const Projects = () => {
   const [verifiedProjects, setVerifiedProjects] = useState([]);
