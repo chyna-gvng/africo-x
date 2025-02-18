@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Source nvm
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
 # Navigate to the frontend directory and install dependencies
 cd frontend
 echo "Installing frontend dependencies..."
