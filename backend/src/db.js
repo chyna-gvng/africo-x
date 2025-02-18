@@ -1,6 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcrypt');
 const { ethers } = require('ethers');
+const crypto = require('crypto');
 
 const db = new sqlite3.Database('./database.sqlite');
 
@@ -14,6 +15,7 @@ db.serialize(() => {
     username TEXT UNIQUE,
     password TEXT,
     address TEXT,
+    private_key TEXT,
     role INTEGER
   )`);
 
@@ -30,30 +32,75 @@ db.serialize(() => {
   )`);
 });
 
+// Function to encrypt private key
+function encrypt(text) {
+  const algorithm = 'aes-256-cbc';
+  const key = crypto.randomBytes(32);
+  const iv = crypto.randomBytes(16);
+  const cipher = crypto.createCipheriv(algorithm, Buffer.from(key), iv);
+  let encrypted = cipher.update(text);
+  encrypted = Buffer.concat([encrypted, cipher.final()]);
+  return `${iv.toString('hex')}:${encrypted.toString('hex')}:${key.toString('hex')}`;
+}
+
 // Register a new user
 function registerUser(username, password, role) {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     bcrypt.hash(password, 10, async (err, hash) => {
       if (err) {
         reject(err);
-      } else {
-        // Get the address from Ganache based on userId
-        const accounts = await provider.listAccounts();
-        db.run('INSERT INTO users (username, password, address, role) VALUES (?, ?, ?, ?)', [username, hash, accounts[0], role], function (err) {
-          if (err) {
-            reject(err);
-          } else {
-            const userId = this.lastID;
-            const userAddress = accounts[userId - 1];
-            db.run('UPDATE users SET address = ? WHERE id = ?', [userAddress, userId], function (err) {
-              if (err) {
-                reject(err);
-              } else {
-                resolve(userId);
+        return;
+      }
+
+      try {
+        // Get the mnemonic phrase from the environment variables
+        const mnemonic = process.env.MNEMONIC;
+        if (!mnemonic) {
+          reject(new Error("MNEMONIC environment variable not set."));
+          return;
+        }
+
+        // Insert user data into the database
+        db.run(
+          'INSERT INTO users (username, password, address, private_key, role) VALUES (?, ?, ?, ?, ?)',
+          [username, hash, null, null, role], // Temporarily set address and private_key to null
+          async function (err) { // Make the callback async
+            if (err) {
+              reject(err);
+              return;
+            }
+
+            const userId = this.lastID; // Get the auto-incremented user ID
+            const userIndex = userId - 1; // Correctly calculate the index
+
+            // Derive the wallet from the mnemonic and user index
+            const wallet = ethers.Wallet.fromMnemonic(
+              mnemonic,
+              `m/44'/60'/0'/0/${userIndex}`
+            );
+            const userAddress = wallet.address;
+            const userPrivateKey = wallet.privateKey;
+
+            // Encrypt the private key
+            const encryptedPrivateKey = encrypt(userPrivateKey);
+
+            // Update the user record with the address and encrypted private key
+            db.run(
+              'UPDATE users SET address = ?, private_key = ? WHERE id = ?',
+              [userAddress, encryptedPrivateKey, userId],
+              (err) => {
+                if (err) {
+                  reject(err);
+                  return;
+                }
+                resolve(userId); // Resolve with the new user ID
               }
-            });
+            );
           }
-        });
+        );
+      } catch (ganacheErr) {
+        console.error("Error getting Ganache account:", ganacheErr);
+        reject(new Error("Failed to retrieve Ganache account."));
       }
     });
   });
