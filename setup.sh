@@ -20,21 +20,28 @@ echo "Installing blockchain dependencies..."
 npm install
 echo "Blockchain dependencies installed."
 
+# Check if .env exists, if not copy from example
+if [ ! -f "../backend/.env" ]; then
+  echo ".env file not found. Copying from example..."
+  cp "../backend/example.env" "../backend/.env"
+  echo ".env file created."
+fi
+
 # Generate AES encryption key
 echo "Generating AES encryption key..."
 AES_KEY=$(openssl rand -hex 32)
 
 # Check if AES_ENCRYPTION_KEY already exists in .env
-if grep -q "^AES_ENCRYPTION_KEY=" .env; then
+if grep -q "^AES_ENCRYPTION_KEY=" "../backend/.env"; then
   # Replace the existing key
-  echo "Replacing existing AES_ENCRYPTION_KEY in .env..."
-  sed -i "s/^AES_ENCRYPTION_KEY=.*/AES_ENCRYPTION_KEY=$AES_KEY/" .env
+  echo "Replacing existing AES_ENCRYPTION_KEY in ../backend/.env..."
+  sed -i "s/^AES_ENCRYPTION_KEY=.*/AES_ENCRYPTION_KEY=$AES_KEY/" "../backend/.env"
 else
   # Append the key to the file
-  echo "Adding AES_ENCRYPTION_KEY to .env..."
-  echo "AES_ENCRYPTION_KEY=$AES_KEY" >> .env
+  echo "Adding AES_ENCRYPTION_KEY to ../backend/.env..."
+  echo "AES_ENCRYPTION_KEY=$AES_KEY" >> "../backend/.env"
 fi
 
-echo "AES encryption key generated and stored in .env file."
+echo "AES encryption key generated and stored in ../backend/.env file."
 
 echo "Setup complete!"
