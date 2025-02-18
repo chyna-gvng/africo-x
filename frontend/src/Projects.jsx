@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAllProjects, getProjectsByOwner, getVerifiedProjects, submitProject, verifyProject, getCctBalance, mintTokens, getUserAddress, submitProjectToBlockchain, voteForProject, finalizeProject, getUnverifiedProjects } from './api/contracts';
+import { getAllProjects, getProjectsByOwner, getVerifiedProjects, getUnverifiedProjects, submitProject, verifyProject, getCctBalance, mintTokens, getUserAddress, submitProjectToBlockchain, voteForProject, finalizeProject } from './api/contracts';
 import { getUserRole } from './api/user';
 
 const Projects = () => {
-  const [projects, setProjects] = useState([]);
+  const [verifiedProjects, setVerifiedProjects] = useState([]);
+  const [unverifiedProjects, setUnverifiedProjects] = useState([]);
   const [role, setRole] = useState('');
   const [mintAccount, setMintAccount] = useState('');
   const [mintAmount, setMintAmount] = useState('');
@@ -23,20 +24,27 @@ const Projects = () => {
       if (token) {
         try {
           const roleResponse = await getUserRole(token);
-          console.log('User Role:', roleResponse); // Debug statement
+          console.log('User Role:', roleResponse);
           setRole(roleResponse.dbRole);
+
           if (roleResponse.dbRole === 1) {
             const projectsResponse = await getAllProjects(token);
-            console.log('All Projects:', projectsResponse.projects); // Debug statement
-            setProjects(projectsResponse.projects);
+            console.log('All Projects:', projectsResponse.projects);
+            setVerifiedProjects(projectsResponse.projects);
+            setUnverifiedProjects(projectsResponse.projects); // Show all projects for admin
           } else if (roleResponse.dbRole === 2) {
             const projectsResponse = await getProjectsByOwner(token);
-            console.log('Projects By Owner:', projectsResponse.projects); // Debug statement
-            setProjects(projectsResponse.projects);
+            console.log('Projects By Owner:', projectsResponse.projects);
+            setVerifiedProjects(projectsResponse.projects);
+            setUnverifiedProjects(projectsResponse.projects); // Show all projects for project owner
           } else if (roleResponse.dbRole === 3) {
-            const projectsResponse = await getUnverifiedProjects(token); // Assuming this endpoint exists
-            console.log('Unverified Projects:', projectsResponse.projects);
-            setProjects(projectsResponse.projects);
+            const verifiedResponse = await getVerifiedProjects(token);
+            console.log('Verified Projects:', verifiedResponse.projects);
+            setVerifiedProjects(verifiedResponse.projects);
+
+            const unverifiedResponse = await getUnverifiedProjects(token);
+            console.log('Unverified Projects:', unverifiedResponse.projects);
+            setUnverifiedProjects(unverifiedResponse.projects);
           }
         } catch (error) {
           setError(error.message);
@@ -111,11 +119,13 @@ const Projects = () => {
         // Refresh projects after finalization attempt
         const roleResponse = await getUserRole(token);
         setRole(roleResponse.dbRole);
-          if (roleResponse.dbRole === 3) {
-            const projectsResponse = await getUnverifiedProjects(token); // Assuming this endpoint exists
-            console.log('Unverified Projects:', projectsResponse.projects);
-            setProjects(projectsResponse.projects);
-          }
+        const verifiedResponse = await getVerifiedProjects(token);
+        console.log('Verified Projects:', verifiedResponse.projects);
+        setVerifiedProjects(verifiedResponse.projects);
+
+        const unverifiedResponse = await getUnverifiedProjects(token);
+        console.log('Unverified Projects:', unverifiedResponse.projects);
+        setUnverifiedProjects(unverifiedResponse.projects);
       } catch (error) {
         setError(error.message);
       }
@@ -182,27 +192,49 @@ const Projects = () => {
           <button type="submit">Mint Tokens</button>
         </form>
       )}
-      {projects.length > 0 ? (
+
+      {/* Display Unverified Projects */}
+      <h3>Unverified Projects</h3>
+      {unverifiedProjects.length > 0 ? (
         <ul>
-          {projects.map((project) => (
+          {unverifiedProjects.map((project) => (
             <li key={project.project_id}>
               <h3>{project.name}</h3>
               <p>{project.description}</p>
               <p>{project.location}</p>
               <p>{project.cctAmount} CCT</p>
-              <p>{project.verification_status ? 'Verified' : 'Unverified'}</p>
-              {role === 3 && !project.verification_status && (
+              <p>Unverified</p>
+              {role === 3 && (
                 <button onClick={() => handleVoteForProject(project.project_id)}>Vote</button>
               )}
-              {role === 3 && project.verification_status && (
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No unverified projects found.</p>
+      )}
+
+      {/* Display Verified Projects */}
+      <h3>Verified Projects</h3>
+      {verifiedProjects.length > 0 ? (
+        <ul>
+          {verifiedProjects.map((project) => (
+            <li key={project.project_id}>
+              <h3>{project.name}</h3>
+              <p>{project.description}</p>
+              <p>{project.location}</p>
+              <p>{project.cctAmount} CCT</p>
+              <p>Verified</p>
+              {role === 3 && (
                 <button onClick={() => handlePurchaseCCT(project.project_id, project.cctAmount)}>Purchase</button>
               )}
             </li>
           ))}
         </ul>
       ) : (
-        <p>No projects found.</p>
+        <p>No verified projects found.</p>
       )}
+
       {message && <p>{message}</p>}
     </div>
   );
