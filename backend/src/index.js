@@ -66,6 +66,15 @@ prContract.on("VoteCast", async (projectId, voter, weight) => {
         await tx.wait(); // Wait for the transaction to be mined
         console.log(`Project ${projectId} finalized successfully.`);
 
+        // Mint CCT tokens to the project owner
+        const projectDetails = await db.getProjectById(projectId.toNumber());
+        const ownerAddress = await db.getUserAddressById(projectDetails.owner_id);
+        const cctAmount = projectDetails.cctAmount;
+
+        const mintTx = await cctContract.mint(ownerAddress, ethers.utils.parseEther(cctAmount.toString()));
+        await mintTx.wait();
+        console.log(`Minted ${cctAmount} CCT tokens to project owner ${ownerAddress}`);
+
         // Update verification_status in the database
         await db.verifyProject(projectId.toNumber());
         console.log(`Project ${projectId} verification_status updated in database.`);
