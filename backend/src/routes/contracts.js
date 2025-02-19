@@ -311,9 +311,7 @@ router.post('/purchaseCCT', authenticateJWT, async (req, res) => {
     // Transfer ETH from buyer to owner
     const ethTx = await buyerWallet.sendTransaction({
       to: ownerAddress,
-      value: ethers.utils.parseEther(ethAmount.toString()),
-      gasLimit: 21000, // Standard gas for ETH transfer
-      gasPrice: await provider.getFeeData().then(fees => fees.gasPrice)
+      value: ethers.utils.parseEther(ethAmount.toString())
     });
     await ethTx.wait();
 
