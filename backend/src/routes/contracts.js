@@ -3,6 +3,7 @@ const contracts = require('../contracts');
 const jwt = require('jsonwebtoken');
 const db = require('../db');
 const { wallet } = require('../index'); // Import the wallet object
+const { ethers } = require('ethers');
 
 const router = express.Router();
 
@@ -304,17 +305,22 @@ router.post('/purchaseCCT', authenticateJWT, async (req, res) => {
     const buyerPrivateKey = await db.getUserPrivateKey(username);
 
     // 2. Create a new wallet instance using the buyer's private key
-    const buyerWallet = new ethers.Wallet(buyerPrivateKey, provider);
+    const buyerWallet = new ethers.Wallet(buyerPrivateKey, provider); // Use the provider from index.js
 
     // Transfer ETH from buyer to owner
     const ethTx = await buyerWallet.sendTransaction({
       to: ownerAddress,
       value: ethers.utils.parseEther(ethAmount.toString()),
+      gasLimit: 21000, // Standard gas for ETH transfer
+      gasPrice: await provider.getFeeData().then(fees => fees.gasPrice)
     });
     await ethTx.wait();
 
     // Transfer CCT from owner to buyer
-    const cctAmountWei = ethers.utils.parseEther(ethAmount.toString())
+    // const cctAmountWei = ethers.utils.parseEther(ethAmount.toString())
+
+    // TODO: Implement CCT transfer logic here (if needed)
+    // Consider if CCT transfer should happen automatically or be initiated by the owner
 
     res.status(200).json({ message: 'CCT purchased successfully' });
   } catch (err) {
