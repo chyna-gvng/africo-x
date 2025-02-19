@@ -61,7 +61,14 @@ async function finalizeProject(projectId) {
 }
 
 async function getProject(projectId) {
-  return await prContract.projects(projectId);
+  const project = await prContract.projects(projectId);
+  return {
+    name: project.name,
+    owner: project.owner,
+    project_id: project.project_id,
+    voteWeight: project.voteWeight,
+    registered: project.registered,
+  };
 }
 
 async function getTotalEligibleVotes() {
