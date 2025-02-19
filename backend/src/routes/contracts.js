@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const db = require('../db');
 const { wallet } = require('../index'); // Import the wallet object
 const { ethers } = require('ethers');
+const provider = require('../provider');
 
 const router = express.Router();
 

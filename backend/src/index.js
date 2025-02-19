@@ -1,5 +1,6 @@
 const express = require('express');
 const { ethers } = require('ethers');
+const provider = require('./provider'); // Import the provider
 const db = require('./db');
 const authRoutes = require('./routes/auth');
 const contractRoutes = require('./routes/contracts');
@@ -7,9 +8,6 @@ const cors = require('cors');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-// Connect to Ganache instance
-const provider = new ethers.providers.JsonRpcProvider('http://127.0.0.1:8545');
 
 // Load private key and provider URL from environment variables
 const privateKey = process.env.PRIVATE_KEY;
@@ -106,7 +104,7 @@ async function syncVoteWeights() {
 
 syncVoteWeights(); // Call the function to synchronize vote weights
 
-module.exports = { wallet };
+module.exports = { wallet, provider };
 
 // Start server
 app.listen(PORT, () => {

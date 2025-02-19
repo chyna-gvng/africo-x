@@ -1,4 +1,5 @@
 const { ethers } = require('ethers');
+const provider = require('./provider'); // Import the provider
 const fs = require('fs');
 const path = require('path');
 const db = require('./db');
@@ -6,8 +7,6 @@ require('dotenv').config();
 
 // Load private key and provider URL from environment variables
 const privateKey = process.env.PRIVATE_KEY;
-const providerUrl = process.env.PROVIDER_URL;
-const provider = new ethers.providers.JsonRpcProvider(providerUrl);
 const wallet = new ethers.Wallet(privateKey, provider);
 
 // Load ABIs dynamically
