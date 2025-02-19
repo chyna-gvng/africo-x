@@ -154,6 +154,7 @@ const Projects = () => {
 
         // Fetch project details to get the owner's address
         const projectDetails = await getProjectDetails(token, projectId)
+        console.log("Project Details:", projectDetails);
 
         // Call the backend to handle the ETH transfer and CCT transfer
         await purchaseCCT(token, buyerAddress, projectDetails.project.owner, cctAmount);
