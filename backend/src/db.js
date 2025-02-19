@@ -2,12 +2,9 @@ const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcrypt');
 const { ethers } = require('ethers');
 const crypto = require('crypto');
-require('dotenv').config(); // Load environment variables
+const provider = require('./provider'); // Import the provider
 
 const db = new sqlite3.Database('./database.sqlite');
-
-// Connect to Ganache instance
-const provider = new ethers.providers.JsonRpcProvider('http://127.0.0.1:8545');
 
 // Encryption key (keep this secret and manage securely)
 const AES_SECRET_KEY = process.env.AES_SECRET_KEY;
