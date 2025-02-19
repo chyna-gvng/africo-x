@@ -10,9 +10,9 @@ const db = new sqlite3.Database('./database.sqlite');
 const provider = new ethers.providers.JsonRpcProvider('http://127.0.0.1:8545');
 
 // Encryption key (keep this secret and manage securely)
-const AES_ENCRYPTION_KEY = process.env.AES_ENCRYPTION_KEY;
-if (!AES_ENCRYPTION_KEY) {
-  console.error("AES_ENCRYPTION_KEY environment variable not set.");
+const AES_SECRET_KEY = process.env.AES_SECRET_KEY;
+if (!AES_SECRET_KEY) {
+  console.error("AES_SECRET_KEY environment variable not set.");
   process.exit(1); // Exit if the key is not set
 }
 

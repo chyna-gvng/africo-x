@@ -35,15 +35,15 @@ fi
 echo "Generating AES encryption key..."
 AES_KEY=$(openssl rand -hex 32)
 
-# Check if AES_ENCRYPTION_KEY already exists in .env
-if grep -q "^AES_ENCRYPTION_KEY=" "../backend/.env"; then
+# Check if AES_SECRET_KEY already exists in .env
+if grep -q "^AES_SECRET_KEY=" "../backend/.env"; then
   # Replace the existing key
-  echo "Replacing existing AES_ENCRYPTION_KEY in ../backend/.env..."
-  sed -i "s/^AES_ENCRYPTION_KEY=.*/AES_ENCRYPTION_KEY=$AES_KEY/" "../backend/.env"
+  echo "Replacing existing AES_SECRET_KEY in ../backend/.env..."
+  sed -i "s/^AES_SECRET_KEY=.*/AES_SECRET_KEY=$AES_KEY/" "../backend/.env"
 else
   # Append the key to the file
-  echo "Adding AES_ENCRYPTION_KEY to ../backend/.env..."
-  echo "AES_ENCRYPTION_KEY=$AES_KEY" >> "../backend/.env"
+  echo "Adding AES_SECRET_KEY to ../backend/.env..."
+  echo "AES_SECRET_KEY=$AES_KEY" >> "../backend/.env"
 fi
 
 echo "AES encryption key generated and stored in ../backend/.env file."
