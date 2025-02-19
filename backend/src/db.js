@@ -336,6 +336,23 @@ function updateProjectVoteWeight(projectId, voteWeight) {
   });
 }
 
+// Get user private key
+function getUserPrivateKey(username) {
+  return new Promise((resolve, reject) => {
+    db.get('SELECT private_key FROM users WHERE username = ?', [username], (err, row) => {
+      if (err) {
+        reject(err);
+      } else if (row) {
+        // Decrypt the private key
+        const decryptedPrivateKey = decrypt(row.private_key);
+        resolve(decryptedPrivateKey);
+      } else {
+        reject(new Error('User not found'));
+      }
+    });
+  });
+}
+
 module.exports = {
   registerUser,
   authenticateUser,
@@ -351,5 +368,6 @@ module.exports = {
   updateProjectCctAmount,
   getProjectById,
   getUserAddressById,
+  getUserPrivateKey,
   updateProjectVoteWeight,
 };

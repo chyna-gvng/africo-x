@@ -298,17 +298,23 @@ router.get('/getUserAddress', authenticateJWT, async (req, res) => {
 router.post('/purchaseCCT', authenticateJWT, async (req, res) => {
   const { buyerAddress, ownerAddress, ethAmount } = req.body;
   try {
+    const { username } = req.user; // Get username from JWT
+
+    // 1. Get the buyer's private key from the database
+    const buyerPrivateKey = await db.getUserPrivateKey(username);
+
+    // 2. Create a new wallet instance using the buyer's private key
+    const buyerWallet = new ethers.Wallet(buyerPrivateKey, provider);
+
     // Transfer ETH from buyer to owner
-    const ethTx = await wallet.sendTransaction({
+    const ethTx = await buyerWallet.sendTransaction({
       to: ownerAddress,
       value: ethers.utils.parseEther(ethAmount.toString()),
     });
     await ethTx.wait();
 
     // Transfer CCT from owner to buyer
-    const cctAmountWei = ethers.utils.parseEther(ethAmount.toString());
-    const cctTx = await cctContract.transfer(buyerAddress, cctAmountWei);
-    await cctTx.wait();
+    const cctAmountWei = ethers.utils.parseEther(ethAmount.toString())
 
     res.status(200).json({ message: 'CCT purchased successfully' });
   } catch (err) {

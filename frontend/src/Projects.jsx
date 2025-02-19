@@ -153,10 +153,10 @@ const Projects = () => {
         const buyerAddress = userAddressResponse.userAddress;
 
         // Fetch project details to get the owner's address
-        const projectDetails = await getProjectDetails(token, projectId);
+        const projectDetails = await getProjectDetails(token, projectId)
 
         // Call the backend to handle the ETH transfer and CCT transfer
-        await purchaseCCT(token, buyerAddress, projectDetails.owner, cctAmount);
+        await purchaseCCT(token, buyerAddress, projectDetails.project.owner, cctAmount);
 
         setMessage('CCT purchased successfully');
         navigate('/projects');
