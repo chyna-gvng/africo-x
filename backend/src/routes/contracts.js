@@ -305,6 +305,11 @@ router.post('/purchaseCCT', authenticateJWT, async (req, res) => {
     // 1. Get the buyer's private key from the database
     const buyerPrivateKey = await db.getUserPrivateKey(username);
 
+    // Log the values for debugging
+    console.log("Buyer Address:", buyerAddress);
+    console.log("Owner Address:", ownerAddress);
+    console.log("Buyer Private Key:", buyerPrivateKey);
+
     // 2. Create a new wallet instance using the buyer's private key
     const buyerWallet = new ethers.Wallet(buyerPrivateKey, provider); // Use the provider from index.js
 
