@@ -2,7 +2,7 @@
 
 - [x] Authentication
 - [x] Project Registration
-- [ ] Voting
-- [ ] Purchase
+- [x] Voting
+- [x] Purchase
 - [ ] Depletion
 - [ ] Styling
