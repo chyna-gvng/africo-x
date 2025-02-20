@@ -32,7 +32,9 @@ db.serialize(() => {
     cctAmount INTEGER,
     verification_status BOOLEAN,
     owner_id INTEGER,
-    voteWeight TEXT DEFAULT '0',  -- Changed to TEXT
+    voteWeight TEXT DEFAULT '0',
+    archive_status BOOLEAN DEFAULT FALSE, -- ADD THIS LINE
+    archived_by INTEGER, -- ADD THIS LINE
     FOREIGN KEY (owner_id) REFERENCES users (id)
   )`);
 });
@@ -365,6 +367,45 @@ function getUsernameFromAddress(address) {
   });
 }
 
+// Archive a project
+function archiveProject(projectId, userId) {
+  return new Promise((resolve, reject) => {
+    db.run('UPDATE projects SET archive_status = ?, archived_by = ? WHERE project_id = ?', [true, userId, projectId], function (err) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
+// Get archived projects
+function getArchivedProjects() {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT * FROM projects WHERE archive_status = ?', [true], (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+}
+
+// Get archived projects by owner
+function getArchivedProjectsByOwner(ownerId) {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT * FROM projects WHERE archive_status = ? AND owner_id = ?', [true, ownerId], (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+}
+
 module.exports = {
   registerUser,
   authenticateUser,
@@ -383,4 +424,7 @@ module.exports = {
   getUserPrivateKey,
   updateProjectVoteWeight,
   getUsernameFromAddress,
+  archiveProject,
+  getArchivedProjects,
+  getArchivedProjectsByOwner
 };
