@@ -30,7 +30,7 @@ const authenticateJWT = (req, res, next) => {
 };
 
 // Load ABIs dynamically
-const cctAbiPath = path.join(__dirname, '../../blockchain/build/contracts/CarbonCreditToken.json');
+const cctAbiPath = path.join(__dirname, '../../../blockchain/build/contracts/CarbonCreditToken.json');
 const cctAbi = JSON.parse(fs.readFileSync(cctAbiPath, 'utf8')).abi;
 
 // Set Role by Username
