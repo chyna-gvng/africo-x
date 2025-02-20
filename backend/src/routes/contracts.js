@@ -304,7 +304,8 @@ router.get('/getUserAddress', authenticateJWT, async (req, res) => {
 
 // Purchase CCT
 router.post('/purchaseCCT', authenticateJWT, async (req, res) => {
-  const { buyerAddress, ownerAddress, ethAmount } = req.body;
+  const { buyerAddress, ownerAddress, ethAmount, projectId } = req.body;
+  const { userId } = req.user; // Get the user ID from the JWT
   try {
     const { username } = req.user; // Get username from JWT
 
@@ -359,6 +360,10 @@ router.post('/purchaseCCT', authenticateJWT, async (req, res) => {
       console.error("CCT Transfer Error:", cctTransferError);
       return res.status(500).json({ error: 'CCT transfer failed', details: cctTransferError.message });
     }
+
+    // 9. Archive the project after successful purchase
+    await contracts.archiveProject(projectId);
+    await db.archiveProject(projectId, userId);
 
     res.status(200).json({ message: 'CCT purchased successfully' });
   } catch (err) {

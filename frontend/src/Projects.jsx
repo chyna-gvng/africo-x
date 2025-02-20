@@ -157,7 +157,7 @@ const Projects = () => {
         console.log("Project Details:", projectDetails);
 
         // Call the backend to handle the ETH transfer and CCT transfer
-        await purchaseCCT(token, buyerAddress, projectDetails.project.owner, cctAmount);
+        await purchaseCCT(token, buyerAddress, projectDetails.project.owner, cctAmount, projectId);
 
         setMessage('CCT purchased successfully');
         navigate('/projects');
@@ -168,11 +168,11 @@ const Projects = () => {
   };
 
   // New function to call the backend purchase endpoint
-  const purchaseCCT = async (token, buyerAddress, ownerAddress, ethAmount) => {
+  const purchaseCCT = async (token, buyerAddress, ownerAddress, ethAmount, projectId) => {
     try {
       const response = await axios.post(
         'http://localhost:3000/contracts/purchaseCCT',
-        { buyerAddress, ownerAddress, ethAmount },
+        { buyerAddress, ownerAddress, ethAmount, projectId },
         {
           headers: { Authorization: `Bearer ${token}` },
         }

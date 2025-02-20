@@ -156,6 +156,12 @@ async function updateProjectCctAmount(projectId, cctAmount) {
   return await db.updateProjectCctAmount(projectId, cctAmount);
 }
 
+async function archiveProject(projectId) {
+  const tx = await prContract.archiveProject(projectId);
+  await tx.wait();
+  return tx;
+}
+
 module.exports = {
   mint,
   burn,
@@ -181,4 +187,5 @@ module.exports = {
   getUnverifiedProjects,
   verifyProject,
   updateProjectCctAmount,
+  archiveProject // ADD THIS LINE
 };
