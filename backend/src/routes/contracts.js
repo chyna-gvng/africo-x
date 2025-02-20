@@ -305,13 +305,13 @@ router.post('/purchaseCCT', authenticateJWT, async (req, res) => {
     // 1. Get the buyer's private key from the database
     const buyerPrivateKey = await db.getUserPrivateKey(username);
 
-    // Log the values for debugging
+    // Log the buyer details for debugging
     console.log("Buyer Address:", buyerAddress);
     console.log("Owner Address:", ownerAddress);
-    console.log("Buyer Private Key:", buyerPrivateKey);
+    console.log("Buyer Private Key:", buyerPrivateKey); // WARNING: LOGGING PRIVATE KEY
 
     // 2. Create a new wallet instance using the buyer's private key
-    const buyerWallet = new ethers.Wallet(buyerPrivateKey, provider); // Use the provider from index.js
+    const buyerWallet = new ethers.Wallet(buyerPrivateKey, provider);
 
     // Transfer ETH from buyer to owner
     const ethTx = await buyerWallet.sendTransaction({
@@ -320,11 +320,39 @@ router.post('/purchaseCCT', authenticateJWT, async (req, res) => {
     });
     await ethTx.wait();
 
-    // Transfer CCT from owner to buyer
-    // const cctAmountWei = ethers.utils.parseEther(ethAmount.toString())
+    // 3. Get the owner's private key from the database
+    const ownerUsername = await db.getUsernameFromAddress(ownerAddress);
+    const ownerPrivateKey = await db.getUserPrivateKey(ownerUsername);
 
-    // TODO: Implement CCT transfer logic here (if needed)
-    // Consider if CCT transfer should happen automatically or be initiated by the owner
+    // Log the owner details for debugging
+    console.log("Owner Address:", ownerAddress);
+    console.log("Owner Username:", ownerUsername);
+    console.log("Owner Private Key:", ownerPrivateKey); // WARNING: LOGGING PRIVATE KEY
+
+    // 4. Create a wallet instance for the owner
+    const ownerWallet = new ethers.Wallet(ownerPrivateKey, provider);
+
+    // 5. Create a contract instance connected to the owner's wallet
+    const cctContractWithSigner = new ethers.Contract(process.env.CCT_ADDRESS, cctAbi, ownerWallet);
+
+    // 6. Calculate CCT amount in Wei
+    const cctAmountWei = ethers.utils.parseEther(ethAmount.toString());
+
+    // 7. Check if the owner has enough CCT tokens
+    const ownerCctBalance = await contracts.getCctBalance(ownerAddress);
+    if (parseFloat(ownerCctBalance) < parseFloat(ethAmount)) {
+      return res.status(400).json({ error: 'Owner does not have enough CCT tokens' });
+    }
+
+    // 8. Transfer CCT from owner to buyer
+    try {
+      const cctTx = await cctContractWithSigner.transfer(buyerAddress, cctAmountWei);
+      await cctTx.wait();
+      console.log("CCT Transfer Transaction Hash:", cctTx.hash);
+    } catch (cctTransferError) {
+      console.error("CCT Transfer Error:", cctTransferError);
+      return res.status(500).json({ error: 'CCT transfer failed', details: cctTransferError.message });
+    }
 
     res.status(200).json({ message: 'CCT purchased successfully' });
   } catch (err) {
