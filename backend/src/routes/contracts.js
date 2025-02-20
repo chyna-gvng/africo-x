@@ -5,6 +5,8 @@ const db = require('../db');
 const { wallet } = require('../index'); // Import the wallet object
 const { ethers } = require('ethers');
 const provider = require('../provider');
+const fs = require('fs');
+const path = require('path');
 
 const router = express.Router();
 
@@ -26,6 +28,10 @@ const authenticateJWT = (req, res, next) => {
     res.sendStatus(401);
   }
 };
+
+// Load ABIs dynamically
+const cctAbiPath = path.join(__dirname, '../../blockchain/build/contracts/CarbonCreditToken.json');
+const cctAbi = JSON.parse(fs.readFileSync(cctAbiPath, 'utf8')).abi;
 
 // Set Role by Username
 router.post('/setRole', authenticateJWT, async (req, res) => {
