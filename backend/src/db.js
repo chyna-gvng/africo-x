@@ -350,6 +350,21 @@ function getUserPrivateKey(username) {
   });
 }
 
+// Get username from address
+function getUsernameFromAddress(address) {
+  return new Promise((resolve, reject) => {
+    db.get('SELECT username FROM users WHERE address = ?', [address], (err, row) => {
+      if (err) {
+        reject(err);
+      } else if (row) {
+        resolve(row.username);
+      } else {
+        reject(new Error('User not found with this address'));
+      }
+    });
+  });
+}
+
 module.exports = {
   registerUser,
   authenticateUser,
@@ -367,4 +382,5 @@ module.exports = {
   getUserAddressById,
   getUserPrivateKey,
   updateProjectVoteWeight,
+  getUsernameFromAddress,
 };
