@@ -16,7 +16,6 @@ contract ProjectRegistration {
         uint256 voteWeight;
         bool registered;
         bool archived; // ADD THIS LINE
-        address archivedBy; // ADD THIS LINE
     }
 
     CarbonCreditToken public cct;
@@ -51,7 +50,7 @@ contract ProjectRegistration {
     function submitProject(uint256 _project_id, string calldata _name, address _userAddress) external {
         CarbonCreditToken.Role role = cct.getRole(_userAddress);
         require(role == CarbonCreditToken.Role.ProjectOwner, "Only project owners can submit projects");
-        projects[_project_id] = Project(_name, _userAddress, _project_id, 0, false, false, address(0)); // Initialize archived and archivedBy
+        projects[_project_id] = Project(_name, _userAddress, _project_id, 0, false, false); // Initialize archived
         emit ProjectSubmitted(_project_id, _name, _userAddress);
         console.log("Project submitted:", _name);
         console.log("Project owner:", _userAddress);
@@ -156,6 +155,5 @@ contract ProjectRegistration {
         require(!projects[_project_id].archived, "Project is already archived");
 
         projects[_project_id].archived = true;
-        projects[_project_id].archivedBy = msg.sender;
     }
 }

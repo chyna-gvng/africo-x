@@ -34,7 +34,6 @@ db.serialize(() => {
     owner_id INTEGER,
     voteWeight TEXT DEFAULT '0',
     archive_status BOOLEAN DEFAULT FALSE, -- ADD THIS LINE
-    archived_by INTEGER, -- ADD THIS LINE
     FOREIGN KEY (owner_id) REFERENCES users (id)
   )`);
 });
@@ -368,9 +367,9 @@ function getUsernameFromAddress(address) {
 }
 
 // Archive a project
-function archiveProject(projectId, userId) {
+function archiveProject(projectId) {
   return new Promise((resolve, reject) => {
-    db.run('UPDATE projects SET archive_status = ?, archived_by = ? WHERE project_id = ?', [true, userId, projectId], function (err) {
+    db.run('UPDATE projects SET archive_status = ? WHERE project_id = ?', [true, projectId], function (err) {
       if (err) {
         reject(err);
       } else {

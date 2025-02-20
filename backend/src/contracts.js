@@ -162,6 +162,10 @@ async function archiveProject(projectId) {
   return tx;
 }
 
+async function getArchivedProjectsByOwner(ownerId) {
+  return await db.getArchivedProjectsByOwner(ownerId);
+}
+
 module.exports = {
   mint,
   burn,
@@ -187,5 +191,6 @@ module.exports = {
   getUnverifiedProjects,
   verifyProject,
   updateProjectCctAmount,
-  archiveProject // ADD THIS LINE
+  archiveProject,
+  getArchivedProjectsByOwner // ADD THIS LINE
 };

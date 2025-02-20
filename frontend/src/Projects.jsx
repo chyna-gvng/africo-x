@@ -7,6 +7,7 @@ import axios from 'axios';
 const Projects = () => {
   const [verifiedProjects, setVerifiedProjects] = useState([]);
   const [unverifiedProjects, setUnverifiedProjects] = useState([]);
+  const [archivedProjects, setArchivedProjects] = useState([]);
   const [role, setRole] = useState('');
   const [mintAccount, setMintAccount] = useState('');
   const [mintAmount, setMintAmount] = useState('');
@@ -33,29 +34,35 @@ const Projects = () => {
             console.log('All Projects:', projectsResponse.projects);
 
             // Filter projects for admin
-            setVerifiedProjects(projectsResponse.projects.filter(project => project.verification_status));
-            setUnverifiedProjects(projectsResponse.projects.filter(project => !project.verification_status));
+            setVerifiedProjects(projectsResponse.projects.filter(project => project.verification_status && !project.archive_status));
+            setUnverifiedProjects(projectsResponse.projects.filter(project => !project.verification_status && !project.archive_status));
+            setArchivedProjects(projectsResponse.projects.filter(project => project.archive_status));
 
           } else if (roleResponse.dbRole === 2) {
             const projectsResponse = await getProjectsByOwner(token);
             console.log('Projects By Owner:', projectsResponse.projects);
 
             // Filter projects for project owner
-            setVerifiedProjects(projectsResponse.projects.filter(project => project.verification_status));
-            setUnverifiedProjects(projectsResponse.projects.filter(project => !project.verification_status));
+            setVerifiedProjects(projectsResponse.projects.filter(project => project.verification_status && !project.archive_status));
+            setUnverifiedProjects(projectsResponse.projects.filter(project => !project.verification_status && !project.archive_status));
+
+            const archivedResponse = await axios.get('http://localhost:3000/contracts/getArchivedProjectsByOwner', {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            setArchivedProjects(archivedResponse.data.projects);
 
           } else if (roleResponse.dbRole === 3) {
             const verifiedResponse = await getVerifiedProjects(token);
 
             // Filter projects for buyer
-            setVerifiedProjects(verifiedResponse.projects);
+            setVerifiedProjects(verifiedResponse.projects.filter(project => !project.archive_status));
 
             const unverifiedResponse = await getUnverifiedProjects(token);
             console.log('Verified Projects:', verifiedResponse.projects);
-            setVerifiedProjects(verifiedResponse.projects);
+            setVerifiedProjects(verifiedResponse.projects.filter(project => !project.archive_status));
 
             console.log('Unverified Projects:', unverifiedResponse.projects);
-            setUnverifiedProjects(unverifiedResponse.projects);
+            setUnverifiedProjects(unverifiedResponse.projects.filter(project => !project.archive_status));
           }
         } catch (error) {
           setError(error.message);
@@ -265,6 +272,28 @@ const Projects = () => {
         </ul>
       ) : (
         <p>No verified projects found.</p>
+      )}
+
+      {/* Display Archived Projects */}
+      {(role === 1 || role === 2) && (
+        <>
+          <h3>Archived Projects</h3>
+          {archivedProjects.length > 0 ? (
+            <ul>
+              {archivedProjects.map((project) => (
+                <li key={project.project_id}>
+                  <h3>{project.name}</h3>
+                  <p>{project.description}</p>
+                  <p>{project.location}</p>
+                  <p>{project.cctAmount} CCT</p>
+                  <p>Archived</p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No archived projects found.</p>
+          )}
+        </>
       )}
 
       {message && <p>{message}</p>}

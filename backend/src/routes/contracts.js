@@ -363,11 +363,22 @@ router.post('/purchaseCCT', authenticateJWT, async (req, res) => {
 
     // 9. Archive the project after successful purchase
     await contracts.archiveProject(projectId);
-    await db.archiveProject(projectId, userId);
+    await db.archiveProject(projectId);
 
     res.status(200).json({ message: 'CCT purchased successfully' });
   } catch (err) {
     console.error("Purchase CCT error:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get Archived Projects By Owner
+router.get('/getArchivedProjectsByOwner', authenticateJWT, async (req, res) => {
+  const { userId } = req.user;
+  try {
+    const projects = await contracts.getArchivedProjectsByOwner(userId);
+    res.status(200).json({ projects });
+  } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
