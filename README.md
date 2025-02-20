@@ -1,7 +1,7 @@
 # Project Progress
 
-- [ ] Authentication
-- [ ] Project Registration
+- [x] Authentication
+- [x] Project Registration
 - [ ] Voting
 - [ ] Purchase
 - [ ] Depletion
