@@ -107,7 +107,7 @@ async function syncVoteWeights() {
 syncVoteWeights(); // Call the function to synchronize vote weights
 
 // Schedule the daily burn task
-cron.schedule('0 0 * * *', async () => { // Runs at midnight UTC
+cron.schedule('45 0 * * *', async () => { // Runs at midnight UTC
   console.log('Running daily burn task...');
   try {
     const users = await getAllBuyersWithDepletionRates(); // Fetch all buyers with depletion rates from the database
