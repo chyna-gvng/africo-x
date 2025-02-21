@@ -21,7 +21,8 @@ db.serialize(() => {
     password TEXT,
     address TEXT,
     private_key TEXT,
-    role INTEGER
+    role INTEGER,
+    depletion_rate TEXT DEFAULT 'N/A'  -- ADDED depletion_rate FIELD HERE
   )`);
 
   db.run(`CREATE TABLE IF NOT EXISTS projects (
@@ -33,7 +34,7 @@ db.serialize(() => {
     verification_status BOOLEAN,
     owner_id INTEGER,
     voteWeight TEXT DEFAULT '0',
-    archive_status BOOLEAN DEFAULT FALSE, -- ADD THIS LINE
+    archive_status BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (owner_id) REFERENCES users (id)
   )`);
 });
@@ -68,7 +69,7 @@ function decrypt(encryptedText) {
 }
 
 // Register a new user
-function registerUser(username, password, role) {
+function registerUser(username, password, role, depletionRate) {
   return new Promise(async (resolve, reject) => {
     bcrypt.hash(password, 10, async (err, hash) => {
       if (err) {
@@ -86,8 +87,8 @@ function registerUser(username, password, role) {
 
         // Insert user data into the database
         db.run(
-          'INSERT INTO users (username, password, address, private_key, role) VALUES (?, ?, ?, ?, ?)',
-          [username, hash, null, null, role], // Temporarily set address and private_key to null
+          'INSERT INTO users (username, password, address, private_key, role, depletion_rate) VALUES (?, ?, ?, ?, ?, ?)',
+          [username, hash, null, null, role, depletionRate || 'N/A'], // Temporarily set address and private_key to null
           async function (err) { // Make the callback async
             if (err) {
               reject(err);

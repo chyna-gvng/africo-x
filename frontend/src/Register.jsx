@@ -6,13 +6,14 @@ const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('');
+  const [depletionRate, setDepletionRate] = useState(''); // ADDED depletionRate STATE
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/auth/register', { username, password, role });
+      const response = await axios.post('http://localhost:3000/auth/register', { username, password, role, depletionRate });
       setMessage(response.data.message);
       navigate('/login'); // Redirect to login
     } catch (error) {
@@ -40,6 +41,10 @@ const Register = () => {
             <option value="2">Project Owner</option>
             <option value="3">Buyer</option>
           </select>
+        </div>
+        <div>
+          <label>Depletion Rate:</label>
+          <input type="text" value={depletionRate} onChange={(e) => setDepletionRate(e.target.value)} />
         </div>
         <button type="submit">Register</button>
       </form>
