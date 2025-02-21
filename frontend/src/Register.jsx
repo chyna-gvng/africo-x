@@ -42,10 +42,12 @@ const Register = () => {
             <option value="3">Buyer</option>
           </select>
         </div>
-        <div>
-          <label>Depletion Rate:</label>
-          <input type="text" value={depletionRate} onChange={(e) => setDepletionRate(e.target.value)} />
-        </div>
+        {role === '3' && (
+          <div>
+            <label>Depletion Rate:</label>
+            <input type="text" value={depletionRate} onChange={(e) => setDepletionRate(e.target.value)} />
+          </div>
+        )}
         <button type="submit">Register</button>
       </form>
       {message && <p>{message}</p>}
