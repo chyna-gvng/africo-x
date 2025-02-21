@@ -30,9 +30,18 @@ async function mint(account, amount) {
   return tx;
 }
 
-async function burn(amount) {
+async function burn(userAddress, amount) {
   try {
-    const tx = await cctContract.burn(ethers.utils.parseEther(amount.toString()));
+    // Get the user's private key from the database
+    const userPrivateKey = await db.getUserPrivateKey(await db.getUsernameFromAddress(userAddress));
+
+    // Create a wallet instance for the user
+    const userWallet = new ethers.Wallet(userPrivateKey, provider);
+
+    // Connect the contract to the user's wallet
+    const cctContractWithSigner = cctContract.connect(userWallet);
+
+    const tx = await cctContractWithSigner.burn(ethers.utils.parseEther(amount.toString()));
     await tx.wait();
     return tx;
   } catch (error) {

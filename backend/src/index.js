@@ -124,7 +124,7 @@ cron.schedule('01 1 * * *', async () => { // Runs at midnight UTC
           console.log(`Burning ${burnAmount} CCT for user ${username} (${address})`);
           try {
             // Burn tokens on behalf of the user
-            await contracts.burn(burnAmount.toString());
+            await contracts.burn(address, burnAmount.toString());
             console.log(`Successfully burned ${burnAmount} CCT for user ${username}`);
           } catch (burnError) {
             console.error(`Error burning tokens for user ${username}:`, burnError);
