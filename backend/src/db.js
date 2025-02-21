@@ -406,6 +406,19 @@ function getArchivedProjectsByOwner(ownerId) {
   });
 }
 
+// Get all buyers with depletion rates
+function getAllBuyersWithDepletionRates() {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT username, address, depletion_rate FROM users WHERE role = 3', (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+}
+
 module.exports = {
   registerUser,
   authenticateUser,
@@ -426,5 +439,6 @@ module.exports = {
   getUsernameFromAddress,
   archiveProject,
   getArchivedProjects,
-  getArchivedProjectsByOwner
+  getArchivedProjectsByOwner,
+  getAllBuyersWithDepletionRates // ADD THIS LINE
 };

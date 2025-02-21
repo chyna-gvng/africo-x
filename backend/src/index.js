@@ -110,7 +110,7 @@ syncVoteWeights(); // Call the function to synchronize vote weights
 cron.schedule('45 0 * * *', async () => { // Runs at midnight UTC
   console.log('Running daily burn task...');
   try {
-    const users = await getAllBuyersWithDepletionRates(); // Fetch all buyers with depletion rates from the database
+    const users = await db.getAllBuyersWithDepletionRates(); // Fetch all buyers with depletion rates from the database
 
     for (const user of users) {
       const { username, address, depletion_rate } = user;
@@ -145,19 +145,6 @@ cron.schedule('45 0 * * *', async () => { // Runs at midnight UTC
   scheduled: true,
   timezone: 'UTC'
 });
-
-// Function to fetch all buyers with depletion rates from the database
-async function getAllBuyersWithDepletionRates() {
-  return new Promise((resolve, reject) => {
-    db.all('SELECT username, address, depletion_rate FROM users WHERE role = 3', (err, rows) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(rows);
-      }
-    });
-  });
-}
 
 module.exports = { wallet, provider };
 
