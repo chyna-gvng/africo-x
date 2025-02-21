@@ -4,5 +4,5 @@
 - [x] Project Registration
 - [x] Voting
 - [x] Purchase
-- [ ] Depletion
+- [x] Depletion
 - [ ] Styling
