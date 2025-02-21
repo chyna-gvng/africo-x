@@ -5,6 +5,8 @@ const db = require('./db');
 const authRoutes = require('./routes/auth');
 const contractRoutes = require('./routes/contracts');
 const cors = require('cors');
+const cron = require('node-cron');
+const contracts = require('./contracts');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -103,6 +105,59 @@ async function syncVoteWeights() {
 }
 
 syncVoteWeights(); // Call the function to synchronize vote weights
+
+// Schedule the daily burn task
+cron.schedule('0 0 * * *', async () => { // Runs at midnight UTC
+  console.log('Running daily burn task...');
+  try {
+    const users = await getAllBuyersWithDepletionRates(); // Fetch all buyers with depletion rates from the database
+
+    for (const user of users) {
+      const { username, address, depletion_rate } = user;
+
+      if (depletion_rate !== 'N/A' && parseFloat(depletion_rate) > 0) {
+        const cctBalance = await contracts.getCctBalance(address);
+
+        if (parseFloat(cctBalance) > 0) {
+          const burnAmount = Math.min(parseFloat(cctBalance), parseFloat(depletion_rate)); // Burn up to the balance
+
+          console.log(`Burning ${burnAmount} CCT for user ${username} (${address})`);
+          try {
+            // Burn tokens on behalf of the user
+            await contracts.burn(burnAmount.toString());
+            console.log(`Successfully burned ${burnAmount} CCT for user ${username}`);
+          } catch (burnError) {
+            console.error(`Error burning tokens for user ${username}:`, burnError);
+          }
+        } else {
+          console.log(`User ${username} has insufficient CCT balance (0). Skipping burn.`);
+        }
+      } else {
+        console.log(`User ${username} has no depletion rate set. Skipping burn.`);
+      }
+    }
+
+    console.log('Daily burn task completed.');
+  } catch (error) {
+    console.error('Error running daily burn task:', error);
+  }
+}, {
+  scheduled: true,
+  timezone: 'UTC'
+});
+
+// Function to fetch all buyers with depletion rates from the database
+async function getAllBuyersWithDepletionRates() {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT username, address, depletion_rate FROM users WHERE role = 3', (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+}
 
 module.exports = { wallet, provider };
 

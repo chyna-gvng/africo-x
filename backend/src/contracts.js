@@ -31,9 +31,14 @@ async function mint(account, amount) {
 }
 
 async function burn(amount) {
-  const tx = await cctContract.burn(amount);
-  await tx.wait();
-  return tx;
+  try {
+    const tx = await cctContract.burn(ethers.utils.parseEther(amount.toString()));
+    await tx.wait();
+    return tx;
+  } catch (error) {
+    console.error("Error burning tokens:", error);
+    throw error;
+  }
 }
 
 async function setDepletionRate(buyer, rate) {

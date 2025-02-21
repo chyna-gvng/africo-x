@@ -1,6 +1,8 @@
 const express = require('express');
 const db = require('../db');
 const jwt = require('jsonwebtoken');
+const contracts = require('../contracts');
+const { ethers } = require('ethers');
 
 const router = express.Router();
 
@@ -18,8 +20,12 @@ router.post('/register', async (req, res) => {
     const userAddress = await db.getUserAddress(username);
 
     // Set role in blockchain
-    const contracts = require('../contracts');
     await contracts.setRole(username, role);
+
+    // Set depletion rate in blockchain
+    if (role === '3') {
+      await contracts.setDepletionRate(userAddress, ethers.utils.parseEther(depletionRate.toString()));
+    }
 
     res.status(201).json({ message: 'User registered successfully', userId });
   } catch (err) {
