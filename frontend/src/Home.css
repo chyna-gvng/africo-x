@@ -1,0 +1,46 @@
+.hero-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+    height: 100vh;
+}
+
+.hero-section h1 {
+    color: #7DE38D;
+    font-size: 3rem;
+    font-weight: 700;
+}
+
+.highlight-cards {
+    display: flex;
+    padding: 2rem 0;
+}
+
+.card {
+    margin: 0 1rem;
+    padding: 1rem;
+    border-radius: 1em;
+    background-color: rgba(217, 217, 217, 0.05);
+}
+
+.how-it-works {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 0;
+}
+
+.how-it-works h2 {
+    color: #7DE38D;
+    font-size: 3rem;
+    font-weight: 500;
+}
+
+.how-it-works ol {
+    text-align: left;
+}
+
+.how-it-works ol ::marker {
+    color: #7DE38D;
+}
