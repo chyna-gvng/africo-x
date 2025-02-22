@@ -5,6 +5,7 @@ import Home from './Home';
 import Dashboard from './Dashboard';
 import Projects from './Projects';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import './App.css';
 
 function App() {
@@ -23,6 +24,9 @@ function App() {
             <Route path="/login" element={<Login />} />
           </Routes>
         </main>
+        <footer>
+          <Footer />
+        </footer>
       </div>
     </Router>
   );
