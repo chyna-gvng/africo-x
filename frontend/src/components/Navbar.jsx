@@ -3,16 +3,18 @@ import './Navbar.css';
 
 const Navbar = () => {
   return (
-    <nav>
-        <img src="/logo.svg" alt="logo" />
+    <div className='navbar'>
+        <div className='logo'>
+            <img src="/logo.svg" alt="logo"/>
+        </div>
         <ul>
             <li><Link to="/">Home</Link></li>
-            <li><Link to="/register">Register</Link></li>
-            <li><Link to="/login">Login</Link></li>
             <li><Link to="/dashboard">Dashboard</Link></li>
             <li><Link to="/projects">Projects</Link></li>
+            <li className='navbar-btn'><Link to="/register">Register</Link></li>
+            <li className='navbar-btn'><Link to="/login">Login</Link></li>
         </ul>
-    </nav>
+    </div>
   );
 };
 
