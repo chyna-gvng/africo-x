@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './Login.css';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -21,16 +22,16 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className="login-form">
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
         <div>
-          <label>Username:</label>
-          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
+          <label><img src="/at-symbol.svg" alt="at-symbol"/></label>
+          <input type="text" value={username} placeholder="Username" onChange={(e) => setUsername(e.target.value)} required />
         </div>
         <div>
-          <label>Password:</label>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <label><img src="/password.svg" alt="password"/></label>
+          <input type="password" value={password} placeholder="Password" onChange={(e) => setPassword(e.target.value)} required />
         </div>
         <button type="submit">Login</button>
       </form>

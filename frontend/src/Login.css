@@ -1,0 +1,51 @@
+.login-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 11em 0;
+    padding: 5em;
+    border-radius: 1em;
+    background-color: rgba(217, 217, 217, 0.05);
+    height: 35vh;
+}
+
+.login-form h2 {
+    color: #7DE38D;
+    font-size: 3em;
+    font-weight: 500;
+}
+
+.login-form form div {
+    display: flex;
+    margin-bottom: 1.5em;
+}
+
+.login-form form div label img{
+    width: 2.5em;
+    height: 2.5em;
+    margin-right: 1em;
+}
+
+.login-form form div input {
+    width: 100%;
+    padding: 1em;
+    border-radius: 2em;
+    border: none;
+    background-color: rgba(217, 217, 217, 0.35);
+    text-align: center;
+}
+
+.login-form form div ::placeholder {
+    color: inherit;
+}
+
+.login-form form button {
+    width: 40%;
+    color: #7DE38D;
+    border: solid 1px #7DE38D;
+    padding: 1em 2em;
+    margin: 2em 0;
+    border-radius: 35px;
+    background-color: transparent;
+}
