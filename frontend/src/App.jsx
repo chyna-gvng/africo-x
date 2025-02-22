@@ -5,6 +5,7 @@ import Login from './Login';
 import Home from './Home';
 import Dashboard from './Dashboard';
 import Projects from './Projects';
+import Navbar from './components/Navbar';
 import './App.css';
 
 function App() {
@@ -13,15 +14,7 @@ function App() {
       <div className="App">
         <header className="App-header">
           <h1>AfriCO-X</h1>
-          <nav>
-            <ul>
-              <li><Link to="/">Home</Link></li>
-              <li><Link to="/register">Register</Link></li>
-              <li><Link to="/login">Login</Link></li>
-              <li><Link to="/dashboard">Dashboard</Link></li>
-              <li><Link to="/projects">Projects</Link></li>
-            </ul>
-          </nav>
+          <Navbar />
         </header>
         <main>
           <Routes>
