@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './Register.css';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -22,19 +23,19 @@ const Register = () => {
   };
 
   return (
-    <div>
-      <h2>Register</h2>
+    <div className="reg-form">
+      <h2>Registration</h2>
       <form onSubmit={handleRegister}>
         <div>
-          <label>Username:</label>
-          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
+          <label><img src="/at-symbol.svg" alt="at-symbol"/></label>
+          <input type="text" value={username} placeholder="Username" onChange={(e) => setUsername(e.target.value)} required />
         </div>
         <div>
-          <label>Password:</label>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <label><img src="/password.svg" alt="password"/></label>
+          <input type="password" value={password} placeholder="Password" onChange={(e) => setPassword(e.target.value)} required />
         </div>
         <div>
-          <label>Role:</label>
+          <label><img src="/role.svg" alt="role"/></label>
           <select value={role} onChange={(e) => setRole(e.target.value)} required>
             <option value="">Select Role</option>
             <option value="1">Admin</option>
@@ -44,8 +45,8 @@ const Register = () => {
         </div>
         {role === '3' && (
           <div>
-            <label>Depletion Rate:</label>
-            <input type="text" value={depletionRate} onChange={(e) => setDepletionRate(e.target.value)} />
+            <label><img src="/depletion.svg" alt="depletion"/></label>
+            <input type="text" value={depletionRate} placeholder="Daily Depletion Rate" onChange={(e) => setDepletionRate(e.target.value)} />
           </div>
         )}
         <button type="submit">Register</button>
