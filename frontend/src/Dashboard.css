@@ -25,6 +25,10 @@
     width: 100%;
 }
 
+.dashboard table td {
+    padding: 0.25em;
+}
+
 .dashboard table td img {
     width: 1.5em;
     height: 1.5em;
