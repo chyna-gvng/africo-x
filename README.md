@@ -5,4 +5,6 @@
 - [x] Voting
 - [x] Purchase
 - [x] Depletion
-- [ ] Styling
+- [x] Styling
+- [ ] Responsiveness
+- [ ] Documentation
