@@ -62,15 +62,17 @@ const Dashboard = () => {
     <div className="dashboard">
       <h2>Dashboard</h2>
       <table border="1">
-        <tr>
-          <td>ETH</td>
-          <td>{userData.ethBalance}</td>
-          <td rowSpan="2"><img src="/copy.svg" alt="copy" onClick={handleCopyAddress}/></td>
-        </tr>
-        <tr>
-          <td>CCT</td>
-          <td>{userData.cctBalance}</td>
-        </tr>
+        <tbody>
+          <tr>
+            <td>ETH</td>
+            <td>{userData.ethBalance}</td>
+            <td rowSpan="2"><img src="/copy.svg" alt="copy" onClick={handleCopyAddress}/></td>
+          </tr>
+          <tr>
+            <td>CCT</td>
+            <td>{userData.cctBalance}</td>
+          </tr>
+        </tbody>
       </table>
       <button onClick={handleRefreshBalances}>Refresh</button>
     </div>
