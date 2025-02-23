@@ -106,8 +106,8 @@ const Projects = () => {
         setDescription('');
         setLocation('');
         setCctAmount('');
-      } finally {
-        setError('Please log in to submit a project.');
+      } catch (error) {
+        setError(error.message);
       }
     };
   }

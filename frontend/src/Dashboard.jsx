@@ -40,8 +40,8 @@ const Dashboard = () => {
           .catch(error => {
             setMessage('Failed to copy address: ' + error.message);
           });
-      } finally {
-        setMessage('Please log in to copy your address.');
+      } catch (error) {
+        setMessage(error.message);
       }
     }
   };
