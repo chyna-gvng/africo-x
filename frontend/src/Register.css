@@ -48,6 +48,7 @@
     background-color: rgba(217, 217, 217, 0.35);
     text-align: center;
     appearance: none;
+    cursor: pointer;
 }
 
 .reg-form form div select option {
@@ -63,4 +64,5 @@
     margin: 2em 0;
     border-radius: 35px;
     background-color: transparent;
+    cursor: pointer;
 }

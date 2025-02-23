@@ -32,6 +32,7 @@
 .dashboard table td img {
     width: 1.5em;
     height: 1.5em;
+    cursor: pointer;
 }
 
 .dashboard button {
@@ -42,4 +43,5 @@
     margin: 2em 0;
     border-radius: 35px;
     background-color: transparent;
+    cursor: pointer;
 }
