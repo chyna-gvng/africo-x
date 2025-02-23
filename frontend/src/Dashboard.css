@@ -1,0 +1,41 @@
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 11em 0;
+    padding: 5em;
+    border-radius: 1em;
+    background-color: rgba(217, 217, 217, 0.05);
+    height: 35vh;
+}
+
+.dashboard h2 {
+    color: #7DE38D;
+    font-size: 3em;
+    font-weight: 500;
+}
+
+.dashboard table {
+    border: #7DE38D solid 1px;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 0.5em;
+    overflow: hidden;
+    width: 100%;
+}
+
+.dashboard table td img {
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.dashboard button {
+    width: 40%;
+    color: #7DE38D;
+    border: solid 1px #7DE38D;
+    padding: 1em 2em;
+    margin: 2em 0;
+    border-radius: 35px;
+    background-color: transparent;
+}

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUserBalances } from './api/balances';
+import './Dashboard.css';
 
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
@@ -36,11 +36,21 @@ const Dashboard = () => {
   }
 
   return (
-    <div>
+    <div className="dashboard">
       <h2>Dashboard</h2>
-      <p>Ethereum Balance: {userData.ethBalance} ETH</p>
-      <p>Carbon Credit Balance: {userData.cctBalance} CCT</p>
-      {localStorage.getItem('token') && <button onClick={handleLogout}>Logout</button>}
+      <table border="1">
+        <tr>
+          <td>ETH</td>
+          <td>{userData.ethBalance}</td>
+          <td rowSpan="2"><img src="/copy.svg" alt="copy"/></td>
+        </tr>
+        <tr>
+          <td>CCT</td>
+          <td>{userData.cctBalance}</td>
+        </tr>
+      </table>
+      <button>Refresh</button>
+      {localStorage.getItem('token') && <button onClick={handleLogout}>Logout</button>} {/* Move to navigation */}
     </div>
   );
 };
