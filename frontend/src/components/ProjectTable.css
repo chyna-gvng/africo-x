@@ -28,7 +28,6 @@
     border-bottom: 1px solid #7DE38D;
 }
 
-/* Remove double borders */
 .project-table th:first-child,
 .project-table td:first-child {
     border-left: none;

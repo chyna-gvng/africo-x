@@ -28,14 +28,14 @@ const ProjectTable = ({ title, projects, role, onVote, onPurchase }) => {
                 <td>{project.cctAmount}</td>
                 {showActions && (
                   <td>
-                    {title === "Unverified Projects" && (
+                    {title === "Buds" && (
                       <button
                         onClick={() => onVote(project.project_id)}
                       >
                         Vote
                       </button>
                     )}
-                    {title === "Verified Projects" && (
+                    {title === "Beacons" && (
                       <button
                         onClick={() => onPurchase(project.project_id, project.cctAmount)}
                       >
