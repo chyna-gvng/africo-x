@@ -14,7 +14,7 @@ const Projects = () => {
   const [mintAccount, setMintAccount] = useState('');
   const [mintAmount, setMintAmount] = useState('');
   const [name, setName] = useState('');
-  const [setBlockchainSubmitted] = useState(false);
+  const [_, setBlockchainSubmitted] = useState(false);
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
   const [cctAmount, setCctAmount] = useState('');
