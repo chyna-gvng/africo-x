@@ -14,7 +14,7 @@
 .project-table th {
     padding: 0.25em;
     border: #7DE38D solid 1px;
-    background-color: rgba(217, 217, 217, 0.05);
+    background-color: rgba(217, 217, 217, 0.15);
 }
 
 .project-table td {
