@@ -7,6 +7,10 @@
     width: 100%;
 }
 
+.project-table-title {
+    color: #7DE38D;
+}
+
 .project-table th {
     padding: 0.25em;
     border: #7DE38D solid 1px;
