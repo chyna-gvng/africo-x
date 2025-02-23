@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ProjectTable from './components/ProjectTable';
 import { getAllProjects, getProjectsByOwner, getVerifiedProjects, getUnverifiedProjects, submitProject, getUserAddress, voteForProject, finalizeProject, getProjectDetails, mintTokens } from './api/contracts';
 import { getUserRole } from './api/user';
 import axios from 'axios';
@@ -235,67 +236,28 @@ const Projects = () => {
       )}
 
       {/* Display Unverified Projects */}
-      <h3>Unverified Projects</h3>
-      {unverifiedProjects.length > 0 ? (
-        <ul>
-          {unverifiedProjects.map((project) => (
-            <li key={project.project_id}>
-              <h3>{project.name}</h3>
-              <p>{project.description}</p>
-              <p>{project.location}</p>
-              <p>{project.cctAmount} CCT</p>
-              <p>Unverified</p>
-              {role === 3 && (
-                <button onClick={() => handleVoteForProject(project.project_id)}>Vote</button>
-              )}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No unverified projects found.</p>
-      )}
+      <ProjectTable
+        title="Buds"
+        projects={unverifiedProjects}
+        role={role}
+        onVote={handleVoteForProject}
+      />
 
       {/* Display Verified Projects */}
-      <h3>Verified Projects</h3>
-      {verifiedProjects.length > 0 ? (
-        <ul>
-          {verifiedProjects.map((project) => (
-            <li key={project.project_id}>
-              <h3>{project.name}</h3>
-              <p>{project.description}</p>
-              <p>{project.location}</p>
-              <p>{project.cctAmount} CCT</p>
-              <p>Verified</p>
-              {role === 3 && (
-                <button onClick={() => handlePurchaseCCT(project.project_id, project.cctAmount)}>Purchase</button>
-              )}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No verified projects found.</p>
-      )}
+      <ProjectTable
+        title="Beacons"
+        projects={verifiedProjects}
+        role={role}
+        onPurchase={handlePurchaseCCT}
+      />
 
-      {/* Display Archived Projects */}
+      {/* Display Archived Projects only to Admins and Project Owners */}
       {(role === 1 || role === 2) && (
-        <>
-          <h3>Archived Projects</h3>
-          {archivedProjects.length > 0 ? (
-            <ul>
-              {archivedProjects.map((project) => (
-                <li key={project.project_id}>
-                  <h3>{project.name}</h3>
-                  <p>{project.description}</p>
-                  <p>{project.location}</p>
-                  <p>{project.cctAmount} CCT</p>
-                  <p>Archived</p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No archived projects found.</p>
-          )}
-        </>
+        <ProjectTable
+          title="Relics"
+          projects={archivedProjects}
+          role={role}
+        />
       )}
 
       {message && <p>{message}</p>}
