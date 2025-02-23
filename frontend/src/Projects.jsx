@@ -198,24 +198,25 @@ const Projects = () => {
   return (
     <div>
       {(role === 2) && (
-        <form onSubmit={handleSubmitProject}>
+        <form onSubmit={handleSubmitProject} className="project-form">
+          <h2>Projects</h2>
           <div>
-            <label>Name:</label>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+            <label><img src="/project.svg" alt="project"/></label>
+            <input type="text" value={name} placeholder="Name" onChange={(e) => setName(e.target.value)} required />
           </div>
           <div>
-            <label>Description:</label>
-            <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} required />
+            <label><img src="/description.svg" alt="description"/></label>
+            <input type="text" value={description} placeholder="Description" onChange={(e) => setDescription(e.target.value)} required />
           </div>
           <div>
-            <label>Location:</label>
-            <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} required />
+            <label><img src="/location.svg" alt="location"/></label>
+            <input type="text" value={location} placeholder="Location" onChange={(e) => setLocation(e.target.value)} required />
           </div>
           <div>
-            <label>CCT Amount:</label>
-            <input type="number" value={cctAmount} onChange={(e) => setCctAmount(e.target.value)} required />
+            <label><img src="/token-amount.svg" alt="token-amount"/></label>
+            <input className="no-arrows" type="number" min="0" value={cctAmount} placeholder="CCT Amount" onChange={(e) => setCctAmount(e.target.value)} required />
           </div>
-          <button type="submit">Submit Project</button>
+          <button type="submit">Submit</button>
         </form>
       )}
       {role === 1 && (
