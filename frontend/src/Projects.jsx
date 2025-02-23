@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAllProjects, getProjectsByOwner, getVerifiedProjects, getUnverifiedProjects, submitProject, verifyProject, getUserAddress, voteForProject, finalizeProject, getProjectDetails, mintTokens } from './api/contracts';
+import { getAllProjects, getProjectsByOwner, getVerifiedProjects, getUnverifiedProjects, submitProject, getUserAddress, voteForProject, finalizeProject, getProjectDetails, mintTokens } from './api/contracts';
 import { getUserRole } from './api/user';
 import axios from 'axios';
+import './Projects.css';
 
 const Projects = () => {
   const [verifiedProjects, setVerifiedProjects] = useState([]);
@@ -12,7 +13,7 @@ const Projects = () => {
   const [mintAccount, setMintAccount] = useState('');
   const [mintAmount, setMintAmount] = useState('');
   const [name, setName] = useState('');
-  const [blockchainSubmitted, setBlockchainSubmitted] = useState(false);
+  const [setBlockchainSubmitted] = useState(false);
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
   const [cctAmount, setCctAmount] = useState('');
@@ -104,7 +105,7 @@ const Projects = () => {
         setDescription('');
         setLocation('');
         setCctAmount('');
-      } catch (error) {
+      } finally {
         setError('Please log in to submit a project.');
       }
     };
@@ -196,7 +197,6 @@ const Projects = () => {
 
   return (
     <div>
-      <h2>Projects</h2>
       {(role === 2) && (
         <form onSubmit={handleSubmitProject}>
           <div>
@@ -219,16 +219,17 @@ const Projects = () => {
         </form>
       )}
       {role === 1 && (
-        <form onSubmit={handleMintTokens}>
+        <form onSubmit={handleMintTokens} className="mint-form">
+          <h2>Mint</h2>
           <div>
-            <label>Receiver Address:</label>
-            <input type="text" value={mintAccount} onChange={(e) => setMintAccount(e.target.value)} required />
+            <label><img src="/address.svg" alt="address"/></label>
+            <input type="text" value={mintAccount} placeholder="Receiver Address" onChange={(e) => setMintAccount(e.target.value)} required />
           </div>
           <div>
-            <label>Amount:</label>
-            <input type="number" value={mintAmount} onChange={(e) => setMintAmount(e.target.value)} required />
+            <label><img src="/token-amount.svg" alt="token-amount"/></label>
+            <input className="no-arrows" type="number" min="0" value={mintAmount} placeholder="Amount" onChange={(e) => setMintAmount(e.target.value)} required />
           </div>
-          <button type="submit">Mint Tokens</button>
+          <button type="submit">Mint</button>
         </form>
       )}
 
