@@ -1,7 +1,15 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const isLoggedIn = localStorage.getItem('token') !== null;
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
   return (
     <div className='navbar'>
         <div className='logo'>
@@ -12,7 +20,8 @@ const Navbar = () => {
             <li><Link to="/dashboard">Dashboard</Link></li>
             <li><Link to="/projects">Projects</Link></li>
             <li className='navbar-btn'><Link to="/register">Register</Link></li>
-            <li className='navbar-btn'><Link to="/login">Login</Link></li>
+            {/* <li className='navbar-btn'><Link to="/login">Login</Link></li> */}
+            {isLoggedIn ? <li className='navbar-btn'><Link to="/login" onClick={handleLogout}>Logout</Link></li> : <li className='navbar-btn'><Link to="/login">Login</Link></li>}
         </ul>
     </div>
   );
