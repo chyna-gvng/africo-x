@@ -197,7 +197,7 @@ const Projects = () => {
   }
 
   return (
-    <div>
+    <div className="projects">
       {(role === 2) && (
         <form onSubmit={handleSubmitProject} className="project-form">
           <h2>Projects</h2>
