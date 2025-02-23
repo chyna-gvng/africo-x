@@ -20,7 +20,6 @@ const Navbar = () => {
             <li><Link to="/dashboard">Dashboard</Link></li>
             <li><Link to="/projects">Projects</Link></li>
             <li className='navbar-btn'><Link to="/register">Register</Link></li>
-            {/* <li className='navbar-btn'><Link to="/login">Login</Link></li> */}
             {isLoggedIn ? <li className='navbar-btn'><Link to="/login" onClick={handleLogout}>Logout</Link></li> : <li className='navbar-btn'><Link to="/login">Login</Link></li>}
         </ul>
     </div>
