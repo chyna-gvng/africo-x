@@ -1,25 +1,6 @@
 services:
-  ganache:
-    image: trufflesuite/ganache:latest
-    ports:
-      - "8545:8545"
-    command: ["--db", "/data"]
-    volumes:
-      - ganache-db:/data
-    networks:
-      - africox-net
-    healthcheck:
-      test: ["CMD", "nc", "-zv", "localhost", "8545"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-      start_period: 5s
-
   blockchain:
     build: ./blockchain
-    depends_on:
-      ganache:
-        condition: service_healthy
     volumes:
       - ./:/repo
       - blockchain-data:/app/blockchain/build
