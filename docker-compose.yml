@@ -5,7 +5,7 @@ services:
       - ./:/repo
       - blockchain-data:/app/blockchain/build
     environment:
-      - GANACHE_HOST=ganache
+      - GANACHE_HOST=localhost
       - GANACHE_PORT=8545
     networks:
       - africox-net
@@ -13,7 +13,7 @@ services:
       test: ["CMD", "test", "-f", "/app/blockchain/build/addresses.json"]
       interval: 10s
       timeout: 5s
-      retries: 20
+      retries: 10
       start_period: 10s
 
   backend:
