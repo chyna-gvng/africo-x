@@ -21,9 +21,14 @@ echo "Blockchain dependencies installed."
 echo "Generating mnemonic..."
 MNEMONIC=$(openssl rand -hex 16 | node -e "const bip39 = require('bip39'); process.stdin.on('data', data => console.log(bip39.entropyToMnemonic(data.toString().trim())));")
 
+# Print mnemonic
+echo "Mnemonic: $MNEMONIC"
+# Save mnemonic to shared volume - this file is used by the healthcheck
+echo $MNEMONIC > /app/blockchain/build/mnemonic.txt
+
 # Start Ganache
 echo "Starting Ganache..."
-ganache --detach
+ganache --mnemonic "$MNEMONIC" --detach
 
 # Wait for Ganache
 echo "Waiting for Ganache to start..."
