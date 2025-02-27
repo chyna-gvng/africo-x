@@ -32,11 +32,11 @@ PR_ADDRESS=$(jq -r '.PR_ADDRESS' /blockchain-build/addresses.json)
 
 # Get MNEMONIC and PRIVATE_KEY from Ganache via API
 echo "Fetching account data from Ganache..."
-ACCOUNTS_RESPONSE=$(curl -s -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"eth_accounts","params":[],"id":1}' http://ganache:8545)
+ACCOUNTS_RESPONSE=$(curl -s -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"eth_accounts","params":[],"id":1}' http://localhost:8545)
 FIRST_ACCOUNT=$(echo $ACCOUNTS_RESPONSE | jq -r '.result[0]')
 
 # Get private key for the first account
-PRIVATEKEY_RESPONSE=$(curl -s -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"personal_listAccounts","params":[],"id":1}' http://ganache:8545)
+PRIVATEKEY_RESPONSE=$(curl -s -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"personal_listAccounts","params":[],"id":1}' http://localhost:8545)
 PRIVATE_KEY=$(echo $PRIVATEKEY_RESPONSE | jq -r '.result[0].privateKey' | sed 's/0x//')
 
 # For MNEMONIC, we'll use a placeholder since it's harder to get via JSON-RPC
@@ -45,7 +45,7 @@ MNEMONIC="test test test test test test test test test test test junk"
 # Update .env with exact format
 cat <<EOF > /app/backend/.env
 PRIVATE_KEY=$PRIVATE_KEY
-PROVIDER_URL=http://ganache:8545
+PROVIDER_URL=http://localhost:8545
 CCT_ADDRESS=$CCT_ADDRESS
 PR_ADDRESS=$PR_ADDRESS
 MNEMONIC=$MNEMONIC
