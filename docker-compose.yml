@@ -1,14 +1,4 @@
 services:
-  clone:
-    image: bitnami/git:latest
-    command: ["/bin/sh", "-c", "if [ ! -d /repo/.git ]; then git clone $GIT_REPO_URL /repo; else echo 'Repo already cloned'; fi"]
-    environment:
-      - GIT_REPO_URL=https://github.com/chyna-gvng/africo-x.git
-    volumes:
-      - repo-data:/repo
-    networks:
-      - africox-net
-
   ganache:
     image: trufflesuite/ganache:latest
     ports:
@@ -22,10 +12,9 @@ services:
   blockchain:
     build: ./blockchain
     depends_on:
-      - clone
       - ganache
     volumes:
-      - repo-data:/repo
+      - ./:/repo  # Mount local directory as repo
       - blockchain-data:/app/blockchain/build
     environment:
       - GANACHE_HOST=ganache
@@ -40,7 +29,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - repo-data:/repo
+      - ./:/repo  # Mount local directory as repo
       - blockchain-data:/blockchain-build
     environment:
       - NODE_ENV=development
@@ -54,7 +43,7 @@ services:
     ports:
       - "5173:5173"
     volumes:
-      - repo-data:/repo
+      - ./:/repo  # Mount local directory as repo
     environment:
       - VITE_API_URL=http://backend:3000
     networks:
@@ -65,6 +54,5 @@ networks:
     driver: bridge
 
 volumes:
-  repo-data:
   blockchain-data:
   ganache-db:
