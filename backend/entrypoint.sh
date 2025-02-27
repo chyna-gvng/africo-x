@@ -8,7 +8,7 @@ cp -r /repo/backend/* /app/backend/
 # Install backend dependencies from within the directory
 echo "Installing backend dependencies..."
 cd /app/backend
-npm install
+npm install --silent
 echo "Backend dependencies installed."
 
 # Copy example.env to .env

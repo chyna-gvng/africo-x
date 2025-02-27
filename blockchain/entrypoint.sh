@@ -14,7 +14,7 @@ npm install --silent -g truffle ganache
 # Install blockchain dependencies from within the directory
 echo "Installing blockchain dependencies..."
 cd /app/blockchain
-npm install
+npm install --silent
 echo "Blockchain dependencies installed."
 
 # Start Ganache
