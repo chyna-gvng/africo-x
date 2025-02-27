@@ -23,7 +23,7 @@ ganache --detach
 
 # Wait for Ganache
 echo "Waiting for Ganache to start..."
-while ! nc -zv ganache 8545; do
+while ! nc -zv localhost 8545; do
   sleep 1
 done
 echo "Ganache is up, running migrations..."
