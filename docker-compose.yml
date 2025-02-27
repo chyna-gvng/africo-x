@@ -1,9 +1,7 @@
 services:
   clone:
     image: bitnami/git:latest
-    command: ["/bin/sh", "-c", "git clone $GIT_REPO_URL /repo"]
-    environment:
-      - GIT_REPO_URL=https://github.com/chyna-gvng/africo-x.git
+    command: ["/bin/sh", "-c", "git clone https://github.com/chyna-gvng/africo-x.git /repo"]
     volumes:
       - repo-data:/repo
     networks:
@@ -13,7 +11,7 @@ services:
     image: trufflesuite/ganache:latest
     ports:
       - "8545:8545"
-    command: ["/bin/bash", "ganache --host 0.0.0.0 --port 8545 --accounts 10 --db /data"]
+    command: ["/bin/bash", "ganache --db /data"]
     volumes:
       - ganache-db:/data
     networks:
