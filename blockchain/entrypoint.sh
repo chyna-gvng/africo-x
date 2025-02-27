@@ -28,9 +28,6 @@ while ! nc -zv localhost 8545; do
 done
 echo "Ganache is up, running migrations..."
 
-# Complile contracts
-truffle compile
-
 # Make sure build directory exists
 mkdir -p /app/blockchain/build
 
