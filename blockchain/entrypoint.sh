@@ -8,7 +8,9 @@ echo "Copying blockchain directory..."
 cp -r /repo/blockchain/* /app/blockchain/
 
 # Install global Truffle
-npm install -g truffle ganache
+npm set audit false
+echo "Installing Truffle and Ganache..."
+npm install truffle ganache --legacy-peer-deps
 
 # Install blockchain dependencies from within the directory
 echo "Installing blockchain dependencies..."
