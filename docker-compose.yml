@@ -8,12 +8,12 @@ services:
       - ganache-db:/data
     networks:
       - africox-net
-    healthcheck:
-      test: ["CMD", "curl", "-X", "POST", "--data", "{\"jsonrpc\":\"2.0\",\"method\":\"eth_blockNumber\",\"params\":[],\"id\":1}", "http://localhost:8545"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-      start_period: 5s
+    # healthcheck:
+    #   test: ["CMD", "curl", "-X", "POST", "--data", "{\"jsonrpc\":\"2.0\",\"method\":\"eth_blockNumber\",\"params\":[],\"id\":1}", "http://localhost:8545"]
+    #   interval: 5s
+    #   timeout: 5s
+    #   retries: 10
+    #   start_period: 5s
 
   blockchain:
     build: ./blockchain
