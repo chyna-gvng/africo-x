@@ -13,7 +13,7 @@ services:
     image: trufflesuite/ganache:latest
     ports:
       - "8545:8545"
-    command: ["ganache", "--db", "/data"]
+    command: ["--db", "/data"]
     volumes:
       - ganache-db:/data
     networks:
@@ -45,6 +45,7 @@ services:
       - repo-data:/repo
       - blockchain-data:/blockchain-build
       - ./backend/generate-env.sh:/app/backend/generate-env.sh
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - NODE_ENV=development
     entrypoint: ["/bin/bash", "/app/backend/generate-env.sh"]
