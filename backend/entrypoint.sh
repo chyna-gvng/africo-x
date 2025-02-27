@@ -1,8 +1,9 @@
 #!/bin/bash
 
-# Move backend directory as a whole
-mkdir -p /app
-mv /repo/backend /app/
+# Copy backend directory instead of moving it
+mkdir -p /app/backend
+echo "Copying backend directory..."
+cp -r /repo/backend/* /app/backend/
 
 # Install backend dependencies from within the directory
 echo "Installing backend dependencies..."

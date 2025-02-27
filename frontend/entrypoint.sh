@@ -1,8 +1,9 @@
 #!/bin/bash
 
-# Move frontend directory as a whole
-mkdir -p /app
-mv /repo/frontend /app/
+# Copy frontend directory instead of moving it
+mkdir -p /app/frontend
+echo "Copying frontend directory..."
+cp -r /repo/frontend/* /app/frontend/
 
 # Install frontend dependencies from within the directory
 echo "Installing frontend dependencies..."

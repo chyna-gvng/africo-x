@@ -2,9 +2,10 @@
 # Install netcat
 apt-get update && apt-get install -y netcat-openbsd
 
-# Move blockchain directory as a whole
-mkdir -p /app
-mv /repo/blockchain /app/
+# Copy blockchain directory instead of moving it
+mkdir -p /app/blockchain
+echo "Copying blockchain directory..."
+cp -r /repo/blockchain/* /app/blockchain/
 
 # Install global Truffle
 npm install -g truffle
