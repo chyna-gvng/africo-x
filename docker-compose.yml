@@ -1,7 +1,7 @@
 services:
   clone:
     image: bitnami/git:latest
-    command: git clone -b "$GIT_BRANCH" "$GIT_REPO_URL" /repo
+    command: ["/bin/sh", "-c", "git clone -b $GIT_BRANCH $GIT_REPO_URL /repo"]
     environment:
       - GIT_REPO_URL=https://github.com/chyna-gvng/africo-x.git
       - GIT_BRANCH=main
