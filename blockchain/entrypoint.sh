@@ -22,11 +22,11 @@ echo "Starting Ganache..."
 ganache
 
 # Wait for Ganache
-echo "Waiting for Ganache to start..."
-while ! nc -z ganache 8545; do
-  sleep 1
-done
-echo "Ganache is up, running migrations..."
+# echo "Waiting for Ganache to start..."
+# while ! nc -z ganache 8545; do
+#   sleep 1
+# done
+# echo "Ganache is up, running migrations..."
 
 # Complile contracts
 truffle compile
