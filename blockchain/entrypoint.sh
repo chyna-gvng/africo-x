@@ -9,7 +9,7 @@ cp -r /repo/blockchain/* /app/blockchain/
 
 # Install global Truffle
 echo "Installing Truffle and Ganache..."
-npm install --silent -g truffle ganache-cli
+npm install --silent -g truffle ganache
 
 # Install blockchain dependencies from within the directory
 echo "Installing blockchain dependencies..."
