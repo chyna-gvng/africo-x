@@ -2,6 +2,11 @@
 # Install netcat and curl
 apt-get update && apt-get install -y netcat-openbsd curl
 
+# Test curl and netcat
+echo "Testing curl and netcat..."
+curl --version
+nc --version
+
 # Copy blockchain directory instead of moving it
 mkdir -p /app/blockchain
 echo "Copying blockchain directory..."
