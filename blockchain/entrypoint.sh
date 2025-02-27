@@ -17,6 +17,10 @@ cd /app/blockchain
 npm install --silent
 echo "Blockchain dependencies installed."
 
+# Generate Mmemonic
+echo "Generating mnemonic..."
+MNEMONIC=$(openssl rand -hex 16 | node -e "const bip39 = require('bip39'); process.stdin.on('data', data => console.log(bip39.entropyToMnemonic(data.toString().trim())));")
+
 # Start Ganache
 echo "Starting Ganache..."
 ganache --detach
