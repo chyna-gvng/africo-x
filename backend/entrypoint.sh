@@ -2,7 +2,7 @@
 
 # Move backend directory as a whole
 mkdir -p /app
-mv -r /repo/backend /app/
+mv /repo/backend /app/
 
 # Install backend dependencies from within the directory
 echo "Installing backend dependencies..."
