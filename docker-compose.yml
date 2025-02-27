@@ -1,7 +1,7 @@
 services:
   clone:
     image: bitnami/git:latest
-    command: ["/bin/sh", "-c", "git clone $GIT_REPO_URL /repo"]
+    command: ["/bin/sh", "-c", "if [ ! -d /repo/.git ]; then git clone $GIT_REPO_URL /repo; else echo 'Repo already cloned'; fi"]
     environment:
       - GIT_REPO_URL=https://github.com/chyna-gvng/africo-x.git
     volumes:
@@ -13,7 +13,7 @@ services:
     image: trufflesuite/ganache:latest
     ports:
       - "8545:8545"
-    command: ["/bin/bash", "ganache --db /data"]
+    command: ganache --host 0.0.0.0 --port 8545 --accounts 10 --db /data
     volumes:
       - ganache-db:/data
     networks:
@@ -27,6 +27,7 @@ services:
     volumes:
       - repo-data:/repo
       - blockchain-data:/app/blockchain/build
+      - ./blockchain/entrypoint.sh:/app/blockchain/entrypoint.sh
     environment:
       - GANACHE_HOST=ganache
       - GANACHE_PORT=8545
@@ -43,6 +44,7 @@ services:
     volumes:
       - repo-data:/repo
       - blockchain-data:/blockchain-build
+      - ./backend/generate-env.sh:/app/backend/generate-env.sh
     environment:
       - NODE_ENV=development
     entrypoint: ["/bin/bash", "/app/backend/generate-env.sh"]
@@ -50,13 +52,14 @@ services:
       - africox-net
 
   frontend:
-    image: bitnami/node:18.20.5
+    image: bitnami/node:latest
     depends_on:
       - backend
     ports:
       - "5173:5173"
     volumes:
       - repo-data:/repo
+      - ./frontend/entrypoint.sh:/app/frontend/entrypoint.sh
     environment:
       - VITE_API_URL=http://backend:3000
     entrypoint: ["/bin/bash", "/app/frontend/entrypoint.sh"]
