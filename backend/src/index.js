@@ -23,6 +23,11 @@ app.use(cors());
 app.use('/auth', authRoutes);
 app.use('/contracts', contractRoutes);
 
+// Add this to your backend Express app
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
 // Load ABIs dynamically
 const fs = require('fs');
 const path = require('path');
