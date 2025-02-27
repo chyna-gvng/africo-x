@@ -13,7 +13,7 @@ services:
     image: trufflesuite/ganache:latest
     ports:
       - "8545:8545"
-    command: ganache --host 0.0.0.0 --port 8545 --accounts 10 --db /data
+    command: ["ganache", "--db", "/data"]
     volumes:
       - ganache-db:/data
     networks:
@@ -36,7 +36,7 @@ services:
       - africox-net
 
   backend:
-    image: bitnami/node:18.20.5
+    image: bitnami/node:latest
     depends_on:
       - blockchain
     ports:
