@@ -9,7 +9,7 @@ services:
     networks:
       - africox-net
     healthcheck:
-      test: ["CMD", "nc", "-z", "localhost", "8545"]
+      test: ["CMD", "nc", "-zv", "localhost", "8545"]
       interval: 5s
       timeout: 5s
       retries: 10
