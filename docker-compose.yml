@@ -1,7 +1,9 @@
 services:
   clone:
     image: bitnami/git:latest
-    command: ["/bin/sh", "-c", "git clone https://github.com/chyna-gvng/africo-x.git /repo"]
+    command: ["/bin/sh", "-c", "git clone $GIT_REPO_URL /repo"]
+    environment:
+      - GIT_REPO_URL=https://github.com/chyna-gvng/africo-x.git
     volumes:
       - repo-data:/repo
     networks:
