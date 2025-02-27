@@ -5,7 +5,7 @@ services:
       - ./:/repo
       - blockchain-data:/app/blockchain/build
     environment:
-      - GANACHE_HOST=localhost
+      - GANACHE_HOST=0.0.0.0
       - GANACHE_PORT=8545
     networks:
       - africox-net
@@ -14,7 +14,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
-      start_period: 10s
+      start_period: 30s  # Increased to allow more time for startup
 
   backend:
     build: ./backend
@@ -35,7 +35,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
-      start_period: 10s
+      start_period: 15s
 
   frontend:
     build: ./frontend
@@ -47,7 +47,7 @@ services:
     volumes:
       - ./:/repo
     environment:
-      - VITE_API_URL=http://backend:3000
+      - VITE_API_URL=http://localhost:3000  # Changed to localhost for browser access
     networks:
       - africox-net
 
