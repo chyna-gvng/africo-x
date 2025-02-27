@@ -20,23 +20,21 @@ services:
       - africox-net
 
   blockchain:
-    image: bitnami/node:18.20.5
+    build: ./blockchain
     depends_on:
       - clone
       - ganache
     volumes:
       - repo-data:/repo
       - blockchain-data:/app/blockchain/build
-      - ./blockchain/entrypoint.sh:/app/blockchain/entrypoint.sh
     environment:
       - GANACHE_HOST=ganache
       - GANACHE_PORT=8545
-    entrypoint: ["/bin/bash", "/app/blockchain/entrypoint.sh"]
     networks:
       - africox-net
 
   backend:
-    image: bitnami/node:latest
+    build: ./backend
     depends_on:
       - blockchain
     ports:
@@ -44,26 +42,21 @@ services:
     volumes:
       - repo-data:/repo
       - blockchain-data:/blockchain-build
-      - ./backend/generate-env.sh:/app/backend/generate-env.sh
-      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - NODE_ENV=development
-    entrypoint: ["/bin/bash", "/app/backend/generate-env.sh"]
     networks:
       - africox-net
 
   frontend:
-    image: bitnami/node:latest
+    build: ./frontend
     depends_on:
       - backend
     ports:
       - "5173:5173"
     volumes:
       - repo-data:/repo
-      - ./frontend/entrypoint.sh:/app/frontend/entrypoint.sh
     environment:
       - VITE_API_URL=http://backend:3000
-    entrypoint: ["/bin/bash", "/app/frontend/entrypoint.sh"]
     networks:
       - africox-net
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 # Install netcat
-apk add --no-cache nc
+apt-get update && apt-get install -y netcat-openbsd
 
 # Move blockchain directory as a whole
 mkdir -p /app
@@ -31,3 +31,6 @@ PR_ADDRESS=$(grep -oP "(?<=Deploying 'ProjectRegistration'.*contract address:\s*
 
 # Save to shared volume
 echo "{\"CCT_ADDRESS\": \"$CCT_ADDRESS\", \"PR_ADDRESS\": \"$PR_ADDRESS\"}" > /app/blockchain/build/addresses.json
+
+# Keep container running
+tail -f /dev/null

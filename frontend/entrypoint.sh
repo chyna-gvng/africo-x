@@ -1,5 +1,4 @@
 #!/bin/bash
-# No additional tools needed
 
 # Move frontend directory as a whole
 mkdir -p /app
@@ -13,4 +12,4 @@ echo "Frontend dependencies installed."
 
 # Start the frontend
 cd /app/frontend
-npm run dev
+npm run dev -- --host 0.0.0.0
