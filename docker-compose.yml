@@ -1,0 +1,74 @@
+services:
+  clone:
+    image: bitnami/git:latest
+    command: git clone -b "$GIT_BRANCH" "$GIT_REPO_URL" /repo
+    environment:
+      - GIT_REPO_URL=https://github.com/chyna-gvng/africo-x.git
+      - GIT_BRANCH=main
+    volumes:
+      - repo-data:/repo
+    networks:
+      - africox-net
+
+  ganache:
+    image: trufflesuite/ganache:latest
+    ports:
+      - "8545:8545"
+    command: ganache --host 0.0.0.0 --port 8545 --accounts 10 --db /data
+    volumes:
+      - ganache-db:/data
+    networks:
+      - africox-net
+
+  blockchain:
+    image: bitnami/node:18.20.5
+    depends_on:
+      - clone
+      - ganache
+    volumes:
+      - repo-data:/repo
+      - blockchain-data:/app/blockchain/build
+    environment:
+      - GANACHE_HOST=ganache
+      - GANACHE_PORT=8545
+    entrypoint: ["/bin/bash", "/app/blockchain/entrypoint.sh"]
+    networks:
+      - africox-net
+
+  backend:
+    image: bitnami/node:18.20.5
+    depends_on:
+      - blockchain
+    ports:
+      - "3000:3000"
+    volumes:
+      - repo-data:/repo
+      - blockchain-data:/blockchain-build
+    environment:
+      - NODE_ENV=development
+    entrypoint: ["/bin/bash", "/app/backend/generate-env.sh"]
+    networks:
+      - africox-net
+
+  frontend:
+    image: bitnami/node:18.20.5
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+    volumes:
+      - repo-data:/repo
+    environment:
+      - VITE_API_URL=http://backend:3000
+    entrypoint: ["/bin/bash", "/app/frontend/entrypoint.sh"]
+    networks:
+      - africox-net
+
+networks:
+  africox-net:
+    driver: bridge
+
+volumes:
+  repo-data:
+  blockchain-data:
+  ganache-db:
