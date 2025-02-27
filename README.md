@@ -7,4 +7,5 @@
 - [x] Depletion
 - [x] Styling
 - [ ] Responsiveness
+- [ ] Docker Build
 - [ ] Documentation
