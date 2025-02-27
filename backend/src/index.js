@@ -23,7 +23,7 @@ app.use(cors());
 app.use('/auth', authRoutes);
 app.use('/contracts', contractRoutes);
 
-// Add this to your backend Express app
+// Health Check Endpoint
 app.get('/health', (req, res) => {
   res.status(200).send('OK');
 });

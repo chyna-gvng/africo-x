@@ -8,42 +8,63 @@ services:
       - ganache-db:/data
     networks:
       - africox-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8545"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
 
   blockchain:
     build: ./blockchain
     depends_on:
-      - ganache
+      ganache:
+        condition: service_healthy
     volumes:
-      - ./:/repo  # Mount local directory as repo
+      - ./:/repo
       - blockchain-data:/app/blockchain/build
     environment:
       - GANACHE_HOST=ganache
       - GANACHE_PORT=8545
     networks:
       - africox-net
+    healthcheck:
+      test: ["CMD", "test", "-f", "/app/blockchain/build/addresses.json"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
 
   backend:
     build: ./backend
     depends_on:
-      - blockchain
+      blockchain:
+        condition: service_healthy
     ports:
       - "3000:3000"
     volumes:
-      - ./:/repo  # Mount local directory as repo
+      - ./:/repo
       - blockchain-data:/blockchain-build
     environment:
       - NODE_ENV=development
     networks:
       - africox-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
 
   frontend:
     build: ./frontend
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     ports:
       - "5173:5173"
     volumes:
-      - ./:/repo  # Mount local directory as repo
+      - ./:/repo
     environment:
       - VITE_API_URL=http://backend:3000
     networks:
