@@ -2,7 +2,7 @@
 
 # Move frontend directory as a whole
 mkdir -p /app
-cp /repo/frontend /app/
+mv -r /repo/frontend /app/
 
 # Install frontend dependencies from within the directory
 echo "Installing frontend dependencies..."
