@@ -33,7 +33,7 @@ services:
     networks:
       - africox-net
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      test: ["CMD", "nc", "-zv", "http://localhost:3000"]
       interval: 30s
       timeout: 5s
       retries: 10
