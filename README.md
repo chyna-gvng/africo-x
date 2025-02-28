@@ -10,6 +10,16 @@
 - [ ] Documentation
 
 # Quickstart
+## Prerequisites
+### Windows
+- Git Bash
+- Docker Desktop
+### Unix
+- Git
+- Docker
+- Docker Compose
+
+## Script
 ```bash
 curl -sSL https://raw.githubusercontent.com/chyna-gvng/africo-x/main/docker-setup.sh | bash
 ```
