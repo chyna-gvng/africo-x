@@ -61,4 +61,4 @@ EOF
 # Start the backend
 cd /app/backend
 echo "Starting backend server..."
-nohup node src/index.js --host 0.0.0.0 >> server.log 2>&1 &
+node src/index.js --host 0.0.0.0
