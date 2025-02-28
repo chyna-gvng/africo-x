@@ -1,5 +1,4 @@
 # Project Progress
-
 - [x] Authentication
 - [x] Project Registration
 - [x] Voting
@@ -9,3 +8,6 @@
 - [ ] Responsiveness
 - [x] Docker Setup
 - [ ] Documentation
+
+# Quickstart
+```curl -sSL https://raw.githubusercontent.com/chyna-gvng/africo-x/main/docker-setup.sh | bash```
