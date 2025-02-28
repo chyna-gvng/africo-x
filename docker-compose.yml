@@ -4,8 +4,10 @@ services:
     volumes:
       - ./:/repo
       - blockchain-data:/app/blockchain/build
+    ports:
+      - "8545:8545"  # Expose Ganache port
     environment:
-      - GANACHE_HOST=localhost
+      - GANACHE_HOST=0.0.0.0
       - GANACHE_PORT=8545
     networks:
       - africox-net

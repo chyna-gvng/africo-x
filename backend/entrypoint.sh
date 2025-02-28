@@ -34,11 +34,11 @@ PR_ADDRESS=$(jq -r '.PR_ADDRESS' /blockchain-build/addresses.json)
 # Connect to blockchain container's Ganache instance
 echo "Fetching account data from Ganache..."
 # Use blockchain service name instead of localhost
-ACCOUNTS_RESPONSE=$(curl -X POST --data '{"jsonrpc":"2.0","method":"eth_accounts","params":[],"id":1}' http://localhost:8545)
+ACCOUNTS_RESPONSE=$(curl -X POST --data '{"jsonrpc":"2.0","method":"eth_accounts","params":[],"id":1}' http://blockchain:8545)
 FIRST_ACCOUNT=$(echo $ACCOUNTS_RESPONSE | jq -r '.result[0]')
 
 # Get private key for the first account
-PRIVATEKEY_RESPONSE=$(curl -X POST --data '{"jsonrpc":"2.0","method":"personal_listAccounts","params":[],"id":1}' http://localhost:8545)
+PRIVATEKEY_RESPONSE=$(curl -X POST --data '{"jsonrpc":"2.0","method":"personal_listAccounts","params":[],"id":1}' http://blockchain:8545)
 PRIVATE_KEY=$(echo $PRIVATEKEY_RESPONSE | jq -r '.result[0].privateKey' | sed 's/0x//')
 
 # Fetch mnemonic from blockchain service
@@ -47,7 +47,7 @@ MNEMONIC=$(cat /blockchain-build/mnemonic.txt)
 # Update .env with exact format and use blockchain as provider URL
 cat <<EOF > /app/backend/.env
 PRIVATE_KEY=$PRIVATE_KEY
-PROVIDER_URL=http://localhost:8545
+PROVIDER_URL=http://blockchain:8545
 CCT_ADDRESS=$CCT_ADDRESS
 PR_ADDRESS=$PR_ADDRESS
 MNEMONIC=$MNEMONIC
