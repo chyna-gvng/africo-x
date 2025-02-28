@@ -5,7 +5,7 @@ services:
       - ./:/repo
       - blockchain-data:/app/blockchain/build
     environment:
-      - GANACHE_HOST=0.0.0.0
+      - GANACHE_HOST=localhost
       - GANACHE_PORT=8545
     networks:
       - africox-net

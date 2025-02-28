@@ -28,11 +28,11 @@ echo $MNEMONIC > /app/blockchain/build/mnemonic.txt
 
 # Start Ganache
 echo "Starting Ganache..."
-ganache --mnemonic "$MNEMONIC" --host 0.0.0.0 --port 8545 --detach
+ganache --mnemonic "$MNEMONIC" --detach
 
 # Wait for Ganache
 echo "Waiting for Ganache to start..."
-until nc -z localhost 8545 || nc -z 127.0.0.1 8545; do
+until nc -z localhost 8545 || nc -z localhost 8545; do
   echo "Waiting for Ganache to be available..."
   sleep 2
 done
