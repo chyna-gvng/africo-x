@@ -38,7 +38,7 @@ ACCOUNTS_RESPONSE=$(curl -X POST --data '{"jsonrpc":"2.0","method":"eth_accounts
 FIRST_ACCOUNT=$(echo $ACCOUNTS_RESPONSE | jq -r '.result[0]')
 
 # Fetch mnemonic from blockchain service
-MNEMONIC=$(cat /blockchain-build/mnemonic.txt)
+MNEMONIC=$(cat /app/blockchain/build/mnemonic.txt)
 
 # Generate private key from mnemonic using ethers in a one-liner
 PRIVATE_KEY=$(node -e "
