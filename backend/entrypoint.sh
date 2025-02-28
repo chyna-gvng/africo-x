@@ -37,12 +37,16 @@ echo "Fetching account data from Ganache..."
 ACCOUNTS_RESPONSE=$(curl -X POST --data '{"jsonrpc":"2.0","method":"eth_accounts","params":[],"id":1}' http://blockchain:8545)
 FIRST_ACCOUNT=$(echo $ACCOUNTS_RESPONSE | jq -r '.result[0]')
 
-# Get private key for the first account
-PRIVATEKEY_RESPONSE=$(curl -X POST --data '{"jsonrpc":"2.0","method":"personal_listAccounts","params":[],"id":1}' http://blockchain:8545)
-PRIVATE_KEY=$(echo $PRIVATEKEY_RESPONSE | jq -r '.result[0].privateKey' | sed 's/0x//')
-
 # Fetch mnemonic from blockchain service
 MNEMONIC=$(cat /blockchain-build/mnemonic.txt)
+
+# Generate private key from mnemonic using ethers in a one-liner
+PRIVATE_KEY=$(node -e "
+const { ethers } = require('ethers');
+const mnemonic = '$MNEMONIC';
+const wallet = ethers.Wallet.fromMnemonic(mnemonic);
+console.log(wallet.privateKey.substring(2));
+")
 
 # Update .env with exact format and use blockchain as provider URL
 cat <<EOF > /app/backend/.env
