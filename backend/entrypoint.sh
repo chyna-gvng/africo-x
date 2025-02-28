@@ -18,7 +18,7 @@ cp /app/backend/example.env /app/backend/.env
 
 # Wait for data from blockchain service
 echo "Waiting for blockchain contract addresses..."
-while [ ! -f /blockchain-build/addresses.json ]; do
+while [ ! -f /app/blockchain/build/addresses.json ]; do
   sleep 2
   echo "Still waiting for contract addresses..."
 done
@@ -28,8 +28,8 @@ echo "Contract addresses found!"
 AES_SECRET_KEY=$(openssl rand -hex 32)
 
 # Fetch CCT_ADDRESS and PR_ADDRESS from blockchain service
-CCT_ADDRESS=$(jq -r '.CCT_ADDRESS' /blockchain-build/addresses.json)
-PR_ADDRESS=$(jq -r '.PR_ADDRESS' /blockchain-build/addresses.json)
+CCT_ADDRESS=$(jq -r '.CCT_ADDRESS' /app/blockchain/build/addresses.json)
+PR_ADDRESS=$(jq -r '.PR_ADDRESS' /app/blockchain/build/addresses.json)
 
 # Connect to blockchain container's Ganache instance
 echo "Fetching account data from Ganache..."
