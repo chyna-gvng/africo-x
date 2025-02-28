@@ -27,11 +27,11 @@ fi
 
 # check for docker compose (either 'docker-compose' or 'docker compose')
 if command_exists docker-compose; then
-    compose_version=$(docker-compose --version | awk '{print $3}')
+    compose_version=$(docker-compose --version | awk '{print $4}')
     echo "dep satisfied: docker-compose v$compose_version"
     compose_command="docker-compose"
 elif docker compose version >/dev/null 2>&1; then
-    compose_version=$(docker compose version | head -n 1 | awk '{print $3}')
+    compose_version=$(docker compose version | head -n 1 | awk '{print $4}')
     echo "dep satisfied: docker compose plugin v$compose_version"
     compose_command="docker compose"
 else
