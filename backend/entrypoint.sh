@@ -45,7 +45,7 @@ PRIVATE_KEY=$(node -e "
 const { ethers } = require('ethers');
 const mnemonic = '$MNEMONIC';
 const wallet = ethers.Wallet.fromMnemonic(mnemonic);
-console.log(wallet.privateKey.substring(2));
+console.log(wallet.privateKey);
 ")
 
 # Update .env with exact format and use blockchain as provider URL
