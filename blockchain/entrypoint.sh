@@ -32,7 +32,7 @@ ganache --mnemonic "$MNEMONIC" --detach
 
 # Wait for Ganache
 echo "Waiting for Ganache to start..."
-until nc -zv localhost 8545 || nc -zv blckchain 8545; do
+until nc -zv localhost 8545; do
   echo "Waiting for Ganache to be available..."
   sleep 2
 done
