@@ -27,7 +27,7 @@ services:
       - "3000:3000"
     volumes:
       - ./:/repo
-      - blockchain-data:/blockchain-build
+      - blockchain-data:/app/blockchain/build
     environment:
       - NODE_ENV=development
     networks:
