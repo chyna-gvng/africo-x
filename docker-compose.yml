@@ -13,7 +13,7 @@ services:
       - africox-net
     healthcheck:
       test: ["CMD", "test", "-f", "/app/blockchain/build/addresses.json"]
-      interval: 300s
+      interval: 150s
       timeout: 5s
       retries: 10
       start_period: 60s  # Increased to allow more time for startup
