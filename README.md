@@ -14,6 +14,9 @@
 ### Windows
 - Git Bash
 - Docker Desktop
+
+ALT: WSL with Unix prerequisites
+
 ### Unix
 - Git
 - Docker
