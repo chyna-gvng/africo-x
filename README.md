@@ -10,4 +10,6 @@
 - [ ] Documentation
 
 # Quickstart
-```curl -sSL https://raw.githubusercontent.com/chyna-gvng/africo-x/main/docker-setup.sh | bash```
+```bash
+curl -sSL https://raw.githubusercontent.com/chyna-gvng/africo-x/main/docker-setup.sh | bash
+```
