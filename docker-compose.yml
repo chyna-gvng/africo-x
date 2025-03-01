@@ -17,7 +17,7 @@ services:
       timeout: 5s
       retries: 10
       start_period: 60s  # Increased to allow more time for startup
-    restart: always  # ADD THIS LINE
+    restart: always
 
   backend:
     build: ./backend
@@ -39,7 +39,7 @@ services:
       timeout: 5s
       retries: 10
       start_period: 60s
-    restart: always  # ADD THIS LINE
+    restart: always
 
   frontend:
     build: ./frontend
@@ -54,7 +54,7 @@ services:
       - VITE_API_URL=http://localhost:3000  # Changed to localhost for browser access
     networks:
       - africox-net
-    restart: always  # ADD THIS LINE
+    restart: always
 
 networks:
   africox-net:
