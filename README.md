@@ -6,7 +6,7 @@
 - [x] Depletion
 - [x] Styling
 - [ ] Responsiveness
-- [x] Docker Setup
+- [x] Docker + Caddy Setup
 - [ ] Documentation
 
 # Quickstart
