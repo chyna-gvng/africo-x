@@ -14,7 +14,7 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost/auth/register', { username, password, role, depletionRate });
+      const response = await axios.post('https://africox.angoyewally.dev/auth/register', { username, password, role, depletionRate });
       setMessage(response.data.message);
       navigate('/login'); // Redirect to login
     } catch (error) {

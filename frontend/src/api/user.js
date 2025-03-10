@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost/contracts';
+const API_URL = 'https://africox.angoyewally.dev/contracts';
 
 export const getUserRole = async (token) => {
   try {

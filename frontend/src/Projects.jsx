@@ -49,7 +49,7 @@ const Projects = () => {
             setVerifiedProjects(projectsResponse.projects.filter(project => project.verification_status && !project.archive_status));
             setUnverifiedProjects(projectsResponse.projects.filter(project => !project.verification_status && !project.archive_status));
 
-            const archivedResponse = await axios.get('http://localhost/contracts/getArchivedProjectsByOwner', {
+            const archivedResponse = await axios.get('https://africox.angoyewally.dev/contracts/getArchivedProjectsByOwner', {
               headers: { Authorization: `Bearer ${token}` },
             });
             setArchivedProjects(archivedResponse.data.projects);
@@ -181,7 +181,7 @@ const Projects = () => {
   const purchaseCCT = async (token, buyerAddress, ownerAddress, ethAmount, projectId) => {
     try {
       const response = await axios.post(
-        'http://localhost/contracts/purchaseCCT',
+        'https://africox.angoyewally.dev/contracts/purchaseCCT',
         { buyerAddress, ownerAddress, ethAmount, projectId },
         {
           headers: { Authorization: `Bearer ${token}` },
