@@ -56,8 +56,8 @@ services:
     networks:
       - africox-net
   
-  nginx:
-    build: ./nginx
+  caddy:
+    build: ./caddy
     restart: unless-stopped
     depends_on:
       backend:
