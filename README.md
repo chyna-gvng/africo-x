@@ -29,5 +29,5 @@ curl -sSL https://raw.githubusercontent.com/chyna-gvng/africo-x/main/docker-setu
 
 ### Live
 ```bash
-htts://africox.angoyewally.dev
+https://africox.angoyewally.dev
 ```
