@@ -66,6 +66,9 @@ services:
         condition: service_started
     ports:
       - "80:80"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
     networks:
       - africox-net
 
@@ -76,3 +79,4 @@ networks:
 volumes:
   blockchain-data:
   ganache-db:
+  caddy_data:
