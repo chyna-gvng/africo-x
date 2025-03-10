@@ -26,7 +26,7 @@ services:
       blockchain:
         condition: service_healthy
     ports:
-      - "3000:3000"
+      - "3000"
     volumes:
       - ./:/repo
       - blockchain-data:/app/blockchain/build
@@ -48,11 +48,19 @@ services:
       backend:
         condition: service_healthy
     ports:
-      - "5173:5173"
+      - "5173"
     volumes:
       - ./:/repo
     environment:
       - VITE_API_URL=http://localhost:3000  # Changed to localhost for browser access
+    networks:
+      - africox-net
+  
+  nginx:
+    build: ./nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
     networks:
       - africox-net
 
