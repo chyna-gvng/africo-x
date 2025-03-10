@@ -52,7 +52,7 @@ services:
     volumes:
       - ./:/repo
     environment:
-      - VITE_API_URL=http://backend:3000
+      - VITE_API_URL=https://africox.angoyewally.dev
     networks:
       - africox-net
   
