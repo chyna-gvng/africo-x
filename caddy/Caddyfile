@@ -1,9 +1,8 @@
-localhost {
-    # Matches and strips the /api prefix, then proxies to backend
-    handle_path /api/* {
-        reverse_proxy backend:3000
+:80 {
+    handle_path /* {
+        reverse_proxy http://frontend:5173
     }
-
-    # All other requests go to the frontend
-    reverse_proxy frontend:5173
+    handle_path /api/* {
+        reverse_proxy http://backend:3000
+    }
 }
