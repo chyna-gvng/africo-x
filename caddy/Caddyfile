@@ -1,3 +1,5 @@
 :80 {
-	reverse_proxy /* localhost:5173
+    handle_path /* {
+        reverse_proxy frontend:5173
+    }
 }

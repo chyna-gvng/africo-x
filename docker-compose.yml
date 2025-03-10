@@ -52,7 +52,7 @@ services:
     volumes:
       - ./:/repo
     environment:
-      - VITE_API_URL=http://localhost:3000  # Changed to localhost for browser access
+      - VITE_API_URL=/api  # Changed to localhost for browser access
     networks:
       - africox-net
   
