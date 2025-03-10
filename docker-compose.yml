@@ -59,11 +59,11 @@ services:
   caddy:
     build: ./caddy
     restart: unless-stopped
-    # depends_on:
-    #   backend:
-    #     condition: service_healthy
-    #   frontend:
-    #     condition: service_started
+    depends_on:
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_started
     ports:
       - "80:80"
     volumes:
