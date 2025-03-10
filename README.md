@@ -24,7 +24,7 @@
 
 ## Script
 ```bash
-curl -sSL https://raw.githubusercontent.com/chyna-gvng/africo-x/main/docker-setup.sh | bash
+curl -sSL https://raw.githubusercontent.com/chyna-gvng/africo-x/deployment/docker-setup.sh | bash
 ```
 
 ### Live
