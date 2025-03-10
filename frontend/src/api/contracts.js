@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/contracts';
+const API_URL = 'http://localhost/contracts';
 
 export const setRole = async (token, username, role) => {
   try {

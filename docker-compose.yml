@@ -52,18 +52,18 @@ services:
     volumes:
       - ./:/repo
     environment:
-      - VITE_API_URL=/api  # Changed to localhost for browser access
+      - VITE_API_URL=http://backend:3000
     networks:
       - africox-net
   
   caddy:
     build: ./caddy
     restart: unless-stopped
-    depends_on:
-      backend:
-        condition: service_healthy
-      frontend:
-        condition: service_started
+    # depends_on:
+    #   backend:
+    #     condition: service_healthy
+    #   frontend:
+    #     condition: service_started
     ports:
       - "80:80"
     volumes:
