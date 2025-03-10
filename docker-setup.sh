@@ -69,7 +69,7 @@ sleep 60
 echo "setup complete!"
 
 # notify user of UI URL
-echo "UI 👉 http//localhost"
+echo "UI 👉 http//:localhost"
 
 # exit the script
 exit 0
