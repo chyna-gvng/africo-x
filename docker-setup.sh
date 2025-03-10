@@ -69,7 +69,7 @@ sleep 60
 echo "setup complete!"
 
 # notify user of UI URL
-echo "UI 👉 http://localhost:5173"
+echo "UI 👉 https://africox.angoyewally.dev:5173"
 
 # exit the script
 exit 0
