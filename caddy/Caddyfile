@@ -1,0 +1,11 @@
+localhost {
+
+    # Route API requests to the backend on port 3000.
+    reverse_proxy /api/* backend:3000 {
+        # Remove the "/api" prefix before forwarding the request.
+        uri strip_prefix /api
+    }
+
+    # All other requests are forwarded to the frontend on port 5173.
+    reverse_proxy frontend:5173
+}
