@@ -60,10 +60,10 @@ services:
     build: ./nginx
     restart: unless-stopped
     depends_on:
-      - backend:
-          condition: service_healthy
-      - frontend:
-          condition: service_healthy
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_healthy
     ports:
       - "80:80"
     networks:
