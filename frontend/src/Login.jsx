@@ -12,7 +12,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/auth/login', { username, password });
+      const response = await axios.post('http://localhost/auth/login', { username, password });
       localStorage.setItem('token', response.data.token);
       setMessage(response.data.message);
       navigate('/dashboard'); // Redirect to dashboard

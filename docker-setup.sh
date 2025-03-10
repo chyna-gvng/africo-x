@@ -45,13 +45,13 @@ if [ -d "africo-x" ]; then
     cd africo-x || { echo "error: failed to enter directory africo-x"; exit 1; }
     
     echo "pulling latest changes..."
-    git pull origin main
+    git pull origin deployment
 
     echo "stopping containers and removing volumes..."
     $compose_command down -v
 else
     echo "cloning repository..."
-    git clone -b main https://github.com/chyna-gvng/africo-x.git
+    git clone -b deployment https://github.com/chyna-gvng/africo-x.git
 
     # change to the project directory
     cd africo-x || { echo "error: failed to enter directory africo-x"; exit 1; }
@@ -69,7 +69,7 @@ sleep 60
 echo "setup complete!"
 
 # notify user of UI URL
-echo "UI 👉 http://localhost:5173"
+echo "UI 👉 http//localhost"
 
 # exit the script
 exit 0

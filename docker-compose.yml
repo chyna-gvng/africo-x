@@ -26,7 +26,7 @@ services:
       blockchain:
         condition: service_healthy
     ports:
-      - "3000:3000"
+      - "3000"
     volumes:
       - ./:/repo
       - blockchain-data:/app/blockchain/build
@@ -48,11 +48,27 @@ services:
       backend:
         condition: service_healthy
     ports:
-      - "5173:5173"
+      - "5173"
     volumes:
       - ./:/repo
     environment:
-      - VITE_API_URL=http://localhost:3000  # Changed to localhost for browser access
+      - VITE_API_URL=http://backend:3000
+    networks:
+      - africox-net
+  
+  caddy:
+    build: ./caddy
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_started
+    ports:
+      - "80:80"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
     networks:
       - africox-net
 
@@ -63,3 +79,4 @@ networks:
 volumes:
   blockchain-data:
   ganache-db:
+  caddy_data:
