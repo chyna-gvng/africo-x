@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { getUserBalances } from './api/balances';
 import { getUserAddress } from './api/contracts';
+import { toast } from 'sonner'
 import './Dashboard.css';
 
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
-  const [message, setMessage] = useState('');
+  const loginToastShown = useRef(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -15,10 +16,13 @@ const Dashboard = () => {
           const response = await getUserBalances(token);
           setUserData(response);
         } catch (error) {
-          setMessage(error.response.data.error);
+          toast.error(error.response?.data?.error || 'Failed to fetch balances');
         }
       } else {
-        setMessage('Please log in to view your dashboard.');
+        if (!loginToastShown.current) {
+          toast.error('Please log in to view your dashboard.');
+          loginToastShown.current = true;
+        }
       }
     };
 
@@ -29,19 +33,13 @@ const Dashboard = () => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        const addressResponse = await getUserAddress(token); // Get the entire response object
-        const userAddress = addressResponse.userAddress; // Extract the userAddress
+        const addressResponse = await getUserAddress(token);
+        const userAddress = addressResponse.userAddress;
 
-        navigator.clipboard.writeText(userAddress)
-          .then(() => {
-            setMessage('Address copied to clipboard!');
-            setTimeout(() => setMessage(''), 3000); // Clear message after 3 seconds
-          })
-          .catch(error => {
-            setMessage('Failed to copy address: ' + error.message);
-          });
+        await navigator.clipboard.writeText(userAddress);
+        toast.success('Address copied to clipboard!');
       } catch (error) {
-        setMessage(error.message);
+        toast.error('Failed to copy address: ' + (error.message || 'Unknown error'));
       }
     }
   };
@@ -49,13 +47,23 @@ const Dashboard = () => {
   const handleRefreshBalances = async () => {
     const token = localStorage.getItem('token');
     if (token) {
-      const response = await getUserBalances(token);
-      setUserData(response);
+      try {
+        const response = await getUserBalances(token);
+        setUserData(response);
+        toast.success('Balances refreshed');
+      } catch (error) {
+        toast.error('Failed to refresh balances: ' + (error.message || 'Unknown error'));
+      }
+    } else {
+      if (!loginToastShown.current) {
+        toast.error('Please log in to refresh balances.');
+        loginToastShown.current = true;
+      }
     }
   };
 
   if (!userData) {
-    return <div>{message}</div>;
+    return <div><img src="/sad.svg" alt="sad" /></div>;
   }
 
   return (
