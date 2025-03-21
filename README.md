@@ -6,7 +6,7 @@
 - [x] Depletion
 - [x] Styling
 - [ ] Responsiveness
-- [ ] Sonner
+- [x] Sonner
 - [x] Docker + Caddy Setup
 - [ ] Documentation
 
