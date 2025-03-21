@@ -2,7 +2,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100vw;
     padding: 1em;
     height: 10vh;
     display: flex;
@@ -38,4 +38,46 @@
     border: solid 1px #7DE38D;
     padding: 1em 2em;
     border-radius: 35px;
+}
+
+.hamburger {
+    display: none;
+    cursor: pointer;
+}
+
+.hamburger img {
+    padding: 1.5em;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0;
+    }
+
+    .navbar ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 5vh;
+        right: 0;
+    }
+
+    .navbar-btn {
+        border: none;
+        padding: 0;
+    }
+
+    .navbar ul.open {
+        display: flex;
+        padding: 1em;
+    }
+
+    .navbar ul li {
+        text-align: end;
+    }
+
+    .hamburger {
+        display: block;
+    }
 }

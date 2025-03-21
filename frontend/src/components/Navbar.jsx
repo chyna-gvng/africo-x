@@ -1,21 +1,30 @@
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const isLoggedIn = localStorage.getItem('token') !== null;
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
   };
 
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
   return (
-    <div className='navbar'>
+    <div className='navbar' onClick={toggleMenu}>
         <div className='logo'>
             <img src="/logo.svg" alt="logo"/>
         </div>
-        <ul>
+        <div className='hamburger' onClick={toggleMenu}>
+          <img src="/hamburger-menu.svg" alt="menu"/>
+        </div>
+        <ul className={menuOpen ? 'open' : ''}>
             <li><Link to="/">Home</Link></li>
             <li><Link to="/dashboard">Dashboard</Link></li>
             <li><Link to="/projects">Projects</Link></li>
