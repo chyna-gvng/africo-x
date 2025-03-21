@@ -8,6 +8,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: #00242B;
+    z-index: 100;
+    transition: height 0.3s ease;
 }
 
 .logo img {
@@ -38,4 +41,66 @@
     border: solid 1px #7DE38D;
     padding: 1em 2em;
     border-radius: 35px;
+}
+
+.hamburger {
+    display: none;
+    cursor: pointer;
+}
+
+.hamburger img {
+    padding: 1.5em;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0;
+        flex-wrap: wrap;
+        height: auto;
+        min-height: 10vh;
+    }
+
+    .navbar.expanded {
+        height: auto;
+    }
+
+    .navbar ul {
+        display: none;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    .navbar ul.open {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        top: 0;
+        padding: 1em;
+        margin-right: 1em;
+        background-color: inherit;
+    }
+
+    .navbar ul li {
+        text-align: end;
+        margin: 0.5em 0;
+    }
+
+    .navbar-btn {
+        border: none;
+        padding: 0;
+    }
+
+    .hamburger {
+        display: block;
+    }
+
+    body {
+        padding-top: 10vh;
+    }
+
+    body.menu-open {
+        padding-top: auto;
+    }
 }

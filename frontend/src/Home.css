@@ -44,3 +44,18 @@
 .how-it-works ol ::marker {
     color: #7DE38D;
 }
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .hero-section {
+        flex-direction: column;
+    }
+
+    .highlight-cards {
+        flex-direction: column;
+    }
+
+    .card {
+        margin: 1rem 0;
+    }
+}

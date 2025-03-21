@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Toaster } from 'sonner'
 import Register from './Register';
 import Login from './Login';
 import Home from './Home';
@@ -12,6 +13,7 @@ function App() {
   return (
     <Router>
       <div className="App">
+        <Toaster richColors />
         <header className="App-header">
           <Navbar />
         </header>

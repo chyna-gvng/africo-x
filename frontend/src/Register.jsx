@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import './Register.css';
 
 const Register = () => {
@@ -8,17 +9,17 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('');
   const [depletionRate, setDepletionRate] = useState(''); // ADDED depletionRate STATE
-  const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post('https://africox.angoyewally.dev/auth/register', { username, password, role, depletionRate });
-      setMessage(response.data.message);
+      toast.success(response.data.message || 'Registration successful!');
       navigate('/login'); // Redirect to login
     } catch (error) {
-      setMessage(error.response.data.error);
+      const errMessage = error.response?.data?.error || 'Something went wrong';
+      toast.error(errMessage);
     }
   };
 
@@ -51,7 +52,6 @@ const Register = () => {
         )}
         <button type="submit">Register</button>
       </form>
-      {message && <p>{message}</p>}
     </div>
   );
 };
