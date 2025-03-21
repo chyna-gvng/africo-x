@@ -5,7 +5,7 @@
 - [x] Purchase
 - [x] Depletion
 - [x] Styling
-- [ ] Responsiveness
+- [x] Responsiveness
 - [x] Sonner
 - [x] Docker + Caddy Setup
 - [ ] Documentation
