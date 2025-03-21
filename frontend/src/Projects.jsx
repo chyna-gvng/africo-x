@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProjectTable from './components/ProjectTable';
 import { getAllProjects, getProjectsByOwner, getVerifiedProjects, getUnverifiedProjects, submitProject, getUserAddress, voteForProject, finalizeProject, getProjectDetails, mintTokens } from './api/contracts';
 import { getUserRole } from './api/user';
 import axios from 'axios';
+import { toast } from 'sonner'
 import './Projects.css';
 
 const Projects = () => {
@@ -19,9 +20,12 @@ const Projects = () => {
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
   const [cctAmount, setCctAmount] = useState('');
-  const [message, setMessage] = useState('');
   const [error, setError] = useState(null);
+  // Remove the toastTriggered state variable completely
   const navigate = useNavigate();
+  
+  // Use a ref to track if toast has been shown - this won't cause re-renders
+  const loginToastShown = useRef(false);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -68,15 +72,20 @@ const Projects = () => {
             setUnverifiedProjects(unverifiedResponse.projects.filter(project => !project.archive_status));
           }
         } catch (error) {
-          setError(error.message);
+          toast.error(error.message);
         }
       } else {
-        setError('Please log in to view projects.');
+        // Only show toast if it hasn't been shown before using the ref
+        if (!loginToastShown.current) {
+          toast.error('Please log in to view projects.');
+          loginToastShown.current = true; // Mark toast as shown
+        }
+        setError('Unauthorized');
       }
     };
 
     fetchProjects();
-  }, []);
+  }, []);  // Empty dependency array - no need for ESLint disable now
 
   const handleMintTokens = async (e) => {
     e.preventDefault();
@@ -84,14 +93,14 @@ const Projects = () => {
     if (token) {
       try {
         await mintTokens(token, mintAccount, mintAmount);
-        setMessage('Tokens minted successfully');
+        toast.success('Tokens minted successfully');
         setMintAccount('');
         setMintAmount('');
       } catch (error) {
-        setError(error.message);
+        toast.error(error.message);
       }
     } else {
-      setError('Please log in to mint tokens.');
+      toast.error('Please log in to mint tokens.');
     }
   };
 
@@ -102,16 +111,18 @@ const Projects = () => {
       try {
         await submitProject(token, name, description, location, cctAmount);
         setBlockchainSubmitted(true);
-        setMessage('Project submitted successfully');
+        toast.success('Project submitted successfully');
         setName('');
         setDescription('');
         setLocation('');
         setCctAmount('');
       } catch (error) {
-        setError(error.message);
+        toast.error(error.message);
       }
-    };
-  }
+    } else {
+      toast.error('Please log in to submit a project.');
+    }
+  };
 
   const handleVoteForProject = async (projectId) => {
     const token = localStorage.getItem('token');
@@ -120,14 +131,14 @@ const Projects = () => {
         const response = await getUserAddress(token); // Get the entire response object
         const userAddress = response.userAddress; // Extract the userAddress
         await voteForProject(token, projectId, userAddress);
-        setMessage('Vote cast successfully');
+        toast.success('Vote cast successfully');
         // After voting, attempt to finalize the project
         await handleFinalizeProject(projectId);
       } catch (error) {
-        setError(error.message);
+        toast.error(error.message);
       }
     } else {
-      setError('Please log in to vote.');
+      toast.error('Please log in to vote.');
     }
   };
 
@@ -136,7 +147,7 @@ const Projects = () => {
     if (token) {
       try {
         await finalizeProject(token, projectId);
-        setMessage('Project finalized successfully (if enough votes)');
+        toast.success('Attempting to finalize project');
         // Refresh projects after finalization attempt
         const roleResponse = await getUserRole(token);
         setRole(roleResponse.dbRole);
@@ -148,10 +159,10 @@ const Projects = () => {
         console.log('Unverified Projects:', unverifiedResponse.projects);
         setUnverifiedProjects(unverifiedResponse.projects);
       } catch (error) {
-        setError(error.message);
+        toast.error(error.message);
       }
     } else {
-      setError('Please log in to finalize.');
+      toast.error('Please log in to finalize.');
     }
   };
 
@@ -169,10 +180,10 @@ const Projects = () => {
         // Call the backend to handle the ETH transfer and CCT transfer
         await purchaseCCT(token, buyerAddress, projectDetails.project.owner, cctAmount, projectId);
 
-        setMessage('CCT purchased successfully');
+        toast.success('CCT purchased successfully');
         navigate('/projects');
       } catch (error) {
-        setError(error.message);
+        toast.error(error.message);
       }
     }
   };
@@ -194,7 +205,7 @@ const Projects = () => {
   };
 
   if (error) {
-    return <div>{error}</div>;
+    return <div><img src="/sad.svg" alt="sad" /></div>;
   }
 
   return (
@@ -261,7 +272,6 @@ const Projects = () => {
         />
       )}
 
-      {message && <p>{message}</p>}
     </div>
   );
 };
