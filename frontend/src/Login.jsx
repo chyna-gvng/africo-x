@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import './Login.css';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -14,10 +14,11 @@ const Login = () => {
     try {
       const response = await axios.post('http://localhost/auth/login', { username, password });
       localStorage.setItem('token', response.data.token);
-      setMessage(response.data.message);
+      toast.success(response.data.message || 'Login successful!');
       navigate('/dashboard'); // Redirect to dashboard
     } catch (error) {
-      setMessage(error.response.data.error);
+      const errMessage = error.response?.data?.error || 'Login failed';
+      toast.error(errMessage);
     }
   };
 
@@ -35,7 +36,6 @@ const Login = () => {
         </div>
         <button type="submit">Login</button>
       </form>
-      {message && <p>{message}</p>}
     </div>
   );
 };
