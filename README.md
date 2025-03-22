@@ -82,6 +82,67 @@ Install global packages:
 npm install -g truffle ganache
 ```
 
+Change directory to blockchain:
+```bash
+cd blockchain
+```
+Switch Node version:
+```bash
+nvm use v18.20.5
+```
+Install blockchain packages:
+```bash
+npm install
+```
+To setup the blockchain instance, you need 2 terminal sessions:
+- Start Ganache instance:
+```bash
+ganache
+```
+- Deploy the contracts to the ganache instance:
+```bash
+truffle migrate --network development
+```
+Take note of the any private key from the ganache instance, and the contract addresses.  
+
+Change directory to backend:
+```bash
+cd ../backend
+```
+Switch Node version:
+```bash
+nvm use default
+```
+Install backend packages:
+```bash
+npm install
+```
+Generate AES secret:
+```bash
+openssl rand -hex 32
+```
+Create and modify .env:
+```bash
+cp example.env .env
+```
+Run backend server:
+```bash
+npm run dev
+```
+
+In a new terminal session, change directory to frontend:
+```bash
+cd frontend
+```
+Install frontend packages:
+```bash
+npm install
+```
+Run frontend server:
+```bash
+npm run dev
+```
+
 ### Quick Access
 For a simplified and quick setup using Docker, ensure you have **Docker**, **Docker Compose** and **Git** installed.  
 Run:
