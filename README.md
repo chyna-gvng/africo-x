@@ -70,11 +70,11 @@ AFRICOX is built using a modern and robust technology stack, ensuring scalabilit
 ### Development
 For development setup, ensure you have **NVM(Node Version Manager)** available.  
 ```bash
-# Clone repository
+# CLONE REPOSITORY
 git clone https://github.com/chyna-gvng/africo-x.git
 cd africo-x
 
-# Install global dependencies
+# INSTALL GLOBAL PACKAGES
 npm install -g truffle ganache
 
 # BLOCKCHAIN SETUP
