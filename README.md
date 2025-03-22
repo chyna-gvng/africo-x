@@ -77,7 +77,8 @@ cd africo-x
 # Install global dependencies
 npm install -g truffle ganache
 
-# Blockchain setup
+# BLOCKCHAIN SETUP
+# Needs 2 terminal sessions
 cd blockchain
 nvm use v18.20.5
 npm install
@@ -89,7 +90,7 @@ ganache
 truffle migrate --network development
 # Note: Record any private key, preferrable [0] and contract addresses
 
-# Backend setup
+# BACKEND SETUP
 cd ../backend
 nvm use default
 npm install
@@ -97,7 +98,8 @@ openssl rand -hex 32  # Generate AES secret
 cp example.env .env   # Create and modify .env
 npm run dev
 
-# Frontend setup (new terminal)
+# FRONTEND SETUP
+# New terminal session
 cd frontend
 npm install
 npm run dev
