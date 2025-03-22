@@ -88,7 +88,7 @@ ganache
 
 # In terminal 2: Deploy contracts
 truffle migrate --network development
-# Note: Record any private key, preferrable [0] and contract addresses
+# Note: Record any private key, preferably [0] and contract addresses
 
 # BACKEND SETUP
 cd ../backend
