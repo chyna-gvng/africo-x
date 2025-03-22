@@ -69,77 +69,37 @@ AFRICOX is built using a modern and robust technology stack, ensuring scalabilit
 ## Setup
 ### Development
 For development setup, ensure you have NVM(Node Version Manager) available.  
-Clone the repo:
 ```bash
+# Clone repository
 git clone https://github.com/chyna-gvng/africo-x.git
-```
-Change directory:
-```bash
 cd africo-x
-```
-Install global packages:
-```bash
+
+# Install global dependencies
 npm install -g truffle ganache
-```
 
-Change directory to blockchain:
-```bash
+# Blockchain setup
 cd blockchain
-```
-Switch Node version:
-```bash
 nvm use v18.20.5
-```
-Install blockchain packages:
-```bash
 npm install
-```
-To setup the blockchain instance, you need 2 terminal sessions:
-- Start Ganache instance:
-```bash
+
+# In terminal 1: Start Ganache
 ganache
-```
-- Deploy the contracts to the ganache instance:
-```bash
+
+# In terminal 2: Deploy contracts
 truffle migrate --network development
-```
-Take note of the any private key from the ganache instance, and the contract addresses.  
+# Note: Record any private key, preferrable [0] and contract addresses
 
-Change directory to backend:
-```bash
+# Backend setup
 cd ../backend
-```
-Switch Node version:
-```bash
 nvm use default
-```
-Install backend packages:
-```bash
 npm install
-```
-Generate AES secret:
-```bash
-openssl rand -hex 32
-```
-Create and modify .env:
-```bash
-cp example.env .env
-```
-Run backend server:
-```bash
+openssl rand -hex 32  # Generate AES secret
+cp example.env .env   # Create and modify .env
 npm run dev
-```
 
-In a new terminal session, change directory to frontend:
-```bash
+# Frontend setup (new terminal)
 cd frontend
-```
-Install frontend packages:
-```bash
 npm install
-```
-Run frontend server:
-```bash
 npm run dev
 ```
 
