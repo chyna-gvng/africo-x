@@ -68,7 +68,7 @@ AFRICOX is built using a modern and robust technology stack, ensuring scalabilit
 
 ## Setup
 ### Development
-For development setup, ensure you have NVM(Node Version Manager) available.  
+For development setup, ensure you have **NVM(Node Version Manager)** available.  
 ```bash
 # Clone repository
 git clone https://github.com/chyna-gvng/africo-x.git
