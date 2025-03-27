@@ -45,13 +45,13 @@ if [ -d "africo-x" ]; then
     cd africo-x || { echo "error: failed to enter directory africo-x"; exit 1; }
     
     echo "pulling latest changes..."
-    git pull origin deployment
+    git pull origin main
 
     echo "stopping containers and removing volumes..."
     $compose_command down -v
 else
     echo "cloning repository..."
-    git clone -b deployment https://github.com/chyna-gvng/africo-x.git
+    git clone -b main https://github.com/chyna-gvng/africo-x.git
 
     # change to the project directory
     cd africo-x || { echo "error: failed to enter directory africo-x"; exit 1; }
